@@ -1,3 +1,6 @@
+*.js
+
+### Github generated file ###
 # Logs
 logs
 *.log

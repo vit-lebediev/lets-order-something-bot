@@ -1,0 +1,33 @@
+{
+  "name": "lets-order-something-bot",
+  "version": "0.0.1",
+  "description": "Bot to make choosing place to order FUN",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "watch": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Malgin/lets-order-something-bot.git"
+  },
+  "keywords": [
+    "bot",
+    "telegram",
+    "delivery",
+    "order"
+  ],
+  "author": "Vit Lebediev",
+  "bugs": {
+    "url": "https://github.com/Malgin/lets-order-something-bot/issues"
+  },
+  "homepage": "https://github.com/Malgin/lets-order-something-bot#readme",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.40.0"
+  },
+  "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.40.1",
+    "typescript": "^3.7.5"
+  }
+}
