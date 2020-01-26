@@ -8,11 +8,23 @@ if (!BOT_TOKEN) {
 
 const LOSBot = new TelegramBot(BOT_TOKEN, { polling: true });
 
-LOSBot.on('message', (msg) => {
-    const chatId = msg.chat.id;
-
-    console.log(`ChatID: ${ chatId }`);
-    console.log(`Message text: ${ msg.text }`);
-
-    return LOSBot.sendMessage(chatId, `Received your message: ${ msg.text }`);
+LOSBot.onText(/^\/start/, (msg) => {
+    return LOSBot.sendMessage(msg.chat.id, `Let' start this PAR-TEY!`);
 });
+
+LOSBot.onText(/^\/help/, (msg) => {
+    return LOSBot.sendMessage(msg.chat.id, 'Help is not supported yet');
+});
+
+LOSBot.onText(/^\/settings/, (msg) => {
+    return LOSBot.sendMessage(msg.chat.id, 'Settings currently are not supported. TBD.');
+});
+
+// LOSBot.on('message', (msg) => {
+//     const chatId : number = msg.chat.id;
+//
+//     console.log(`ChatID: ${ chatId }`);
+//     console.log(`Message text: ${ msg.text }`);
+//
+//     return LOSBot.sendMessage(chatId, `Received your message: ${ msg.text }`);
+// });
