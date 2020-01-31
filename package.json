@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc -b",
-    "watch": "tsc -w",
+    "watchts": "tsc -w",
     "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/index.js"
@@ -26,10 +26,12 @@
   },
   "homepage": "https://github.com/Malgin/lets-order-something-bot#readme",
   "dependencies": {
-    "node-telegram-bot-api": "^0.40.0"
+    "node-telegram-bot-api": "^0.40.0",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "@types/node-telegram-bot-api": "^0.40.1",
+    "@types/redis": "^2.8.14",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
     "eslint": "^6.8.0",
