@@ -1,3 +1,4 @@
+// Dependency imports
 import TelegramBot, {
   SendMessageOptions,
   KeyboardButton,
@@ -6,44 +7,42 @@ import TelegramBot, {
   User
 } from 'node-telegram-bot-api';
 
-import redisClient from './Redis';
+// Projects imports
+import LosRedisClient from './RedisClient';
+import UserState, { USER_STATES, SUPPORTED_CITIES } from './UserStateInterface';
 
+// Const initialization
 const { LOS_BOT_TOKEN } = process.env;
+
+// const LOS_BOT_TOKEN: string | undefined = process.env.LOS_BOT_TOKEN;
+const REDIS_HOST: string = process.env.LOS_REDIS_HOST || 'localhost';
+const REDIS_PORT: string | number = process.env.LOS_REDIS_PORT || 8001;
 
 if (!LOS_BOT_TOKEN) {
   throw new Error('You HAVE to run a bot with LOS_BOT_TOKEN env var set!');
 }
 
-const USER_STATE_MACHINE = {
-  waitForLocation: {
-    nextStates: [ 'waitForCityConfirm', '???' ]
-  },
-  waitForCityConfirm: {
-    nextStates: [ '???' ]
-  }
-};
+// const USER_STATE_MACHINE = {
+//   waitForLocation: {
+//     nextStates: [ 'waitForCityConfirm', '???' ]
+//   },
+//   waitForCityConfirm: {
+//     nextStates: [ '???' ]
+//   }
+// };
 
-enum SUPPORTED_CITIES {
-  UNKNOWN,
-  ODESSA
-  // KIEV
-}
-
-enum USER_STATES {
-  WAIT_FOR_LOCATION,
-  WAIT_FOR_CITY_CONFIRM
-}
-
-interface UserState {
-  currentState: USER_STATES,
-  currentCity: SUPPORTED_CITIES
-  lastUpdated: number,
-}
+// Init Redis
+const redisClient: LosRedisClient = new LosRedisClient({
+  host: REDIS_HOST,
+  port: REDIS_PORT as number
+});
 
 redisClient.on('error', (err) => console.log(`REDIS ERROR: ${ err }`));
 
+// Init TelegramBot
 const LOSBot = new TelegramBot(LOS_BOT_TOKEN, { polling: true });
 
+// Telegram Events handlers
 LOSBot.onText(/^\/start/, (msg: Message) => {
   const user: User | undefined = msg.from;
 
@@ -54,7 +53,9 @@ LOSBot.onText(/^\/start/, (msg: Message) => {
   console.log(`/start command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
   // Update current user state in Redis
-  const userRedisKey = `${ user.id }_userState`;
+  const userRedisKey: string = `${ user.id }_userState`;
+
+  // Should implement UserState, but redis lib swears
   const userState = { // :UserState
     currentState: USER_STATES.WAIT_FOR_LOCATION,
     currentCity: SUPPORTED_CITIES.UNKNOWN,
@@ -79,7 +80,7 @@ LOSBot.onText(/^\/start/, (msg: Message) => {
   return LOSBot.sendMessage(msg.chat.id, "Great! Let's start. First things first, I'll need your location to only show you places around you.", messageOptions);
 });
 
-LOSBot.onText(/^\/help/, async (msg) => {
+LOSBot.onText(/^\/help/, async (msg: Message) => {
   const user: User | undefined = msg.from;
 
   if (user === undefined) {
@@ -104,6 +105,8 @@ LOSBot.onText(/^\/help/, async (msg) => {
 LOSBot.onText(/^\/settings/, (msg) => LOSBot.sendMessage(msg.chat.id, 'Settings currently are not supported. TBD.'));
 
 LOSBot.on('message', (msg: Message) => {
+  // TODO IF 'location' request, ignore
+
   // TODO IF requesting user is in USER_STATES.WAIT_FOR_LOCATION:
   //  - take msg.text and try to identify city.
   //  - update current state to USER_STATES.WAIT_FOR_CITY_CONFIRM
@@ -112,10 +115,10 @@ LOSBot.on('message', (msg: Message) => {
   // TODO IF requesting user is in USER_STATES.WAIT_FOR_CITY_CONFIRM
   //  - update currentCity in redis and go on
 
-
+  console.log('Test - message came in');
 });
 
-LOSBot.on('location', (msg) => {
+LOSBot.on('location', (msg: Message) => {
   console.log('location event received.');
   console.log(msg);
 
