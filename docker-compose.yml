@@ -2,8 +2,19 @@ version: '3'
 services:
   redis:
     image: redis:alpine # https://hub.docker.com/_/redis/
+    restart: always
     container_name: los-bot-redis
     ports:
       - 8001:6379
     command:
       - redis-server
+  mongo:
+    image: mongo:bionic # https://hub.docker.com/_/mongo/ 18.04 LTS
+    restart: always
+    container_name: los-bot-mongo
+    ports:
+      - 8002:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: los-bot
+      MONGO_INITDB_ROOT_PASSWORD: breakable_dev_password
+

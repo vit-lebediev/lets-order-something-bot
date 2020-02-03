@@ -1,15 +1,15 @@
 // Dependency imports
 import TelegramBot, {
-  SendMessageOptions,
   KeyboardButton,
-  ReplyKeyboardMarkup,
   Message,
+  ReplyKeyboardMarkup,
+  SendMessageOptions,
   User
 } from 'node-telegram-bot-api';
 
 // Projects imports
 import LosRedisClient from './RedisClient';
-import UserState, { USER_STATES, SUPPORTED_CITIES } from './UserStateInterface';
+import UserState, { SUPPORTED_CITIES, USER_STATES } from './UserStateInterface';
 
 // Const initialization
 const { LOS_BOT_TOKEN } = process.env;
@@ -83,9 +83,7 @@ LOSBot.onText(/^\/start/, (msg: Message) => {
 LOSBot.onText(/^\/help/, async (msg: Message) => {
   const user: User | undefined = msg.from;
 
-  if (user === undefined) {
-    return LOSBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
-  }
+  if (user === undefined) return LOSBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
 
   const userRedisKey = `${ user.id }_userState`;
 
@@ -104,16 +102,43 @@ LOSBot.onText(/^\/help/, async (msg: Message) => {
 
 LOSBot.onText(/^\/settings/, (msg) => LOSBot.sendMessage(msg.chat.id, 'Settings currently are not supported. TBD.'));
 
-LOSBot.on('message', (msg: Message) => {
-  // TODO IF 'location' request, ignore
+LOSBot.on('message', async (msg: Message) => {
+  // leave 'location' requests for dedicated handler
+  if (msg.location) return new Promise(() => {});
 
-  // TODO IF requesting user is in USER_STATES.WAIT_FOR_LOCATION:
-  //  - take msg.text and try to identify city.
-  //  - update current state to USER_STATES.WAIT_FOR_CITY_CONFIRM
-  //  - send user confirmation message with YES and NO buttons
+  // get user state
+  const user: User | undefined = msg.from;
 
-  // TODO IF requesting user is in USER_STATES.WAIT_FOR_CITY_CONFIRM
-  //  - update currentCity in redis and go on
+  if (user === undefined) return LOSBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
+
+  const userRedisKey = `${ user.id }_userState`;
+
+  const obj = await redisClient.hgetallAsync(userRedisKey);
+
+  // TODO if undefined - redirect to /start
+  if (!obj.currentState) return;
+
+  const userState: UserState = {
+    currentState: Number(obj.currentState),
+    currentCity: Number(obj.currentCity),
+    lastUpdated: Number(obj.lastUpdated)
+  };
+
+  // switch userState
+  switch (userState.currentState) {
+    case USER_STATES.WAIT_FOR_LOCATION:
+      // TODO IF requesting user is in USER_STATES.WAIT_FOR_LOCATION:
+      //  - take msg.text and try to identify city.
+      //  - update current state to USER_STATES.WAIT_FOR_CITY_CONFIRM
+      //  - send user confirmation message with YES and NO buttons
+      break;
+    case USER_STATES.WAIT_FOR_CITY_CONFIRM:
+      // TODO IF requesting user is in USER_STATES.WAIT_FOR_CITY_CONFIRM
+      //  - update currentCity in redis and go on
+      break;
+    default:
+      // TODO redirect to /start
+  }
 
   console.log('Test - message came in');
 });
@@ -124,4 +149,10 @@ LOSBot.on('location', (msg: Message) => {
 
   // TODO IF requesting user is in USER_STATES.WAIT_FOR_LOCATION states
   //    - update currentCity in redis and go on
+});
+
+LOSBot.on('polling_error', (err) => {
+  console.log(`Polling Error: ${err}`);
+
+  // TODO Save error log to Mongo
 });
