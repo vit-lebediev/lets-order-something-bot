@@ -7,19 +7,37 @@ import TelegramBot, {
   User
 } from 'node-telegram-bot-api';
 
+import NodeGeocoder, {
+  Entry,
+  Geocoder,
+  Location,
+  Options
+} from 'node-geocoder';
+
 // Projects imports
 import LosRedisClient from './RedisClient';
 import UserState, { SUPPORTED_CITIES, USER_STATES } from './UserStateInterface';
 
 // Const initialization
-const { LOS_BOT_TOKEN } = process.env;
+const { LOS_BOT_TG_TOKEN } = process.env;
 
-// const LOS_BOT_TOKEN: string | undefined = process.env.LOS_BOT_TOKEN;
-const REDIS_HOST: string = process.env.LOS_REDIS_HOST || 'localhost';
-const REDIS_PORT: string | number = process.env.LOS_REDIS_PORT || 8001;
+if (!LOS_BOT_TG_TOKEN) {
+  throw new Error('You HAVE to run a bot with LOS_BOT_TG_TOKEN env var set!');
+}
 
-if (!LOS_BOT_TOKEN) {
-  throw new Error('You HAVE to run a bot with LOS_BOT_TOKEN env var set!');
+// const LOS_BOT_TG_TOKEN: string | undefined = process.env.LOS_BOT_TG_TOKEN;
+const REDIS_HOST: string | undefined = process.env.LOS_REDIS_HOST;
+const REDIS_PORT: string | number | undefined = process.env.LOS_REDIS_PORT;
+
+if (REDIS_HOST === undefined || !REDIS_PORT === undefined) {
+  throw new Error('You need to set REDIS_HOST and REDIS_PORT env vars');
+}
+
+// const LOS_BOT_OC_TOKEN: string | undefined = process.env.LOS_BOT_OC_TOKEN;
+const { LOS_BOT_OC_TOKEN } = process.env;
+
+if (LOS_BOT_OC_TOKEN === undefined) {
+  throw new Error('You need to set LOS_BOT_OC_TOKEN env var');
 }
 
 // const USER_STATE_MACHINE = {
@@ -34,13 +52,24 @@ if (!LOS_BOT_TOKEN) {
 // Init Redis
 const redisClient: LosRedisClient = new LosRedisClient({
   host: REDIS_HOST,
-  port: REDIS_PORT as number
+  port: REDIS_PORT as unknown as number // this shitty line is to make (strict) linter happy
 });
 
 redisClient.on('error', (err) => console.log(`REDIS ERROR: ${ err }`));
 
+// TODO Init MongoDB
+
+// init Geocoder
+const geocoderOptions: Options = {
+  provider: 'opencage',
+  apiKey: LOS_BOT_OC_TOKEN,
+  formatter: null
+};
+
+const geocoderClient: Geocoder = NodeGeocoder(geocoderOptions);
+
 // Init TelegramBot
-const LOSBot = new TelegramBot(LOS_BOT_TOKEN, { polling: true });
+const LOSBot = new TelegramBot(LOS_BOT_TG_TOKEN, { polling: true });
 
 // Telegram Events handlers
 LOSBot.onText(/^\/start/, (msg: Message) => {
@@ -116,7 +145,7 @@ LOSBot.on('message', async (msg: Message) => {
   const obj = await redisClient.hgetallAsync(userRedisKey);
 
   // TODO if undefined - redirect to /start
-  if (!obj.currentState) return;
+  if (!obj.currentState) return new Promise(() => {});
 
   const userState: UserState = {
     currentState: Number(obj.currentState),
@@ -140,19 +169,30 @@ LOSBot.on('message', async (msg: Message) => {
       // TODO redirect to /start
   }
 
-  console.log('Test - message came in');
+  return console.log('Test - message came in');
 });
 
-LOSBot.on('location', (msg: Message) => {
-  console.log('location event received.');
+LOSBot.on('location', async (msg: Message) => {
   console.log(msg);
 
   // TODO IF requesting user is in USER_STATES.WAIT_FOR_LOCATION states
   //    - update currentCity in redis and go on
+  console.log('Querying for a city by coordinates...');
+
+  if (msg.location === undefined) return LOSBot.sendMessage(msg.chat.id, 'Что-то не так с получением ваших геоданных, попробуйте еще раз...');
+
+  const requestLocation: Location = {
+    lat: msg.location.latitude,
+    lon: msg.location.longitude
+  };
+
+  const placeAtLocation: Entry[] = await geocoderClient.reverse(requestLocation);
+
+  return console.log(`User city: ${ placeAtLocation[0].city }`);
 });
 
 LOSBot.on('polling_error', (err) => {
-  console.log(`Polling Error: ${err}`);
+  console.log(`Polling Error: ${ err }`);
 
   // TODO Save error log to Mongo
 });
