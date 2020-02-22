@@ -6,23 +6,15 @@ import TelegramBot, {
 } from 'node-telegram-bot-api';
 import UserStateInterface, { SUPPORTED_CITIES } from './UserStateInterface';
 import LosRedisClient from '../LosRedisClient';
+import LosTelegramBot from '../LosTelegramBot';
 
 const CITY_STRING_ODESA = 'Odesa';
 
 export default class UserStateManager {
-  redisClient: LosRedisClient;
-
-  LOSBot: TelegramBot;
-
-  constructor (redisClient: LosRedisClient, LOSBot: TelegramBot) {
-    this.redisClient = redisClient;
-    this.LOSBot = LOSBot;
-  }
-
-  async getUserState (userId: number): Promise<UserStateInterface> {
+  static async getUserState (userId: number): Promise<UserStateInterface> {
     const userRedisKey = `${ userId }_userState`;
 
-    const obj = await this.redisClient.hgetallAsync(userRedisKey);
+    const obj = await LosRedisClient.hgetallAsync(userRedisKey);
 
     if (!obj.currentState) return Promise.resolve({} as UserStateInterface);
 
@@ -35,12 +27,12 @@ export default class UserStateManager {
     return Promise.resolve(userState);
   }
 
-  async updateUserState (userId: number, newUserState: UserStateInterface): Promise<boolean> {
+  static async updateUserState (userId: number, newUserState: UserStateInterface): Promise<boolean> {
     const userRedisKey = `${ userId }_userState`;
 
     console.log(`Storing user state in Redis with key ${ userRedisKey }`);
     // @ts-ignore TODO
-    await this.redisClient.hmsetAsync(userRedisKey, newUserState);
+    await LosRedisClient.hmsetAsync(userRedisKey, newUserState);
 
     return Promise.resolve(true);
   }
@@ -54,7 +46,7 @@ export default class UserStateManager {
     }
   }
 
-  answerWithWaitForLocation (chatId: number, message?: string): Promise<TelegramBot.Message> {
+  static answerWithWaitForLocation (chatId: number, message?: string): Promise<TelegramBot.Message> {
     // Respond with a message and keyboard
     const verifiedMessage: string = message || "Great! Let's start. First things first, I'll need your location to only show you places around you.";
 
@@ -69,10 +61,10 @@ export default class UserStateManager {
       reply_markup: replyMarkup
     };
 
-    return this.LOSBot.sendMessage(chatId, verifiedMessage, messageOptions);
+    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
-  answerWithStartFromBeginning (chatId: number, message?: string): Promise<TelegramBot.Message> {
+  static answerWithStartFromBeginning (chatId: number, message?: string): Promise<TelegramBot.Message> {
     const verifiedMessage: string = message || 'Start from the start';
 
     const replyMarkup: ReplyKeyboardRemove = {
@@ -83,10 +75,10 @@ export default class UserStateManager {
       reply_markup: replyMarkup
     };
 
-    return this.LOSBot.sendMessage(chatId, verifiedMessage, messageOptions);
+    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
-  answerWithFoodCategoriesMenu (chatId: number, message?: string): Promise<TelegramBot.Message> {
+  static answerWithFoodCategoriesMenu (chatId: number, message?: string): Promise<TelegramBot.Message> {
     const verifiedMessage: string = message || "Good! What kind of food you're up to?";
 
     const surpriseMeButton: KeyboardButton = { text: '🐙 Surprise me!' };
@@ -103,6 +95,6 @@ export default class UserStateManager {
       reply_markup: replyMarkup
     };
 
-    return this.LOSBot.sendMessage(chatId, verifiedMessage, messageOptions);
+    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 }

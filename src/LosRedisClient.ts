@@ -1,6 +1,13 @@
 import { promisify } from 'util';
 import { RedisClient } from 'redis';
 
+const REDIS_HOST: string | undefined = process.env.LOS_REDIS_HOST;
+const REDIS_PORT: string | number | undefined = process.env.LOS_REDIS_PORT;
+
+if (REDIS_HOST === undefined || !REDIS_PORT === undefined) {
+  throw new Error('You need to set REDIS_HOST and REDIS_PORT env vars');
+}
+
 /**
  * Async/await wrapper class around RedisClient.
  *
@@ -9,7 +16,7 @@ import { RedisClient } from 'redis';
  *
  * @see https://stackoverflow.com/a/59526836/852399
  */
-export default class LosRedisClient extends RedisClient {
+class LosRedisClient extends RedisClient {
   public readonly getAsync = promisify(this.get).bind(this);
 
   public readonly setAsync = promisify(this.set).bind(this);
@@ -28,3 +35,12 @@ export default class LosRedisClient extends RedisClient {
 
   public readonly hgetallAsync = promisify(this.hgetall).bind(this);
 }
+
+const redisClient: LosRedisClient = new LosRedisClient({
+  host: REDIS_HOST,
+  port: REDIS_PORT as unknown as number // this shitty line is to make (strict) linter happy
+});
+
+redisClient.on('error', (err) => console.log(`REDIS ERROR: ${ err }`));
+
+export default redisClient;
