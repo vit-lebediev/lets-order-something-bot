@@ -1,8 +1,5 @@
 // Dependency imports
-import TelegramBot, {
-  Message,
-  User
-} from 'node-telegram-bot-api';
+import TelegramBot, { Message, User } from 'node-telegram-bot-api';
 
 import NodeGeocoder, {
   Entry,
@@ -10,7 +7,6 @@ import NodeGeocoder, {
   Location,
   Options
 } from 'node-geocoder';
-
 // Projects imports
 import LosRedisClient from './LosRedisClient';
 import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from './UserState/UserStateInterface';
@@ -100,7 +96,8 @@ LOSBot.onText(/^\/help/, async (msg: Message) => {
 
   const userState: UserStateInterface | null = await usm.getUserState(user.id);
 
-  console.log(`Retrieved user state from Redis (typeof ${ typeof userState }), last updated: ${ Math.round(Date.now() / 1000) - (userState.lastUpdated ? userState.lastUpdated : 0) } seconds ago`);
+  console.log(`Retrieved user state from Redis (typeof ${ typeof userState }), 
+    last updated: ${ Math.round(Date.now() / 1000) - (userState.lastUpdated ? userState.lastUpdated : 0) } seconds ago`);
 
   return usm.answerWithStartFromBeginning(msg.chat.id, 'Help is not supported yet');
   // return LOSBot.sendMessage(msg.chat.id, 'Help is not supported yet');
@@ -134,6 +131,9 @@ LOSBot.on('message', async (msg: Message) => {
       // TODO IF requesting user is in USER_STATES.WAIT_FOR_CITY_CONFIRM
       //  - update currentCity in redis and go on
       break;
+    case USER_STATES.WAIT_FOR_FOOD_CATEGORY:
+      // TODO based on category, randomly select 5 foods and send
+      break;
     default:
       // TODO redirect to /start
   }
@@ -148,8 +148,13 @@ LOSBot.on('location', async (msg: Message) => {
 
   console.log(`/location command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
-  // TODO IF requesting user is in USER_STATES.WAIT_FOR_LOCATION states
-  //    - update currentCity in redis and go on
+  const userState: UserStateInterface = await usm.getUserState(user.id);
+
+  if (userState.currentState !== USER_STATES.WAIT_FOR_LOCATION) {
+    console.log(`User state mismatch: current state ${ userState.currentState } !== ${ USER_STATES.WAIT_FOR_LOCATION }`);
+    return usm.answerWithStartFromBeginning(msg.chat.id);
+  }
+
   console.log('Querying for a city by coordinates...');
 
   if (msg.location === undefined) return LOSBot.sendMessage(msg.chat.id, 'Что-то не так с получением ваших геоданных, попробуйте еще раз...');
@@ -161,7 +166,23 @@ LOSBot.on('location', async (msg: Message) => {
 
   const placeAtLocation: Entry[] = await geocoderClient.reverse(requestLocation);
 
-  return console.log(`User city: ${ placeAtLocation[0].city }`);
+  // check if user city is supported
+  const userCityString: string | undefined = placeAtLocation[0].city;
+  console.log(`User city de-Geocoded: ${ userCityString }`);
+  const userCity: SUPPORTED_CITIES | null = UserStateManager.getCityFromString(userCityString);
+
+  if (userCity === null) {
+    console.log('User city not supported');
+    return usm.answerWithStartFromBeginning(msg.chat.id, `Unfortunately, but ${ userCityString } city is not supported yet. 
+      Try waiting, or moving to another place!`);
+  }
+
+  // update user state
+  userState.currentCity = userCity;
+  userState.currentState = USER_STATES.WAIT_FOR_FOOD_CATEGORY;
+  await usm.updateUserState(user.id, userState);
+
+  return usm.answerWithFoodCategoriesMenu(msg.chat.id);
 });
 
 LOSBot.on('polling_error', (err) => {

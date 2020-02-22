@@ -4,8 +4,10 @@ import TelegramBot, {
   ReplyKeyboardRemove,
   SendMessageOptions
 } from 'node-telegram-bot-api';
-import UserStateInterface from './UserStateInterface';
+import UserStateInterface, { SUPPORTED_CITIES } from './UserStateInterface';
 import LosRedisClient from '../LosRedisClient';
+
+const CITY_STRING_ODESA = 'Odesa';
 
 export default class UserStateManager {
   redisClient: LosRedisClient;
@@ -25,39 +27,41 @@ export default class UserStateManager {
     if (!obj.currentState) return Promise.resolve({} as UserStateInterface);
 
     const userState: UserStateInterface = {
-      currentState: obj.currentState as unknown as number,
-      currentCity: obj.currentCity as unknown as number,
-      lastUpdated: obj.lastUpdated as unknown as number
+      currentState: parseInt(obj.currentState, 10),
+      currentCity: parseInt(obj.currentCity, 10),
+      lastUpdated: parseInt(obj.lastUpdated, 10)
     };
 
     return Promise.resolve(userState);
   }
 
   async updateUserState (userId: number, newUserState: UserStateInterface): Promise<boolean> {
-    // get user state from REDIS by user id
-    const currUserState: UserStateInterface | null = await this.getUserState(userId);
     const userRedisKey = `${ userId }_userState`;
-    // if not present, just set it
-    if (currUserState === null) {
-      console.log(`Storing user state in Redis with key ${ userRedisKey }`);
-      // @ts-ignore TODO
-      await this.redisClient.hmsetAsync(userRedisKey, newUserState);
-    }
 
-    // TODO if present, update fields which are set by userState param, including null, but excluding all undefined props
-    // save to redis
+    console.log(`Storing user state in Redis with key ${ userRedisKey }`);
+    // @ts-ignore TODO
+    await this.redisClient.hmsetAsync(userRedisKey, newUserState);
 
     return Promise.resolve(true);
+  }
+
+  static getCityFromString (city: string | undefined): SUPPORTED_CITIES | null {
+    switch (city) {
+      case CITY_STRING_ODESA:
+        return SUPPORTED_CITIES.ODESSA;
+      default:
+        return null;
+    }
   }
 
   answerWithWaitForLocation (chatId: number, message?: string): Promise<TelegramBot.Message> {
     // Respond with a message and keyboard
     const verifiedMessage: string = message || "Great! Let's start. First things first, I'll need your location to only show you places around you.";
 
-    const firstButton: KeyboardButton = { text: '📍 Send my Location', request_location: true };
+    const sendLocationButton: KeyboardButton = { text: '📍 Send my Location', request_location: true };
 
     const replyMarkup: ReplyKeyboardMarkup = {
-      keyboard: [[ firstButton ]],
+      keyboard: [[ sendLocationButton ]],
       resize_keyboard: true
     };
 
@@ -73,6 +77,26 @@ export default class UserStateManager {
 
     const replyMarkup: ReplyKeyboardRemove = {
       remove_keyboard: true
+    };
+
+    const messageOptions: SendMessageOptions = {
+      reply_markup: replyMarkup
+    };
+
+    return this.LOSBot.sendMessage(chatId, verifiedMessage, messageOptions);
+  }
+
+  answerWithFoodCategoriesMenu (chatId: number, message?: string): Promise<TelegramBot.Message> {
+    const verifiedMessage: string = message || "Good! What kind of food you're up to?";
+
+    const surpriseMeButton: KeyboardButton = { text: '🐙 Surprise me!' };
+    const firstRowOfCategories: KeyboardButton[] = [
+      { text: '🍣 Sushi' }, { text: '🍕 Pizza' }, { text: '🥡 Wok' }
+    ];
+
+    const replyMarkup: ReplyKeyboardMarkup = {
+      keyboard: [[ surpriseMeButton ], firstRowOfCategories ],
+      resize_keyboard: true
     };
 
     const messageOptions: SendMessageOptions = {
