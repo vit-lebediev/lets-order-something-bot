@@ -1,9 +1,6 @@
 // Dependency imports
 import TelegramBot, {
-  KeyboardButton,
   Message,
-  ReplyKeyboardMarkup,
-  SendMessageOptions,
   User
 } from 'node-telegram-bot-api';
 
@@ -15,8 +12,9 @@ import NodeGeocoder, {
 } from 'node-geocoder';
 
 // Projects imports
-import LosRedisClient from './RedisClient';
-import UserState, { SUPPORTED_CITIES, USER_STATES } from './UserStateInterface';
+import LosRedisClient from './LosRedisClient';
+import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from './UserState/UserStateInterface';
+import UserStateManager from './UserState/UserStateManager';
 
 // Const initialization
 const { LOS_BOT_TG_TOKEN } = process.env;
@@ -71,42 +69,26 @@ const geocoderClient: Geocoder = NodeGeocoder(geocoderOptions);
 // Init TelegramBot
 const LOSBot = new TelegramBot(LOS_BOT_TG_TOKEN, { polling: true });
 
+// Init Project Deps
+const usm = new UserStateManager(redisClient, LOSBot);
+
 // Telegram Events handlers
-LOSBot.onText(/^\/start/, (msg: Message) => {
+LOSBot.onText(/^\/start/, async (msg: Message) => {
   const user: User | undefined = msg.from;
 
-  if (user === undefined) {
-    return LOSBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
-  }
+  if (user === undefined) return LOSBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
 
   console.log(`/start command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
-  // Update current user state in Redis
-  const userRedisKey: string = `${ user.id }_userState`;
-
-  // Should implement UserState, but redis lib swears
-  const userState = { // :UserState
+  const userState = {
     currentState: USER_STATES.WAIT_FOR_LOCATION,
     currentCity: SUPPORTED_CITIES.UNKNOWN,
     lastUpdated: Math.round(Date.now() / 1000)
-  };
+  } as UserStateInterface;
 
-  console.log(`Storing user state in Redis with key ${ userRedisKey }`);
-  redisClient.hmset(userRedisKey, userState);
+  await usm.updateUserState(user.id, userState);
 
-  // Respond with a message and keyboard
-  const firstButton: KeyboardButton = { text: '📍 Send my Location', request_location: true };
-
-  const replyMarkup: ReplyKeyboardMarkup = {
-    keyboard: [[ firstButton ]],
-    resize_keyboard: true
-  };
-
-  const messageOptions: SendMessageOptions = {
-    reply_markup: replyMarkup
-  };
-
-  return LOSBot.sendMessage(msg.chat.id, "Great! Let's start. First things first, I'll need your location to only show you places around you.", messageOptions);
+  return usm.answerWithWaitForLocation(msg.chat.id);
 });
 
 LOSBot.onText(/^\/help/, async (msg: Message) => {
@@ -114,19 +96,14 @@ LOSBot.onText(/^\/help/, async (msg: Message) => {
 
   if (user === undefined) return LOSBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
 
-  const userRedisKey = `${ user.id }_userState`;
+  console.log(`/start command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
-  const obj = await redisClient.hgetallAsync(userRedisKey);
+  const userState: UserStateInterface | null = await usm.getUserState(user.id);
 
-  const userState: UserState = {
-    currentState: Number(obj.currentState),
-    currentCity: Number(obj.currentCity),
-    lastUpdated: Number(obj.lastUpdated)
-  };
+  console.log(`Retrieved user state from Redis (typeof ${ typeof userState }), last updated: ${ Math.round(Date.now() / 1000) - (userState.lastUpdated ? userState.lastUpdated : 0) } seconds ago`);
 
-  console.log(`Retrieved user state from Redis (typeof ${ typeof userState }), last updated: ${ Math.round(Date.now() / 1000) - userState.lastUpdated } seconds ago`);
-
-  return LOSBot.sendMessage(msg.chat.id, 'Help is not supported yet');
+  return usm.answerWithStartFromBeginning(msg.chat.id, 'Help is not supported yet');
+  // return LOSBot.sendMessage(msg.chat.id, 'Help is not supported yet');
 });
 
 LOSBot.onText(/^\/settings/, (msg) => LOSBot.sendMessage(msg.chat.id, 'Settings currently are not supported. TBD.'));
@@ -137,21 +114,13 @@ LOSBot.on('message', async (msg: Message) => {
 
   // get user state
   const user: User | undefined = msg.from;
-
   if (user === undefined) return LOSBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
 
-  const userRedisKey = `${ user.id }_userState`;
+  const userState: UserStateInterface | null = await usm.getUserState(user.id);
 
-  const obj = await redisClient.hgetallAsync(userRedisKey);
-
-  // TODO if undefined - redirect to /start
-  if (!obj.currentState) return new Promise(() => {});
-
-  const userState: UserState = {
-    currentState: Number(obj.currentState),
-    currentCity: Number(obj.currentCity),
-    lastUpdated: Number(obj.lastUpdated)
-  };
+  if (userState === null) {
+    return usm.answerWithWaitForLocation(msg.chat.id);
+  }
 
   // switch userState
   switch (userState.currentState) {
@@ -169,11 +138,15 @@ LOSBot.on('message', async (msg: Message) => {
       // TODO redirect to /start
   }
 
-  return console.log('Test - message came in');
+  return console.log('Test - ANY message came in');
 });
 
 LOSBot.on('location', async (msg: Message) => {
-  console.log(msg);
+  const user: User | undefined = msg.from;
+
+  if (user === undefined) return LOSBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
+
+  console.log(`/location command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
   // TODO IF requesting user is in USER_STATES.WAIT_FOR_LOCATION states
   //    - update currentCity in redis and go on

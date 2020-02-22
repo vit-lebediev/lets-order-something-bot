@@ -9,10 +9,14 @@
   "scripts": {
     "build": "tsc -b",
     "watchts": "tsc -w",
+
     "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "export $(cat .los_bot_env | xargs) && nodemon src/index.js",
-    "env": "export $(cat .los_bot_env | xargs)"
+
+    "stack": "docker-compose -f stack.yml up",
+
+    "start": "export $(cat .env | xargs) && nodemon src/index.js",
+    "env": "export $(cat .env | xargs)"
   },
   "repository": {
     "type": "git",

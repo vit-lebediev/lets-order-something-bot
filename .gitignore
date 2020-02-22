@@ -1,5 +1,5 @@
 *.js
-.los_bot_env
+.env
 
 ### Github generated file ###
 # Logs

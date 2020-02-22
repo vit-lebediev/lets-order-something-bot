@@ -24,7 +24,9 @@
             "arraysInArrays": false
         }],
         "template-curly-spacing": ["warn", "always"],
+        "space-before-function-paren": ["warn", "always"],
         "comma-dangle": ["error", "never"],
+        "max-len": ["warn", 160],
         "@typescript-eslint/no-unused-vars": "error"
     }
 }
