@@ -1,6 +1,21 @@
-// eslint-disable-next-line import/prefer-default-export
 export enum LOCALES {
   UK = 'uk',
   RU = 'ru',
   EN = 'en'
+}
+
+export enum FOOD_CATEGORIES {
+  SUSHI = 'SUSHI',
+  PIZZA = 'PIZZA',
+  SHAWERMA = 'SHAWERMA',
+  VEGETARIAN = 'VEG',
+  NOODLES_N_RICE = 'NOODLES_N_RICE',
+  HOMEY = 'HOMEY',
+  BURGERS_N_HOTDOGS_N_SANDWICHES = 'BHS',
+  SALADS = 'SALADS',
+  SOUPS = 'SOUPS',
+  PASTA = 'PASTA',
+  SNACKS = 'SNACKS',
+  DESERTS = 'DESERTS',
+  CHILDREN_MENU = 'CHILDREN_MENU'
 }

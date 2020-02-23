@@ -1,5 +1,6 @@
+# Project-wise
 *.js
-.env
+*/places.csv
 
 ### Github generated file ###
 # Logs
