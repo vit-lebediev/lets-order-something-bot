@@ -1,6 +1,5 @@
-import TelegramBot, { Message, User } from 'node-telegram-bot-api';
+import { Message } from 'node-telegram-bot-api';
 
-import LosTelegramBot from '../LosTelegramBot';
 import UserStateInterface, { USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
 
@@ -10,19 +9,12 @@ import TextLocationHandler from './MessageHandlers/TextLocationHandler';
 import CityConfirmationHandler from './MessageHandlers/CityConfirmationHandler';
 
 export default class MessageHandler {
-  static async handle (msg: Message): Promise<TelegramBot.Message> {
+  static async handle (msg: Message): Promise<Message> {
     // leave 'location' requests for dedicated handle
     if (msg.location) return new Promise(() => {});
 
     // get user state
-    const user: User | undefined = msg.from;
-    if (user === undefined) return LosTelegramBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
-
-    const userState: UserStateInterface | null = await UserStateManager.getUserState(user.id);
-
-    if (userState === null) {
-      return UserStateManager.answerWithWaitForLocation(msg.chat.id);
-    }
+    const userState: UserStateInterface = await UserStateManager.getUserState(msg);
 
     // switch userState
     switch (userState.currentState) {

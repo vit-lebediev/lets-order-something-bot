@@ -1,5 +1,5 @@
 // Dependency imports
-import TelegramBot, { Message, User } from 'node-telegram-bot-api';
+import { Message, User } from 'node-telegram-bot-api';
 import NodeGeocoder, {
   Entry,
   Geocoder,
@@ -31,15 +31,14 @@ const geocoderOptions: Options = {
 const geocoderClient: Geocoder = NodeGeocoder(geocoderOptions);
 
 export default class LocationHandler {
-  static async handle (msg: Message): Promise<TelegramBot.Message> {
-    const user: User | undefined = msg.from;
-
-    if (user === undefined) return LosTelegramBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
+  static async handle (msg: Message): Promise<Message> {
+    const user: User = UserStateManager.getUserFromMessage(msg);
 
     logger.info(`/location command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
-    const userState: UserStateInterface = await UserStateManager.getUserState(user.id);
+    const userState: UserStateInterface = await UserStateManager.getUserState(msg);
 
+    // verify we're in a proper state for this event...
     if (userState.currentState !== USER_STATES.WAIT_FOR_LOCATION) {
       logger.warn(`User state mismatch: current state ${ userState.currentState } !== ${ USER_STATES.WAIT_FOR_LOCATION }`);
       return UserStateManager.answerWithStartFromBeginning(msg.chat.id);
