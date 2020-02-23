@@ -11,6 +11,7 @@ import NodeGeocoder, {
 import LosTelegramBot from '../LosTelegramBot';
 import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
+import ResponseManager from '../ResponseManager';
 import Logger from '../Logger';
 
 const logger = Logger.child({ module: 'LocationHandler' });
@@ -41,7 +42,7 @@ export default class LocationHandler {
     // verify we're in a proper state for this event...
     if (userState.currentState !== USER_STATES.WAIT_FOR_LOCATION) {
       logger.warn(`User state mismatch: current state ${ userState.currentState } !== ${ USER_STATES.WAIT_FOR_LOCATION }`);
-      return UserStateManager.answerWithStartFromBeginning(msg.chat.id);
+      return ResponseManager.answerWithStartFromBeginning(msg.chat.id);
     }
 
     logger.info('Querying for a city by coordinates...');
@@ -62,7 +63,7 @@ export default class LocationHandler {
 
     if (userCity === null) {
       logger.warn('User city not supported');
-      return UserStateManager.answerWithStartFromBeginning(msg.chat.id, `Unfortunately, but ${ userCityString } city is not supported yet. 
+      return ResponseManager.answerWithStartFromBeginning(msg.chat.id, `Unfortunately, but ${ userCityString } city is not supported yet. 
       Try waiting, or moving to another place!`);
     }
 
@@ -71,6 +72,6 @@ export default class LocationHandler {
     userState.currentState = USER_STATES.WAIT_FOR_FOOD_CATEGORY;
     await UserStateManager.updateUserState(user.id, userState);
 
-    return UserStateManager.answerWithFoodCategoriesMenu(msg.chat.id);
+    return ResponseManager.answerWithFoodCategoriesMenu(msg.chat.id);
   }
 }

@@ -2,6 +2,7 @@ import { Message, User } from 'node-telegram-bot-api';
 
 import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
+import ResponseManager from '../ResponseManager';
 import Logger from '../Logger';
 
 const logger = Logger.child({ module: 'StartHandler' });
@@ -20,6 +21,6 @@ export default class StartHandler {
 
     await UserStateManager.updateUserState(user.id, userState);
 
-    return UserStateManager.answerWithWaitForLocation(msg.chat.id);
+    return ResponseManager.answerWithWaitForLocation(msg.chat.id);
   }
 }

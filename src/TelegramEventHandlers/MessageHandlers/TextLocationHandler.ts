@@ -1,6 +1,6 @@
 import { Message } from 'node-telegram-bot-api';
 
-import UserStateManager from '../../UserState/UserStateManager';
+import ResponseManager from '../../ResponseManager';
 
 export default class TextLocationHandler {
   static handle (msg: Message): Promise<Message> {
@@ -8,6 +8,6 @@ export default class TextLocationHandler {
     //  - take msg.text and try to identify city.
     //  - update current state to USER_STATES.WAIT_FOR_CITY_CONFIRM
     //  - send user confirmation message with YES and NO buttons
-    return UserStateManager.answerWithStartFromBeginning(msg.chat.id);
+    return ResponseManager.answerWithStartFromBeginning(msg.chat.id);
   }
 }

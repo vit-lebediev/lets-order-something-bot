@@ -7,6 +7,7 @@ import UserStateManager from '../UserState/UserStateManager';
 import FoodCategoryHandler from './MessageHandlers/FoodCategoryHandler';
 import TextLocationHandler from './MessageHandlers/TextLocationHandler';
 import CityConfirmationHandler from './MessageHandlers/CityConfirmationHandler';
+import ResponseManager from '../ResponseManager';
 
 export default class MessageHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -23,7 +24,7 @@ export default class MessageHandler {
       case USER_STATES.WAIT_FOR_CITY_CONFIRM: return CityConfirmationHandler.handle(msg);
       case USER_STATES.WAIT_FOR_FOOD_CATEGORY: return FoodCategoryHandler.handle(msg);
 
-      default: return UserStateManager.answerWithStartFromBeginning(msg.chat.id);
+      default: return ResponseManager.answerWithStartFromBeginning(msg.chat.id);
     }
   }
 }
