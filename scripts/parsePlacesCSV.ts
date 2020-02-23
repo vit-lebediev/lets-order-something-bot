@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import * as csv from 'fast-csv'; // eslint-disable-line import/no-extraneous-dependencies
+import { Collection } from 'mongodb';
 
 import LosMongoClient from '../src/LosMongoClient';
 import Logger from '../src/Logger';
@@ -8,7 +9,8 @@ import Logger from '../src/Logger';
 const logger = Logger.child({ module: 'parsePlaces' });
 
 setTimeout(async () => {
-  const placesCollection = LosMongoClient.dbHandler.collection('places');
+  // @ts-ignore
+  const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
 
   await placesCollection.remove({});
 

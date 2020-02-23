@@ -23,6 +23,7 @@ export default class UserStateManager {
     if (!obj.currentState) return Promise.resolve(null);
 
     const userState: UserStateInterface = {
+      userId,
       currentState: obj.currentState as USER_STATES,
       currentCity: obj.currentCity as SUPPORTED_CITIES,
       lastUpdated: parseInt(obj.lastUpdated, 10)

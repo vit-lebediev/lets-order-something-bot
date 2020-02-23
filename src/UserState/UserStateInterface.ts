@@ -1,6 +1,6 @@
 export enum SUPPORTED_CITIES {
-  UNKNOWN = 'UNKNOWN',
-  ODESA = 'ODESA',
+  UNKNOWN = 'unknown',
+  ODESA = 'odesa',
   // KIEV
 }
 
@@ -11,6 +11,7 @@ export enum USER_STATES {
 }
 
 export default interface UserStateInterface {
+  userId: number | undefined,
   currentState: USER_STATES | undefined,
   currentCity: SUPPORTED_CITIES | undefined,
   lastUpdated: number | undefined,
