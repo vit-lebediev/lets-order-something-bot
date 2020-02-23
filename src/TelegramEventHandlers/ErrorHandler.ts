@@ -1,6 +1,6 @@
-import LosLogger from '../LosLogger';
+import Logger from '../Logger';
 
-const logger = LosLogger.child({ module: 'ErrorHandler' });
+const logger = Logger.child({ module: 'ErrorHandler' });
 
 export default class ErrorHandler {
   static handle (err: Error) {

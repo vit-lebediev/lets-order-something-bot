@@ -2,9 +2,9 @@ import { Message, User } from 'node-telegram-bot-api';
 
 import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
-import LosLogger from '../LosLogger';
+import Logger from '../Logger';
 
-const logger = LosLogger.child({ module: 'StartHandler' });
+const logger = Logger.child({ module: 'StartHandler' });
 
 export default class StartHandler {
   static async handle (msg: Message): Promise<Message> {

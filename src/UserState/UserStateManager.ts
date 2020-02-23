@@ -8,9 +8,9 @@ import {
 import UserStateInterface, { SUPPORTED_CITIES } from './UserStateInterface';
 import LosRedisClient from '../LosRedisClient';
 import LosTelegramBot from '../LosTelegramBot';
-import LosLogger from '../LosLogger';
+import Logger from '../Logger';
 
-const logger = LosLogger.child({ module: 'UserStateManagerHandler' });
+const logger = Logger.child({ module: 'UserStateManagerHandler' });
 
 const CITY_STRING_ODESA = 'Odesa';
 

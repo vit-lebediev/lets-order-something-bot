@@ -11,9 +11,9 @@ import NodeGeocoder, {
 import LosTelegramBot from '../LosTelegramBot';
 import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
-import LosLogger from '../LosLogger';
+import Logger from '../Logger';
 
-const logger = LosLogger.child({ module: 'LocationHandler' });
+const logger = Logger.child({ module: 'LocationHandler' });
 
 const { LOS_BOT_OC_TOKEN } = process.env;
 

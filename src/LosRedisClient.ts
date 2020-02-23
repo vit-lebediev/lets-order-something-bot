@@ -1,9 +1,9 @@
 import { promisify } from 'util';
 import { RedisClient } from 'redis';
 
-import LosLogger from './LosLogger';
+import Logger from './Logger';
 
-const logger = LosLogger.child({ module: 'LosRedisClient' });
+const logger = Logger.child({ module: 'LosRedisClient' });
 
 const REDIS_HOST: string | undefined = process.env.LOS_REDIS_HOST;
 const REDIS_PORT: string | number | undefined = process.env.LOS_REDIS_PORT;
