@@ -19,7 +19,10 @@ setTimeout(async () => {
       logger.info('Inserting Row:');
       console.log(row);
 
-      await placesCollection.insertOne(row);
+      const insertRow = row;
+      insertRow.categories = row.categories.split(',');
+
+      await placesCollection.insertOne(insertRow);
     })
     .on('end', async (rowCount: number) => {
       logger.info(`Parsed ${ rowCount } rows`);

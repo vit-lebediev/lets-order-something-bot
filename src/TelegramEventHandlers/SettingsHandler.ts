@@ -1,10 +1,10 @@
 import { Message } from 'node-telegram-bot-api';
 
-import ResponseManager from '../ResponseManager';
 import I18n from '../I18n';
+import BaseHandler from './BaseHandler';
 
-export default class SettingsHandler {
+export default class SettingsHandler extends BaseHandler {
   static handle (msg: Message): Promise<Message> {
-    return ResponseManager.answerWithStartFromBeginning(msg.chat.id, I18n.t('SettingsHandler.notSupported'));
+    return BaseHandler.answerWithStartFromBeginning(msg.chat.id, I18n.t('SettingsHandler.notSupported'));
   }
 }

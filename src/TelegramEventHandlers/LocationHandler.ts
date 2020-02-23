@@ -1,5 +1,11 @@
 // Dependency imports
-import { Message, User } from 'node-telegram-bot-api';
+import {
+  KeyboardButton,
+  Message,
+  ReplyKeyboardMarkup,
+  SendMessageOptions,
+  User
+} from 'node-telegram-bot-api';
 import NodeGeocoder, {
   Entry,
   Geocoder,
@@ -12,7 +18,7 @@ import i18n from 'i18n';
 import LosTelegramBot from '../LosTelegramBot';
 import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
-import ResponseManager from '../ResponseManager';
+import BaseHandler from './BaseHandler';
 import Logger from '../Logger';
 import I18n from '../I18n';
 
@@ -46,7 +52,7 @@ export default class LocationHandler {
     // verify we're in a proper state for this event...
     if (userState.currentState !== USER_STATES.WAIT_FOR_LOCATION) {
       logger.warn(`User state mismatch: current state ${ userState.currentState } !== ${ USER_STATES.WAIT_FOR_LOCATION }`);
-      return ResponseManager.answerWithStartFromBeginning(msg.chat.id);
+      return BaseHandler.answerWithStartFromBeginning(msg.chat.id);
     }
 
     logger.info('Querying for a city by coordinates...');
@@ -67,7 +73,7 @@ export default class LocationHandler {
 
     if (userCity === null) {
       logger.warn('User city not supported');
-      return ResponseManager.answerWithStartFromBeginning(
+      return BaseHandler.answerWithStartFromBeginning(
         msg.chat.id,
         I18n.t('LocationHandler.errorCityNotSupported', { city: userCityString } as Replacements)
       );
@@ -78,6 +84,60 @@ export default class LocationHandler {
     userState.currentState = USER_STATES.WAIT_FOR_FOOD_CATEGORY;
     await UserStateManager.updateUserState(user.id, userState);
 
-    return ResponseManager.answerWithFoodCategoriesMenu(msg.chat.id);
+    return LocationHandler.answerWithFoodCategoriesMenu(msg.chat.id);
+  }
+
+  /**
+   * Used by LocationHandler
+   *
+   * @param chatId
+   * @param message
+   */
+  static answerWithFoodCategoriesMenu (chatId: number, message?: string): Promise<Message> {
+    const verifiedMessage: string = message || I18n.t('LocationHandler.whatFood');
+
+    const surpriseMeButton: KeyboardButton = { text: I18n.t('LocationHandler.buttons.chooseForMe') };
+    const firstRowOfCategories: KeyboardButton[] = [
+      { text: I18n.t('LocationHandler.buttons.sushi') },
+      { text: I18n.t('LocationHandler.buttons.pizza') },
+      { text: I18n.t('LocationHandler.buttons.shawerma') }
+    ];
+    const secondRowOfCategories: KeyboardButton[] = [
+      { text: I18n.t('LocationHandler.buttons.veg') },
+      { text: I18n.t('LocationHandler.buttons.noodles') },
+      { text: I18n.t('LocationHandler.buttons.homey') }
+    ];
+    const thirdRowOfCategories: KeyboardButton[] = [
+      { text: I18n.t('LocationHandler.buttons.bhs') }
+    ];
+    const fourthRowOfCategories: KeyboardButton[] = [
+      { text: I18n.t('LocationHandler.buttons.salads') },
+      { text: I18n.t('LocationHandler.buttons.soups') },
+      { text: I18n.t('LocationHandler.buttons.pasta') }
+    ];
+    const fifthRowOfCategories: KeyboardButton[] = [
+      { text: I18n.t('LocationHandler.buttons.snacks') },
+      { text: I18n.t('LocationHandler.buttons.desserts') },
+      { text: I18n.t('LocationHandler.buttons.children') }
+    ];
+
+    const replyMarkup: ReplyKeyboardMarkup = {
+      keyboard: [
+        [ surpriseMeButton ],
+        firstRowOfCategories,
+        secondRowOfCategories,
+        thirdRowOfCategories,
+        fourthRowOfCategories,
+        fifthRowOfCategories
+      ],
+      resize_keyboard: true
+    };
+
+    const messageOptions: SendMessageOptions = {
+      reply_markup: replyMarkup,
+      parse_mode: 'Markdown'
+    };
+
+    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 }

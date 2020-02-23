@@ -7,13 +7,13 @@ import UserStateManager from '../UserState/UserStateManager';
 import FoodCategoryHandler from './MessageHandlers/FoodCategoryHandler';
 import TextLocationHandler from './MessageHandlers/TextLocationHandler';
 import CityConfirmationHandler from './MessageHandlers/CityConfirmationHandler';
-import ResponseManager from '../ResponseManager';
+import BaseHandler from './BaseHandler';
 
 const startCommandRegExp = /^\/start/;
 const helpCommandRegExp = /^\/help/;
 const settingsCommandRegExp = /^\/settings/;
 
-export default class MessageHandler {
+export default class MessageHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     // leave 'location' requests for dedicated handle
     if (msg.location) return new Promise(() => {});
@@ -37,7 +37,7 @@ export default class MessageHandler {
       case USER_STATES.WAIT_FOR_CITY_CONFIRM: return CityConfirmationHandler.handle(msg);
       case USER_STATES.WAIT_FOR_FOOD_CATEGORY: return FoodCategoryHandler.handle(msg);
 
-      default: return ResponseManager.answerWithStartFromBeginning(msg.chat.id);
+      default: return BaseHandler.answerWithStartFromBeginning(msg.chat.id);
     }
   }
 }
