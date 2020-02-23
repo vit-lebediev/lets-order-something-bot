@@ -8,11 +8,15 @@ import NodeGeocoder, {
 } from 'node-geocoder';
 
 // Projects imports
+import i18n from 'i18n';
 import LosTelegramBot from '../LosTelegramBot';
 import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
 import ResponseManager from '../ResponseManager';
 import Logger from '../Logger';
+import I18n from '../I18n';
+
+import Replacements = i18n.Replacements;
 
 const logger = Logger.child({ module: 'LocationHandler' });
 
@@ -47,7 +51,7 @@ export default class LocationHandler {
 
     logger.info('Querying for a city by coordinates...');
 
-    if (msg.location === undefined) return LosTelegramBot.sendMessage(msg.chat.id, 'Что-то не так с получением ваших геоданных, попробуйте еще раз...');
+    if (msg.location === undefined) return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('LocationHandler.errorGeocoding'));
 
     const requestLocation: Location = {
       lat: msg.location.latitude,
@@ -63,8 +67,10 @@ export default class LocationHandler {
 
     if (userCity === null) {
       logger.warn('User city not supported');
-      return ResponseManager.answerWithStartFromBeginning(msg.chat.id, `Unfortunately, but ${ userCityString } city is not supported yet. 
-      Try waiting, or moving to another place!`);
+      return ResponseManager.answerWithStartFromBeginning(
+        msg.chat.id,
+        I18n.t('LocationHandler.errorCityNotSupported', { city: userCityString } as Replacements)
+      );
     }
 
     // update user state

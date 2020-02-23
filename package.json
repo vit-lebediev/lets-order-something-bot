@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/Malgin/lets-order-something-bot#readme",
   "dependencies": {
+    "i18n": "^0.8.5",
     "js-levenshtein": "^1.1.6",
     "mongodb": "^3.5.2",
     "node-geocoder": "^3.25.0",
@@ -39,6 +40,7 @@
     "redis": "^2.8.0"
   },
   "devDependencies": {
+    "@types/i18n": "^0.8.6",
     "@types/mongodb": "^3.3.15",
     "@types/node-geocoder": "^3.24.1",
     "@types/node-telegram-bot-api": "^0.40.1",

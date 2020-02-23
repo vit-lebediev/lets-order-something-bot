@@ -9,10 +9,23 @@ import TextLocationHandler from './MessageHandlers/TextLocationHandler';
 import CityConfirmationHandler from './MessageHandlers/CityConfirmationHandler';
 import ResponseManager from '../ResponseManager';
 
+const startCommandRegExp = /^\/start/;
+const helpCommandRegExp = /^\/help/;
+const settingsCommandRegExp = /^\/settings/;
+
 export default class MessageHandler {
   static async handle (msg: Message): Promise<Message> {
     // leave 'location' requests for dedicated handle
     if (msg.location) return new Promise(() => {});
+
+    if (msg.text && (
+      startCommandRegExp.test(msg.text)
+      || helpCommandRegExp.test(msg.text)
+      || settingsCommandRegExp.test(msg.text)
+    )) {
+      // leave all 'commands' to their dedicated handlers
+      return new Promise(() => {});
+    }
 
     // get user state
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
