@@ -19,7 +19,7 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
 
-    const logger = Logger.child({ module: 'MessageHandler:FoodCategoryHandler', userId: userState.userId});
+    const logger = Logger.child({ module: 'MessageHandler:FoodCategoryHandler', userId: userState.userId });
 
     let category: FOOD_CATEGORIES;
 

@@ -18,8 +18,6 @@ import MessageHandler from './TelegramEventHandlers/MessageHandler';
 //   }
 // };
 
-// TODO Init MongoDB
-
 LosTelegramBot.onText(/^\/start/, StartHandler.handle);
 LosTelegramBot.onText(/^\/help/, HelpHandler.handle);
 LosTelegramBot.onText(/^\/settings/, SettingsHandler.handle);
