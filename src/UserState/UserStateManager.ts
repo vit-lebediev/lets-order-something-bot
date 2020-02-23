@@ -1,6 +1,6 @@
 import { Message, User } from 'node-telegram-bot-api';
 
-import UserStateInterface, { SUPPORTED_CITIES } from './UserStateInterface';
+import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from './UserStateInterface';
 import LosRedisClient from '../LosRedisClient';
 import Logger from '../Logger';
 
@@ -23,8 +23,8 @@ export default class UserStateManager {
     if (!obj.currentState) return Promise.resolve(null);
 
     const userState: UserStateInterface = {
-      currentState: parseInt(obj.currentState, 10),
-      currentCity: parseInt(obj.currentCity, 10),
+      currentState: obj.currentState as USER_STATES,
+      currentCity: obj.currentCity as SUPPORTED_CITIES,
       lastUpdated: parseInt(obj.lastUpdated, 10)
     };
 
@@ -82,7 +82,7 @@ export default class UserStateManager {
   static getCityFromString (city: string | undefined): SUPPORTED_CITIES | null {
     switch (city) {
       case CITY_STRING_ODESA:
-        return SUPPORTED_CITIES.ODESSA;
+        return SUPPORTED_CITIES.ODESA;
       default:
         return null;
     }
