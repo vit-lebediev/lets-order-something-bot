@@ -11,6 +11,9 @@ import NodeGeocoder, {
 import LosTelegramBot from '../LosTelegramBot';
 import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
+import LosLogger from '../LosLogger';
+
+const logger = LosLogger.child({ module: 'LocationHandler' });
 
 const { LOS_BOT_OC_TOKEN } = process.env;
 
@@ -33,16 +36,16 @@ export default class LocationHandler {
 
     if (user === undefined) return LosTelegramBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
 
-    console.log(`/location command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
+    logger.info(`/location command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
     const userState: UserStateInterface = await UserStateManager.getUserState(user.id);
 
     if (userState.currentState !== USER_STATES.WAIT_FOR_LOCATION) {
-      console.log(`User state mismatch: current state ${ userState.currentState } !== ${ USER_STATES.WAIT_FOR_LOCATION }`);
+      logger.warn(`User state mismatch: current state ${ userState.currentState } !== ${ USER_STATES.WAIT_FOR_LOCATION }`);
       return UserStateManager.answerWithStartFromBeginning(msg.chat.id);
     }
 
-    console.log('Querying for a city by coordinates...');
+    logger.info('Querying for a city by coordinates...');
 
     if (msg.location === undefined) return LosTelegramBot.sendMessage(msg.chat.id, 'Что-то не так с получением ваших геоданных, попробуйте еще раз...');
 
@@ -55,11 +58,11 @@ export default class LocationHandler {
 
     // check if user city is supported
     const userCityString: string | undefined = placeAtLocation[0].city;
-    console.log(`User city de-Geocoded: ${ userCityString }`);
+    logger.info(`User city de-Geocoded: ${ userCityString }`);
     const userCity: SUPPORTED_CITIES | null = UserStateManager.getCityFromString(userCityString);
 
     if (userCity === null) {
-      console.log('User city not supported');
+      logger.warn('User city not supported');
       return UserStateManager.answerWithStartFromBeginning(msg.chat.id, `Unfortunately, but ${ userCityString } city is not supported yet. 
       Try waiting, or moving to another place!`);
     }

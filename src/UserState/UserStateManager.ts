@@ -4,9 +4,13 @@ import TelegramBot, {
   ReplyKeyboardRemove,
   SendMessageOptions
 } from 'node-telegram-bot-api';
+
 import UserStateInterface, { SUPPORTED_CITIES } from './UserStateInterface';
 import LosRedisClient from '../LosRedisClient';
 import LosTelegramBot from '../LosTelegramBot';
+import LosLogger from '../LosLogger';
+
+const logger = LosLogger.child({ module: 'UserStateManagerHandler' });
 
 const CITY_STRING_ODESA = 'Odesa';
 
@@ -30,7 +34,7 @@ export default class UserStateManager {
   static async updateUserState (userId: number, newUserState: UserStateInterface): Promise<boolean> {
     const userRedisKey = `${ userId }_userState`;
 
-    console.log(`Storing user state in Redis with key ${ userRedisKey }`);
+    logger.info(`Storing user state in Redis with key ${ userRedisKey }`);
     // @ts-ignore TODO
     await LosRedisClient.hmsetAsync(userRedisKey, newUserState);
 

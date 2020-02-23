@@ -9,12 +9,9 @@
   "scripts": {
     "build": "tsc -b",
     "watchts": "tsc -w",
-
     "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-
     "stack": "docker-compose -f stack.yml up",
-
     "start": "export $(cat .env | xargs) && nodemon src/index.js",
     "env": "export $(cat .env | xargs)"
   },
@@ -38,12 +35,14 @@
     "mongodb": "^3.5.2",
     "node-geocoder": "^3.25.0",
     "node-telegram-bot-api": "^0.40.0",
+    "pino": "^5.16.0",
     "redis": "^2.8.0"
   },
   "devDependencies": {
     "@types/mongodb": "^3.3.15",
     "@types/node-geocoder": "^3.24.1",
     "@types/node-telegram-bot-api": "^0.40.1",
+    "@types/pino": "^5.15.5",
     "@types/redis": "^2.8.14",
     "@typescript-eslint/eslint-plugin": "^2.18.0",
     "@typescript-eslint/parser": "^2.18.0",
@@ -51,6 +50,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.0",
     "nodemon": "^2.0.2",
+    "pino-pretty": "^3.6.0",
     "typescript": "^3.7.5"
   }
 }

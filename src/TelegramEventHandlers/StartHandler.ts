@@ -3,6 +3,9 @@ import TelegramBot, { Message, User } from 'node-telegram-bot-api';
 import LosTelegramBot from '../LosTelegramBot';
 import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
+import LosLogger from '../LosLogger';
+
+const logger = LosLogger.child({ module: 'StartHandler' });
 
 export default class StartHandler {
   static async handle (msg: Message): Promise<TelegramBot.Message> {
@@ -10,7 +13,7 @@ export default class StartHandler {
 
     if (user === undefined) return LosTelegramBot.sendMessage(msg.chat.id, "We've got some issue retrieving your user ID...");
 
-    console.log(`/start command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
+    logger.info(`/start command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
     const userState = {
       currentState: USER_STATES.WAIT_FOR_LOCATION,

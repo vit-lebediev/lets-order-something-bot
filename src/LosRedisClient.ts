@@ -1,6 +1,10 @@
 import { promisify } from 'util';
 import { RedisClient } from 'redis';
 
+import LosLogger from './LosLogger';
+
+const logger = LosLogger.child({ module: 'LosRedisClient' });
+
 const REDIS_HOST: string | undefined = process.env.LOS_REDIS_HOST;
 const REDIS_PORT: string | number | undefined = process.env.LOS_REDIS_PORT;
 
@@ -41,6 +45,6 @@ const redisClient: LosRedisClient = new LosRedisClient({
   port: REDIS_PORT as unknown as number // this shitty line is to make (strict) linter happy
 });
 
-redisClient.on('error', (err) => console.log(`REDIS ERROR: ${ err }`));
+redisClient.on('error', (err) => logger.error(`REDIS ERROR: ${ err }`));
 
 export default redisClient;
