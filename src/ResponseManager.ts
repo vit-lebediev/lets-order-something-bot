@@ -69,13 +69,35 @@ export default class ResponseManager {
     const firstRowOfCategories: KeyboardButton[] = [
       { text: I18n.t('LocationHandler.buttons.sushi') },
       { text: I18n.t('LocationHandler.buttons.pizza') },
-      { text: I18n.t('LocationHandler.buttons.wok') }
+      { text: I18n.t('LocationHandler.buttons.shawerma') }
+    ];
+    const secondRowOfCategories: KeyboardButton[] = [
+      { text: I18n.t('LocationHandler.buttons.veg') },
+      { text: I18n.t('LocationHandler.buttons.noodles') },
+      { text: I18n.t('LocationHandler.buttons.homey') }
+    ];
+    const thirdRowOfCategories: KeyboardButton[] = [
+      { text: I18n.t('LocationHandler.buttons.bhs') }
+    ];
+    const fourthRowOfCategories: KeyboardButton[] = [
+      { text: I18n.t('LocationHandler.buttons.salads') },
+      { text: I18n.t('LocationHandler.buttons.soups') },
+      { text: I18n.t('LocationHandler.buttons.pasta') }
+    ];
+    const fifthRowOfCategories: KeyboardButton[] = [
+      { text: I18n.t('LocationHandler.buttons.snacks') },
+      { text: I18n.t('LocationHandler.buttons.desserts') },
+      { text: I18n.t('LocationHandler.buttons.children') }
     ];
 
     const replyMarkup: ReplyKeyboardMarkup = {
       keyboard: [
         [ surpriseMeButton ],
-        firstRowOfCategories
+        firstRowOfCategories,
+        secondRowOfCategories,
+        thirdRowOfCategories,
+        fourthRowOfCategories,
+        fifthRowOfCategories
       ],
       resize_keyboard: true
     };

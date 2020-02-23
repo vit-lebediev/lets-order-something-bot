@@ -19,7 +19,17 @@
       "chooseForMe": "\uD83D\uDC19 Я не знаю... выбери за меня!",
       "sushi": "\uD83C\uDF63 Суши",
       "pizza": "\uD83C\uDF55 Пицца",
-      "wok": "\uD83E\uDD61 Вок"
+      "shawerma": "\uD83C\uDF2F Шаурма",
+      "veg": "\uD83E\uDD51 Veggie",
+      "noodles": "\uD83E\uDD61 Рис, Лапша",
+      "homey": "\uD83C\uDFE1 Домашняя",
+      "bhs": "\uD83C\uDF54 Бургеры, \uD83C\uDF2D Хот-доги, \uD83E\uDD6A Сендвичи",
+      "salads": "\uD83E\uDD57 Салаты",
+      "soups": "\uD83C\uDF72 Супы",
+      "pasta": "\uD83C\uDF5D Паста",
+      "snacks": "\uD83E\uDD68 Снеки",
+      "desserts": "\uD83C\uDF70 Сладкое",
+      "children": "\uD83E\uDDD2 Для детей"
     }
   },
   "HelpHandler": {
