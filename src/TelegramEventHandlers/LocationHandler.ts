@@ -96,29 +96,31 @@ export default class LocationHandler {
   static answerWithFoodCategoriesMenu (chatId: number, message?: string): Promise<Message> {
     const verifiedMessage: string = message || I18n.t('LocationHandler.whatFood');
 
-    const surpriseMeButton: KeyboardButton = { text: I18n.t('LocationHandler.buttons.chooseForMe') };
+    const surpriseMeButton: KeyboardButton = { text: I18n.t('LocationHandler.buttons.dont_know.text') };
     const firstRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.sushi') },
-      { text: I18n.t('LocationHandler.buttons.pizza') },
-      { text: I18n.t('LocationHandler.buttons.shawerma') }
+      { text: I18n.t('LocationHandler.buttons.sushi.text') },
+      { text: I18n.t('LocationHandler.buttons.pizza.text') },
+      { text: I18n.t('LocationHandler.buttons.shawerma.text') }
     ];
     const secondRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.veg') },
-      { text: I18n.t('LocationHandler.buttons.noodles') },
-      { text: I18n.t('LocationHandler.buttons.homey') }
+      { text: I18n.t('LocationHandler.buttons.vegetarian.text') },
+      { text: I18n.t('LocationHandler.buttons.noodles_n_rice.text') },
+      { text: I18n.t('LocationHandler.buttons.homey.text') }
     ];
     const thirdRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.bhs') }
+      { text: I18n.t('LocationHandler.buttons.burgers.text') },
+      { text: I18n.t('LocationHandler.buttons.hotdogs.text') },
+      { text: I18n.t('LocationHandler.buttons.sandwiches.text') }
     ];
     const fourthRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.salads') },
-      { text: I18n.t('LocationHandler.buttons.soups') },
-      { text: I18n.t('LocationHandler.buttons.pasta') }
+      { text: I18n.t('LocationHandler.buttons.salads.text') },
+      { text: I18n.t('LocationHandler.buttons.soups.text') },
+      { text: I18n.t('LocationHandler.buttons.pasta.text') }
     ];
     const fifthRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.snacks') },
-      { text: I18n.t('LocationHandler.buttons.desserts') },
-      { text: I18n.t('LocationHandler.buttons.children') }
+      { text: I18n.t('LocationHandler.buttons.snacks.text') },
+      { text: I18n.t('LocationHandler.buttons.desserts.text') },
+      { text: I18n.t('LocationHandler.buttons.children_menu.text') }
     ];
 
     const replyMarkup: ReplyKeyboardMarkup = {

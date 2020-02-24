@@ -14,6 +14,8 @@ import UserStateManager from '../../UserState/UserStateManager';
 
 import Replacements = i18n.Replacements;
 
+const DEFAULT_NUMBER_OF_ANSWERS = 3;
+
 export default class FoodCategoryHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
@@ -23,20 +25,22 @@ export default class FoodCategoryHandler extends BaseHandler {
     let category: FOOD_CATEGORIES;
 
     switch (msg.text) {
-      case I18n.t('LocationHandler.buttons.sushi'): category = FOOD_CATEGORIES.SUSHI; break;
-      case I18n.t('LocationHandler.buttons.pizza'): category = FOOD_CATEGORIES.PIZZA; break;
-      case I18n.t('LocationHandler.buttons.shawerma'): category = FOOD_CATEGORIES.SHAWERMA; break;
-      case I18n.t('LocationHandler.buttons.veg'): category = FOOD_CATEGORIES.VEGETARIAN; break;
-      case I18n.t('LocationHandler.buttons.noodles'): category = FOOD_CATEGORIES.NOODLES_N_RICE; break;
-      case I18n.t('LocationHandler.buttons.homey'): category = FOOD_CATEGORIES.HOMEY; break;
-      case I18n.t('LocationHandler.buttons.bhs'): category = FOOD_CATEGORIES.BURGERS_N_HOTDOGS_N_SANDWICHES; break;
-      case I18n.t('LocationHandler.buttons.salads'): category = FOOD_CATEGORIES.SALADS; break;
-      case I18n.t('LocationHandler.buttons.soups'): category = FOOD_CATEGORIES.SOUPS; break;
-      case I18n.t('LocationHandler.buttons.pasta'): category = FOOD_CATEGORIES.PASTA; break;
-      case I18n.t('LocationHandler.buttons.snacks'): category = FOOD_CATEGORIES.SNACKS; break;
-      case I18n.t('LocationHandler.buttons.desserts'): category = FOOD_CATEGORIES.DESSERTS; break;
-      case I18n.t('LocationHandler.buttons.children'): category = FOOD_CATEGORIES.CHILDREN_MENU; break;
-      case I18n.t('LocationHandler.buttons.chooseForMe'):
+      case I18n.t('LocationHandler.buttons.sushi.text'): category = FOOD_CATEGORIES.SUSHI; break;
+      case I18n.t('LocationHandler.buttons.pizza.text'): category = FOOD_CATEGORIES.PIZZA; break;
+      case I18n.t('LocationHandler.buttons.shawerma.text'): category = FOOD_CATEGORIES.SHAWERMA; break;
+      case I18n.t('LocationHandler.buttons.vegetarian.text'): category = FOOD_CATEGORIES.VEGETARIAN; break;
+      case I18n.t('LocationHandler.buttons.noodles_n_rice.text'): category = FOOD_CATEGORIES.NOODLES_N_RICE; break;
+      case I18n.t('LocationHandler.buttons.homey.text'): category = FOOD_CATEGORIES.HOMEY; break;
+      case I18n.t('LocationHandler.buttons.burgers.text'): category = FOOD_CATEGORIES.BURGERS; break;
+      case I18n.t('LocationHandler.buttons.hotdogs.text'): category = FOOD_CATEGORIES.HOTDOGS; break;
+      case I18n.t('LocationHandler.buttons.sandwiches.text'): category = FOOD_CATEGORIES.SANDWICHES; break;
+      case I18n.t('LocationHandler.buttons.salads.text'): category = FOOD_CATEGORIES.SALADS; break;
+      case I18n.t('LocationHandler.buttons.soups.text'): category = FOOD_CATEGORIES.SOUPS; break;
+      case I18n.t('LocationHandler.buttons.pasta.text'): category = FOOD_CATEGORIES.PASTA; break;
+      case I18n.t('LocationHandler.buttons.snacks.text'): category = FOOD_CATEGORIES.SNACKS; break;
+      case I18n.t('LocationHandler.buttons.desserts.text'): category = FOOD_CATEGORIES.DESSERTS; break;
+      case I18n.t('LocationHandler.buttons.children_menu.text'): category = FOOD_CATEGORIES.CHILDREN_MENU; break;
+      case I18n.t('LocationHandler.buttons.dont_know.text'):
       default:
         // TODO Special case, handle separately
         category = FOOD_CATEGORIES.DONT_KNOW; break;
@@ -71,7 +75,7 @@ export default class FoodCategoryHandler extends BaseHandler {
           city: currentUserCity
         }
       },
-      { $sample: { size: 5 } } // @see https://stackoverflow.com/a/33578506/852399
+      { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
     ]).toArray();
   }
 
@@ -90,7 +94,7 @@ export default class FoodCategoryHandler extends BaseHandler {
           city: currentUserCity
         }
       },
-      { $sample: { size: 5 } } // @see https://stackoverflow.com/a/33578506/852399
+      { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
     ]).toArray();
   }
 
@@ -111,7 +115,8 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     for (let i = 0; i < places.length; i += 1) {
       const place = places[i];
-      const replacements: Replacements = { name: place.name, url: place.url };
+      const placeCategories = place.categories.map((cat: string) => I18n.t(`LocationHandler.buttons.${ cat.toLowerCase() }.emoji`)).join(' ');
+      const replacements: Replacements = { name: place.name, url: place.url, categories: placeCategories };
       verifiedMessage += `${ i + 1 }. ${ I18n.t('FoodCategoryHandler.placeTemplate', replacements) }\n`;
     }
 
