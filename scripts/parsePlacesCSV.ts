@@ -29,6 +29,10 @@ setTimeout(async () => {
       if (insertRow.categories !== '') {
         insertRow.categories = row.categories.split(',');
 
+        // get rid of duplicates
+        // @see https://stackoverflow.com/a/14438954/852399
+        insertRow.categories = insertRow.categories.filter((value: string, index: number, self: string) => self.indexOf(value) === index);
+
         for (let i = 0; i < insertRow.categories.length; i += 1) {
           const cat = insertRow.categories[i];
 
@@ -42,6 +46,10 @@ setTimeout(async () => {
 
       if (insertRow.kitchens !== '') {
         insertRow.kitchens = row.kitchens.split(',');
+
+        // get rid of duplicates
+        // @see https://stackoverflow.com/a/14438954/852399
+        insertRow.kitchens = insertRow.kitchens.filter((value: string, index: number, self: string) => self.indexOf(value) === index);
 
         for (let i = 0; i < insertRow.kitchens.length; i += 1) {
           const kitchen = insertRow.kitchens[i];
@@ -58,6 +66,12 @@ setTimeout(async () => {
     })
     .on('end', async (rowCount: number) => {
       logger.info(`Parsed ${ rowCount } rows`);
+
+      // logger.info('Reading documents from Mongo collection...');
+      //
+      // const documents = placesCollection.find({});
+      //
+      // console.log(await documents.toArray());
 
       for (let i = 0; i < warnings.length; i += 1) {
         logger.warn(warnings[i]);
