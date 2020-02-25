@@ -55,17 +55,17 @@
       "foods": {
         "dont_know": { "emoji": "\uD83D\uDC19", "text": "\uD83D\uDC19 Выбери за меня!" },
         "sushi": { "emoji": "\uD83C\uDF63", "text": "\uD83C\uDF63 Суши" },
-        "pizza": { "emoji": "\uD83C\uDF55", "text": "\uD83C\uDF55 Пицца" },
-        "shawerma": { "emoji": "\uD83C\uDF2F", "text": "\uD83C\uDF2F Шаурма" },
+        "pizza": { "emoji": "\uD83C\uDF55", "text": "\uD83C\uDF55 Пиццу" },
+        "shawerma": { "emoji": "\uD83C\uDF2F", "text": "\uD83C\uDF2F Шаурму" },
         "vegetarian": { "emoji": "\uD83E\uDD51", "text": "\uD83E\uDD51 Veggie" },
-        "noodles_n_rice": { "emoji": "\uD83E\uDD61", "text": "\uD83E\uDD61 Рис, Лапша" },
-        "homey": { "emoji": "\uD83C\uDFE1", "text": "\uD83C\uDFE1 Домашняя" },
+        "noodles_n_rice": { "emoji": "\uD83E\uDD61", "text": "\uD83E\uDD61 Рис, Лапшу" },
+        "homey": { "emoji": "\uD83C\uDFE1", "text": "\uD83C\uDFE1 Домашнюю" },
         "burgers": {"emoji": "\uD83C\uDF54","text": "\uD83C\uDF54 Бургеры" },
         "hotdogs": { "emoji": "\uD83C\uDF2D", "text": "\uD83C\uDF2D Хот-доги" },
         "sandwiches": { "emoji": "\uD83E\uDD6A", "text": "\uD83E\uDD6A Сендвичи" },
         "salads": { "emoji": "\uD83E\uDD57", "text": "\uD83E\uDD57 Салаты" },
         "soups": { "emoji": "\uD83C\uDF72", "text": "\uD83C\uDF72 Супы" },
-        "pasta": { "emoji": "\uD83C\uDF5D", "text": "\uD83C\uDF5D Паста" },
+        "pasta": { "emoji": "\uD83C\uDF5D", "text": "\uD83C\uDF5D Пасту" },
         "snacks": { "emoji": "\uD83E\uDD68", "text": "\uD83E\uDD68 Снеки" },
         "desserts": { "emoji": "\uD83C\uDF70", "text": "\uD83C\uDF70 Десерты" },
         "children_menu": { "emoji": "\uD83E\uDDD2", "text": "\uD83E\uDDD2 Для детей" }
@@ -73,13 +73,11 @@
     }
   },
   "KitchenHandler": {
-    "searchingForRandom": "",
     "searchingForKitchen": "Ищем {{kitchen}} кухню...",
     "found": "Вот что я нашел:"
   },
   "FoodCategoryHandler": {
-    "searchingForAll": "Вы готовы к приключениям! Ищу места во всех категориях...",
-    "searching": "Ок, ищу места, где в меню есть еда из такой категории...",
+    "searchingForFoodCategory": "Ищем где бы заказать {{foodCat}}...",
     "found": "Вот что я нашел:",
     "placeTemplate": "<a href=\"{{url}}\">{{name}}</a> {{categories}}"
   },

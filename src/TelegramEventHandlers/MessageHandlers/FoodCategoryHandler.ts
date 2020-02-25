@@ -51,20 +51,22 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     logger.info(`User selected '${ msg.text }' category, mapped to ${ category }. Searching in '${ I18n.t(`cities.${ userState.currentCity }`) }' city`);
 
-    let places: any[];
-
     userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
     userState.lastSection = SECTIONS.FOOD;
     userState.lastCategory = category;
     await UserStateManager.updateUserState(userState.userId, userState);
 
     if (category === FOOD_CATEGORIES.DONT_KNOW) {
-      await FoodCategoryHandler.answerWithSearchingForAllCategories(msg.chat.id);
-      places = await FoodCategoryHandler.getRandomPlacesForAllCategories(userState.currentCity);
-    } else {
-      await FoodCategoryHandler.answerWithSearchingForCategory(msg.chat.id);
-      places = await FoodCategoryHandler.getRandomPlacesForCategory(category, userState.currentCity);
+      // get random kitchen category
+      // @see https://stackblitz.com/edit/typescript-random-enum-value
+      const foodCategoryKeys: string[] = Object.keys(FOOD_CATEGORIES);
+      // in our ENUMs, key === enum value
+      category = foodCategoryKeys[Math.floor(Math.random() * foodCategoryKeys.length)] as FOOD_CATEGORIES;
     }
+
+    await FoodCategoryHandler.answerWithSearchingForCategory(msg.chat.id, category);
+
+    const places = await FoodCategoryHandler.getRandomPlacesForCategory(category, userState.currentCity);
 
     logger.info(`${ places.length } places randomly selected: ${ places.map((item) => item.name).join(', ') }`);
 
@@ -104,12 +106,10 @@ export default class FoodCategoryHandler extends BaseHandler {
     ]).toArray();
   }
 
-  static answerWithSearchingForAllCategories (chatId: number): Promise<Message> {
-    return LosTelegramBot.sendMessage(chatId, I18n.t('FoodCategoryHandler.searchingForAll'));
-  }
+  static answerWithSearchingForCategory (chatId: number, foodCategory: string): Promise<Message> {
+    const replacements: Replacements = { foodCat: I18n.t(`SectionHandler.buttons.foods.${ foodCategory.toLowerCase() }.text`) };
 
-  static answerWithSearchingForCategory (chatId: number): Promise<Message> {
-    return LosTelegramBot.sendMessage(chatId, I18n.t('FoodCategoryHandler.searching'));
+    return LosTelegramBot.sendMessage(chatId, I18n.t('FoodCategoryHandler.searchingForFoodCategory', replacements));
   }
 
   static answerWithPlacesToOrder (chatId: number, places: any[]): Promise<Message> {

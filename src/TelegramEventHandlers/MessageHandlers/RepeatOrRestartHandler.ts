@@ -38,7 +38,7 @@ export default class RepeatOrRestartHandler extends BaseHandler {
     switch (userState.lastSection) {
       case SECTIONS.FOOD: {
         const message: Message = msg;
-        message.text = I18n.t(`LocationHandler.buttons.${ userState.lastCategory?.toLowerCase() }.text`);
+        message.text = I18n.t(`SectionHandler.buttons.foods.${ userState.lastCategory?.toLowerCase() }.text`);
         return FoodCategoryHandler.handle(message);
       }
       case SECTIONS.KITCHEN: {

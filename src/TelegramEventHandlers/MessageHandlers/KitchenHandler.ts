@@ -89,10 +89,6 @@ export default class KitchenHandler extends BaseHandler {
     ]).toArray();
   }
 
-  static answerWithSearchingForRandomKitchen (chatId: number): Promise<Message> {
-    return LosTelegramBot.sendMessage(chatId, I18n.t('KitchenHandler.searchingForRandom'));
-  }
-
   static answerWithSearchingForKitchen (chatId: number, kitchen: string): Promise<Message> {
     const replacements: Replacements = { kitchen: I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.text`) };
 
