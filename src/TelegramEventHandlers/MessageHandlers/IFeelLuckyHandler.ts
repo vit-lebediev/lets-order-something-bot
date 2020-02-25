@@ -50,6 +50,7 @@ export default class IFeelLuckyHandler extends BaseHandler {
     const placeCategories: string = place.kitchens ? place.kitchens.map(
       (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
     ).join(' ') : '';
+
     const replacements: Replacements = { name: place.name, url: place.url, categories: placeCategories };
     verifiedMessage += I18n.t('FoodCategoryHandler.placeTemplate', replacements);
 

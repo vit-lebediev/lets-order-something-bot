@@ -100,8 +100,10 @@ export default class KitchenHandler extends BaseHandler {
 
     for (let i = 0; i < places.length; i += 1) {
       const place = places[i];
-      const placeCategories = place.kitchens.map((kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)).join(' ');
-      const replacements: Replacements = { name: place.name, url: place.url, categories: placeCategories };
+      const kitchenCategories = place.kitchens ? place.kitchens.map(
+        (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
+      ).join(' ') : '';
+      const replacements: Replacements = { name: place.name, url: place.url, categories: kitchenCategories };
       verifiedMessage += `${ i + 1 }. ${ I18n.t('FoodCategoryHandler.placeTemplate', replacements) }\n`;
     }
 

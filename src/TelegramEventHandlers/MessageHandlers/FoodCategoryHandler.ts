@@ -112,7 +112,9 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     for (let i = 0; i < places.length; i += 1) {
       const place = places[i];
-      const placeCategories = place.categories.map((cat: string) => I18n.t(`LocationHandler.buttons.${ cat.toLowerCase() }.emoji`)).join(' ');
+      const placeCategories = place.kitchens ? place.categories.map(
+        (cat: string) => I18n.t(`LocationHandler.buttons.${ cat.toLowerCase() }.emoji`)
+      ).join(' ') : '';
       const replacements: Replacements = { name: place.name, url: place.url, categories: placeCategories };
       verifiedMessage += `${ i + 1 }. ${ I18n.t('FoodCategoryHandler.placeTemplate', replacements) }\n`;
     }
