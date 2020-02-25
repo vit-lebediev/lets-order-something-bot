@@ -1,3 +1,5 @@
+export const DEFAULT_NUMBER_OF_ANSWERS = 5;
+
 export enum LOCALES {
   UK = 'uk',
   RU = 'ru',

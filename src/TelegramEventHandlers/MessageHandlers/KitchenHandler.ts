@@ -7,15 +7,13 @@ import BaseHandler from '../BaseHandler';
 import UserStateInterface, { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import Logger from '../../Logger';
-import { KITCHEN_CATEGORIES } from '../../Constants';
+import { DEFAULT_NUMBER_OF_ANSWERS, KITCHEN_CATEGORIES } from '../../Constants';
 import I18n from '../../I18n';
 import LosTelegramBot from '../../LosTelegramBot';
 import LosMongoClient from '../../LosMongoClient';
-
-import Replacements = i18n.Replacements;
 import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 
-const DEFAULT_NUMBER_OF_ANSWERS = 3;
+import Replacements = i18n.Replacements;
 
 export default class KitchenHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {

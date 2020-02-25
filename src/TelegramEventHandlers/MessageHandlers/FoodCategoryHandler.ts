@@ -6,7 +6,7 @@ import { BaseLogger } from 'pino';
 import BaseHandler from '../BaseHandler';
 import LosMongoClient from '../../LosMongoClient';
 import I18n from '../../I18n';
-import { FOOD_CATEGORIES } from '../../Constants';
+import { DEFAULT_NUMBER_OF_ANSWERS, FOOD_CATEGORIES } from '../../Constants';
 import Logger from '../../Logger';
 import LosTelegramBot from '../../LosTelegramBot';
 import UserStateInterface, { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../UserState/UserStateInterface';
@@ -14,8 +14,6 @@ import UserStateManager from '../../UserState/UserStateManager';
 import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 
 import Replacements = i18n.Replacements;
-
-const DEFAULT_NUMBER_OF_ANSWERS = 3;
 
 export default class FoodCategoryHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
