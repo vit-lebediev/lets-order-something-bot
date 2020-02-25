@@ -6,6 +6,12 @@
   "cities": {
     "odesa": "Одесса"
   },
+  "BaseHandler": {
+    "buttons": {
+      "repeat": { "emoji": "\uD83D\uDD01", "text": "\uD83D\uDD01 Еще!" },
+      "restart": { "emoji": "◀️", "text": "◀️ Сначала" }
+    }
+  },
   "StartHandler": {
     "start": "Во-первых, мне нужно знать где вы находитесь, чтобы не предлагать доставку из других городов. Нажмите на кнопку \"\uD83D\uDCCD Отправить местоположение\"",
     "buttons": {
@@ -16,9 +22,22 @@
     "errorGeocoding": "Что-то не так с получением ваших геоданных, попробуйте еще раз...",
     "errorCityNotSupported": "К сожалению, город *{{city}}* еще не поддерживается. Попробуйте подождать, или переехать!",
     "yourCity": "Супер, Вы находитесь в **{{city}}**!",
+    "menu": "Выберите раздел, или доверьтесь удаче!",
     "whatFood": "Супер, на какую еду Вы сегодня настроены?",
     "cityWhatFood": "Супер, Вы находитесь в **{{city}}**! На какую еду Вы сегодня настроены?",
     "buttons": {
+      "i_feel_lucky": {
+        "emoji": "\uD83E\uDD1E",
+        "text": "\uD83E\uDD1E Мне повезет!"
+      },
+      "kitchens": {
+        "emoji": "\uD83C\uDDEF\uD83C\uDDF5\uD83C\uDDFA\uD83C\uDDE6\uD83C\uDDEE\uD83C\uDDF9",
+        "text": "\uD83C\uDDEF\uD83C\uDDF5\uD83C\uDDFA\uD83C\uDDE6\uD83C\uDDEE\uD83C\uDDF9 Кухни"
+      },
+      "categories": {
+        "emoji": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54",
+        "text": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54 Категории"
+      },
       "dont_know": {
         "emoji": "\uD83D\uDC19",
         "text": "\uD83D\uDC19 Я не знаю... выбери за меня!"
@@ -83,29 +102,41 @@
         "emoji": "\uD83E\uDDD2",
         "text": "\uD83E\uDDD2 Для детей"
       }
-    },
-    "oldButtons": {
-      "chooseForMe": "\uD83D\uDC19 Я не знаю... выбери за меня!",
-      "sushi": "\uD83C\uDF63 Суши",
-      "pizza": "\uD83C\uDF55 Пицца",
-      "shawerma": "\uD83C\uDF2F Шаурма",
-      "veg": "\uD83E\uDD51 Veggie",
-      "noodles": "\uD83E\uDD61 Рис, Лапша",
-      "homey": "\uD83C\uDFE1 Домашняя",
-      "bhs": "\uD83C\uDF54 Бургеры, \uD83C\uDF2D Хот-доги, \uD83E\uDD6A Сендвичи",
-      "salads": "\uD83E\uDD57 Салаты",
-      "soups": "\uD83C\uDF72 Супы",
-      "pasta": "\uD83C\uDF5D Паста",
-      "snacks": "\uD83E\uDD68 Снеки",
-      "desserts": "\uD83C\uDF70 Сладкое",
-      "children": "\uD83E\uDDD2 Для детей"
     }
+  },
+  "SectionHandler": {
+    "whatKitchen": "Какую кухню сегодня предпочитаем?",
+    "buttons": {
+      "kitchens": {
+        "random": { "emoji": "\uD83D\uDD00", "text": "\uD83D\uDD00 Любую!" },
+        "homey": { "emoji": "\uD83C\uDFE1", "text": "\uD83C\uDFE1 Домашнюю" },
+        "ukrainian": { "emoji": "\uD83C\uDDFA\uD83C\uDDE6", "text": "\uD83C\uDDFA\uD83C\uDDE6 Украинскую" },
+        "east": { "emoji": "\uD83E\uDD62", "text": "\uD83E\uDD62 Восточную" },
+        "italian": { "emoji": "\uD83C\uDDEE\uD83C\uDDF9", "text": "\uD83C\uDDEE\uD83C\uDDF9 Итальянскую" },
+        "european": { "emoji": "\uD83C\uDDEA\uD83C\uDDFA", "text": "\uD83C\uDDEA\uD83C\uDDFA Европейскую" },
+        "american": { "emoji": "\uD83C\uDDFA\uD83C\uDDF8", "text": "\uD83C\uDDFA\uD83C\uDDF8 Американскую" },
+        "japanese": { "emoji": "\uD83C\uDDEF\uD83C\uDDF5", "text": "\uD83C\uDDEF\uD83C\uDDF5 Японскую" },
+        "chinese": { "emoji": "\uD83C\uDDE8\uD83C\uDDF3", "text": "\uD83C\uDDE8\uD83C\uDDF3 Китайскую" },
+        "korean": { "emoji": "\uD83C\uDDF0\uD83C\uDDF7", "text": "\uD83C\uDDF0\uD83C\uDDF7 Корейскую" },
+        "georgian": { "emoji": "\uD83C\uDDEC\uD83C\uDDEA", "text": "\uD83C\uDDEC\uD83C\uDDEA Грузинскую" },
+        "thai": { "emoji": "\uD83C\uDDF9\uD83C\uDDED", "text": "\uD83C\uDDF9\uD83C\uDDED Тайскую" },
+        "mexican": { "emoji": "\uD83C\uDDF2\uD83C\uDDFD", "text": "\uD83C\uDDF2\uD83C\uDDFD Мексиканскую" }
+      }
+    }
+  },
+  "KitchenHandler": {
+    "searchingForRandom": "",
+    "searchingForKitchen": "Ищем {{kitchen}} кухню...",
+    "found": "Вот что я нашел:"
   },
   "FoodCategoryHandler": {
     "searchingForAll": "Вы готовы к приключениям! Ищу места во всех категориях...",
     "searching": "Ок, ищу места, где в меню есть еда из такой категории...",
     "found": "Вот что я нашел:",
     "placeTemplate": "<a href=\"{{url}}\">{{name}}</a> {{categories}}"
+  },
+  "IFeelLuckyHandler": {
+    "found": "Нашел случайное место, где сегодня можно вкусно покушать!"
   },
   "HelpHandler": {
     "notSupported": "Раздел помощи еще не оформлен."

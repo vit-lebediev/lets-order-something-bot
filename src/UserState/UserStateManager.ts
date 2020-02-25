@@ -1,8 +1,9 @@
 import { Message, User } from 'node-telegram-bot-api';
 
-import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from './UserStateInterface';
+import UserStateInterface, { SECTIONS, SUPPORTED_CITIES, USER_STATES } from './UserStateInterface';
 import LosRedisClient from '../LosRedisClient';
 import Logger from '../Logger';
+import { FOOD_CATEGORIES, KITCHEN_CATEGORIES } from '../Constants';
 
 const logger = Logger.child({ module: 'UserStateManagerHandler' });
 
@@ -26,6 +27,8 @@ export default class UserStateManager {
       userId,
       currentState: obj.currentState as USER_STATES,
       currentCity: obj.currentCity as SUPPORTED_CITIES,
+      lastSection: obj.lastSection as SECTIONS,
+      lastCategory: obj.lastCategory as KITCHEN_CATEGORIES | FOOD_CATEGORIES,
       lastUpdated: parseInt(obj.lastUpdated, 10)
     };
 

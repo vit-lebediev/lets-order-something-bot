@@ -2,12 +2,14 @@ import { Message } from 'node-telegram-bot-api';
 
 import UserStateInterface, { USER_STATES } from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
-
 // Message Handlers
 import FoodCategoryHandler from './MessageHandlers/FoodCategoryHandler';
 import TextLocationHandler from './MessageHandlers/TextLocationHandler';
 import CityConfirmationHandler from './MessageHandlers/CityConfirmationHandler';
 import BaseHandler from './BaseHandler';
+import SectionHandler from './MessageHandlers/SectionHandler';
+import KitchenHandler from './MessageHandlers/KitchenHandler';
+import RepeatOrRestartHandler from './MessageHandlers/RepeatOrRestartHandler';
 
 const startCommandRegExp = /^\/start/;
 const helpCommandRegExp = /^\/help/;
@@ -35,7 +37,10 @@ export default class MessageHandler extends BaseHandler {
       case USER_STATES.WAIT_FOR_LOCATION: return TextLocationHandler.handle(msg);
       // not active state at the moment
       case USER_STATES.WAIT_FOR_CITY_CONFIRM: return CityConfirmationHandler.handle(msg);
+      case USER_STATES.WAIT_FOR_SECTION: return SectionHandler.handle(msg);
       case USER_STATES.WAIT_FOR_FOOD_CATEGORY: return FoodCategoryHandler.handle(msg);
+      case USER_STATES.WAIT_FOR_KITCHEN: return KitchenHandler.handle(msg);
+      case USER_STATES.WAIT_FOR_REPEAT_OR_RESTART: return RepeatOrRestartHandler.handle(msg);
 
       default: return BaseHandler.answerWithStartFromBeginning(msg.chat.id);
     }

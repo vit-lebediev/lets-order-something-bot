@@ -24,6 +24,7 @@ export enum FOOD_CATEGORIES {
 }
 
 export enum KITCHEN_CATEGORIES {
+  RANDOM = 'RANDOM',
   HOMEY = 'HOMEY',
   UKRAINIAN = 'UKRAINIAN',
   EAST = 'EAST',

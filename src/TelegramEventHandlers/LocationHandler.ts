@@ -1,11 +1,5 @@
 // Dependency imports
-import {
-  KeyboardButton,
-  Message,
-  ReplyKeyboardMarkup,
-  SendMessageOptions,
-  User
-} from 'node-telegram-bot-api';
+import { Message, User } from 'node-telegram-bot-api';
 import NodeGeocoder, {
   Entry,
   Geocoder,
@@ -41,7 +35,7 @@ const geocoderOptions: Options = {
 
 const geocoderClient: Geocoder = NodeGeocoder(geocoderOptions);
 
-export default class LocationHandler {
+export default class LocationHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const user: User = UserStateManager.getUserFromMessage(msg);
 
@@ -81,65 +75,9 @@ export default class LocationHandler {
 
     // update user state
     userState.currentCity = userCity;
-    userState.currentState = USER_STATES.WAIT_FOR_FOOD_CATEGORY;
+    userState.currentState = USER_STATES.WAIT_FOR_SECTION;
     await UserStateManager.updateUserState(user.id, userState);
 
-    return LocationHandler.answerWithFoodCategoriesMenu(msg.chat.id);
-  }
-
-  /**
-   * Used by LocationHandler
-   *
-   * @param chatId
-   * @param message
-   */
-  static answerWithFoodCategoriesMenu (chatId: number, message?: string): Promise<Message> {
-    const verifiedMessage: string = message || I18n.t('LocationHandler.whatFood');
-
-    const surpriseMeButton: KeyboardButton = { text: I18n.t('LocationHandler.buttons.dont_know.text') };
-    const firstRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.sushi.text') },
-      { text: I18n.t('LocationHandler.buttons.pizza.text') },
-      { text: I18n.t('LocationHandler.buttons.shawerma.text') }
-    ];
-    const secondRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.vegetarian.text') },
-      { text: I18n.t('LocationHandler.buttons.noodles_n_rice.text') },
-      { text: I18n.t('LocationHandler.buttons.homey.text') }
-    ];
-    const thirdRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.burgers.text') },
-      { text: I18n.t('LocationHandler.buttons.hotdogs.text') },
-      { text: I18n.t('LocationHandler.buttons.sandwiches.text') }
-    ];
-    const fourthRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.salads.text') },
-      { text: I18n.t('LocationHandler.buttons.soups.text') },
-      { text: I18n.t('LocationHandler.buttons.pasta.text') }
-    ];
-    const fifthRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.snacks.text') },
-      { text: I18n.t('LocationHandler.buttons.desserts.text') },
-      { text: I18n.t('LocationHandler.buttons.children_menu.text') }
-    ];
-
-    const replyMarkup: ReplyKeyboardMarkup = {
-      keyboard: [
-        [ surpriseMeButton ],
-        firstRowOfCategories,
-        secondRowOfCategories,
-        thirdRowOfCategories,
-        fourthRowOfCategories,
-        fifthRowOfCategories
-      ],
-      resize_keyboard: true
-    };
-
-    const messageOptions: SendMessageOptions = {
-      reply_markup: replyMarkup,
-      parse_mode: 'Markdown'
-    };
-
-    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
+    return BaseHandler.answerWithSectionsMenu(msg.chat.id);
   }
 }

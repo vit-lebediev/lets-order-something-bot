@@ -39,7 +39,6 @@ setTimeout(async () => {
           if (!(cat in FOOD_CATEGORIES)) {
             const warningText = `No such category supported: ${ cat }, found in ${ insertRow.name }`;
             warnings.push(warningText);
-            return;
           }
         }
       }
@@ -57,7 +56,6 @@ setTimeout(async () => {
           if (!(kitchen in KITCHEN_CATEGORIES)) {
             const warningText = `No such kitchen supported: ${ kitchen }, found in ${ insertRow.name }`;
             warnings.push(warningText);
-            return;
           }
         }
       }

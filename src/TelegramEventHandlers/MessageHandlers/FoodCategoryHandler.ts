@@ -1,4 +1,4 @@
-import { Message, SendMessageOptions } from 'node-telegram-bot-api';
+import { Message, ReplyKeyboardMarkup, SendMessageOptions } from 'node-telegram-bot-api';
 import { Collection } from 'mongodb';
 import i18n from 'i18n';
 import { BaseLogger } from 'pino';
@@ -9,7 +9,7 @@ import I18n from '../../I18n';
 import { FOOD_CATEGORIES } from '../../Constants';
 import Logger from '../../Logger';
 import LosTelegramBot from '../../LosTelegramBot';
-import UserStateInterface, { SUPPORTED_CITIES } from '../../UserState/UserStateInterface';
+import UserStateInterface, { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 
 import Replacements = i18n.Replacements;
@@ -41,17 +41,20 @@ export default class FoodCategoryHandler extends BaseHandler {
       case I18n.t('LocationHandler.buttons.desserts.text'): category = FOOD_CATEGORIES.DESSERTS; break;
       case I18n.t('LocationHandler.buttons.children_menu.text'): category = FOOD_CATEGORIES.CHILDREN_MENU; break;
       case I18n.t('LocationHandler.buttons.dont_know.text'):
-      default:
-        // TODO Special case, handle separately
-        category = FOOD_CATEGORIES.DONT_KNOW; break;
+      default: category = FOOD_CATEGORIES.DONT_KNOW; break;
     }
 
     logger.info(`User selected '${ msg.text }' category, mapped to ${ category }. Searching in '${ I18n.t(`cities.${ userState.currentCity }`) }' city`);
 
     let places: any[];
 
+    userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
+    userState.lastSection = SECTIONS.FOOD;
+    userState.lastCategory = category;
+    await UserStateManager.updateUserState(userState.userId, userState);
+
     if (category === FOOD_CATEGORIES.DONT_KNOW) {
-      await FoodCategoryHandler.answerWithSearchingFoeAllCategories(msg.chat.id);
+      await FoodCategoryHandler.answerWithSearchingForAllCategories(msg.chat.id);
       places = await FoodCategoryHandler.getRandomPlacesForAllCategories(userState.currentCity);
     } else {
       await FoodCategoryHandler.answerWithSearchingForCategory(msg.chat.id);
@@ -59,8 +62,6 @@ export default class FoodCategoryHandler extends BaseHandler {
     }
 
     logger.info(`${ places.length } places randomly selected: ${ places.map((item) => item.name).join(', ') }`);
-
-    // TODO move to next state
 
     return FoodCategoryHandler.answerWithPlacesToOrder(msg.chat.id, places);
   }
@@ -98,16 +99,12 @@ export default class FoodCategoryHandler extends BaseHandler {
     ]).toArray();
   }
 
-  static answerWithSearchingFoeAllCategories (chatId: number): Promise<Message> {
-    const verifiedMessage: string = I18n.t('FoodCategoryHandler.searchingForAll');
-
-    return LosTelegramBot.sendMessage(chatId, verifiedMessage);
+  static answerWithSearchingForAllCategories (chatId: number): Promise<Message> {
+    return LosTelegramBot.sendMessage(chatId, I18n.t('FoodCategoryHandler.searchingForAll'));
   }
 
   static answerWithSearchingForCategory (chatId: number): Promise<Message> {
-    const verifiedMessage: string = I18n.t('FoodCategoryHandler.searching');
-
-    return LosTelegramBot.sendMessage(chatId, verifiedMessage);
+    return LosTelegramBot.sendMessage(chatId, I18n.t('FoodCategoryHandler.searching'));
   }
 
   static answerWithPlacesToOrder (chatId: number, places: any[]): Promise<Message> {
@@ -120,7 +117,10 @@ export default class FoodCategoryHandler extends BaseHandler {
       verifiedMessage += `${ i + 1 }. ${ I18n.t('FoodCategoryHandler.placeTemplate', replacements) }\n`;
     }
 
+    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup();
+
     const messageOptions: SendMessageOptions = {
+      reply_markup: replyMarkup,
       parse_mode: 'HTML',
       disable_web_page_preview: true
     };
