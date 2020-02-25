@@ -9,7 +9,7 @@
   "BaseHandler": {
     "buttons": {
       "repeat": { "emoji": "\uD83D\uDD01", "text": "\uD83D\uDD01 Еще!" },
-      "restart": { "emoji": "◀️", "text": "◀️ Сначала" }
+      "restart": { "emoji": "↩️️", "text": "↩️️ Сначала" }
     }
   },
   "StartHandler": {
@@ -26,82 +26,12 @@
     "whatFood": "Супер, на какую еду Вы сегодня настроены?",
     "cityWhatFood": "Супер, Вы находитесь в **{{city}}**! На какую еду Вы сегодня настроены?",
     "buttons": {
-      "i_feel_lucky": {
-        "emoji": "\uD83E\uDD1E",
-        "text": "\uD83E\uDD1E Мне повезет!"
-      },
+      "i_feel_lucky": { "emoji": "\uD83E\uDD1E", "text": "\uD83E\uDD1E Мне повезет!" },
       "kitchens": {
         "emoji": "\uD83C\uDDEF\uD83C\uDDF5\uD83C\uDDFA\uD83C\uDDE6\uD83C\uDDEE\uD83C\uDDF9",
         "text": "\uD83C\uDDEF\uD83C\uDDF5\uD83C\uDDFA\uD83C\uDDE6\uD83C\uDDEE\uD83C\uDDF9 Кухни"
       },
-      "categories": {
-        "emoji": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54",
-        "text": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54 Категории"
-      },
-      "dont_know": {
-        "emoji": "\uD83D\uDC19",
-        "text": "\uD83D\uDC19 Я не знаю... выбери за меня!"
-      },
-      "sushi": {
-        "emoji": "\uD83C\uDF63",
-        "text": "\uD83C\uDF63 Суши"
-      },
-      "pizza": {
-        "emoji": "\uD83C\uDF55",
-        "text": "\uD83C\uDF55 Пицца"
-      },
-      "shawerma": {
-        "emoji": "\uD83C\uDF2F",
-        "text": "\uD83C\uDF2F Шаурма"
-      },
-      "vegetarian": {
-        "emoji": "\uD83E\uDD51",
-        "text": "\uD83E\uDD51 Veggie"
-      },
-      "noodles_n_rice": {
-        "emoji": "\uD83E\uDD61",
-        "text": "\uD83E\uDD61 Рис, Лапша"
-      },
-      "homey": {
-        "emoji": "\uD83C\uDFE1",
-        "text": "\uD83C\uDFE1 Домашняя"
-      },
-      "burgers": {
-        "emoji": "\uD83C\uDF54",
-        "text": "\uD83C\uDF54 Бургеры"
-      },
-      "hotdogs": {
-        "emoji": "\uD83C\uDF2D",
-        "text": "\uD83C\uDF2D Хот-доги"
-      },
-      "sandwiches": {
-        "emoji": "\uD83E\uDD6A",
-        "text": "\uD83E\uDD6A Сендвичи"
-      },
-      "salads": {
-        "emoji": "\uD83E\uDD57",
-        "text": "\uD83E\uDD57 Салаты"
-      },
-      "soups": {
-        "emoji": "\uD83C\uDF72",
-        "text": "\uD83C\uDF72 Супы"
-      },
-      "pasta": {
-        "emoji": "\uD83C\uDF5D",
-        "text": "\uD83C\uDF5D Паста"
-      },
-      "snacks": {
-        "emoji": "\uD83E\uDD68",
-        "text": "\uD83E\uDD68 Снеки"
-      },
-      "desserts": {
-        "emoji": "\uD83C\uDF70",
-        "text": "\uD83C\uDF70 Десерты"
-      },
-      "children_menu": {
-        "emoji": "\uD83E\uDDD2",
-        "text": "\uD83E\uDDD2 Для детей"
-      }
+      "categories": { "emoji": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54", "text": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54 Категории" }
     }
   },
   "SectionHandler": {
@@ -121,6 +51,24 @@
         "georgian": { "emoji": "\uD83C\uDDEC\uD83C\uDDEA", "text": "\uD83C\uDDEC\uD83C\uDDEA Грузинскую" },
         "thai": { "emoji": "\uD83C\uDDF9\uD83C\uDDED", "text": "\uD83C\uDDF9\uD83C\uDDED Тайскую" },
         "mexican": { "emoji": "\uD83C\uDDF2\uD83C\uDDFD", "text": "\uD83C\uDDF2\uD83C\uDDFD Мексиканскую" }
+      },
+      "foods": {
+        "dont_know": { "emoji": "\uD83D\uDC19", "text": "\uD83D\uDC19 Я не знаю... выбери за меня!" },
+        "sushi": { "emoji": "\uD83C\uDF63", "text": "\uD83C\uDF63 Суши" },
+        "pizza": { "emoji": "\uD83C\uDF55", "text": "\uD83C\uDF55 Пицца" },
+        "shawerma": { "emoji": "\uD83C\uDF2F", "text": "\uD83C\uDF2F Шаурма" },
+        "vegetarian": { "emoji": "\uD83E\uDD51", "text": "\uD83E\uDD51 Veggie" },
+        "noodles_n_rice": { "emoji": "\uD83E\uDD61", "text": "\uD83E\uDD61 Рис, Лапша" },
+        "homey": { "emoji": "\uD83C\uDFE1", "text": "\uD83C\uDFE1 Домашняя" },
+        "burgers": {"emoji": "\uD83C\uDF54","text": "\uD83C\uDF54 Бургеры" },
+        "hotdogs": { "emoji": "\uD83C\uDF2D", "text": "\uD83C\uDF2D Хот-доги" },
+        "sandwiches": { "emoji": "\uD83E\uDD6A", "text": "\uD83E\uDD6A Сендвичи" },
+        "salads": { "emoji": "\uD83E\uDD57", "text": "\uD83E\uDD57 Салаты" },
+        "soups": { "emoji": "\uD83C\uDF72", "text": "\uD83C\uDF72 Супы" },
+        "pasta": { "emoji": "\uD83C\uDF5D", "text": "\uD83C\uDF5D Паста" },
+        "snacks": { "emoji": "\uD83E\uDD68", "text": "\uD83E\uDD68 Снеки" },
+        "desserts": { "emoji": "\uD83C\uDF70", "text": "\uD83C\uDF70 Десерты" },
+        "children_menu": { "emoji": "\uD83E\uDDD2", "text": "\uD83E\uDDD2 Для детей" }
       }
     }
   },

@@ -60,31 +60,31 @@ export default class SectionHandler extends BaseHandler {
   static answerWithFoodCategoriesMenu (chatId: number, message?: string): Promise<Message> {
     const verifiedMessage: string = message || I18n.t('LocationHandler.whatFood');
 
-    const surpriseMeButton: KeyboardButton = { text: I18n.t('LocationHandler.buttons.dont_know.text') };
+    const surpriseMeButton: KeyboardButton = { text: I18n.t('SectionHandler.buttons.foods.dont_know.text') };
     const firstRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.sushi.text') },
-      { text: I18n.t('LocationHandler.buttons.pizza.text') },
-      { text: I18n.t('LocationHandler.buttons.shawerma.text') }
+      { text: I18n.t('SectionHandler.buttons.foods.sushi.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.pizza.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.shawerma.text') }
     ];
     const secondRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.vegetarian.text') },
-      { text: I18n.t('LocationHandler.buttons.noodles_n_rice.text') },
-      { text: I18n.t('LocationHandler.buttons.homey.text') }
+      { text: I18n.t('SectionHandler.buttons.foods.vegetarian.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.noodles_n_rice.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.homey.text') }
     ];
     const thirdRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.burgers.text') },
-      { text: I18n.t('LocationHandler.buttons.hotdogs.text') },
-      { text: I18n.t('LocationHandler.buttons.sandwiches.text') }
+      { text: I18n.t('SectionHandler.buttons.foods.burgers.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.hotdogs.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.sandwiches.text') }
     ];
     const fourthRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.salads.text') },
-      { text: I18n.t('LocationHandler.buttons.soups.text') },
-      { text: I18n.t('LocationHandler.buttons.pasta.text') }
+      { text: I18n.t('SectionHandler.buttons.foods.salads.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.soups.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.pasta.text') }
     ];
     const fifthRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.snacks.text') },
-      { text: I18n.t('LocationHandler.buttons.desserts.text') },
-      { text: I18n.t('LocationHandler.buttons.children_menu.text') }
+      { text: I18n.t('SectionHandler.buttons.foods.snacks.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.desserts.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.children_menu.text') }
     ];
 
     const replyMarkup: ReplyKeyboardMarkup = {

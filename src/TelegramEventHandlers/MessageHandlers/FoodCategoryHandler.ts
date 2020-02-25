@@ -25,22 +25,22 @@ export default class FoodCategoryHandler extends BaseHandler {
     let category: FOOD_CATEGORIES;
 
     switch (msg.text) {
-      case I18n.t('LocationHandler.buttons.sushi.text'): category = FOOD_CATEGORIES.SUSHI; break;
-      case I18n.t('LocationHandler.buttons.pizza.text'): category = FOOD_CATEGORIES.PIZZA; break;
-      case I18n.t('LocationHandler.buttons.shawerma.text'): category = FOOD_CATEGORIES.SHAWERMA; break;
-      case I18n.t('LocationHandler.buttons.vegetarian.text'): category = FOOD_CATEGORIES.VEGETARIAN; break;
-      case I18n.t('LocationHandler.buttons.noodles_n_rice.text'): category = FOOD_CATEGORIES.NOODLES_N_RICE; break;
-      case I18n.t('LocationHandler.buttons.homey.text'): category = FOOD_CATEGORIES.HOMEY; break;
-      case I18n.t('LocationHandler.buttons.burgers.text'): category = FOOD_CATEGORIES.BURGERS; break;
-      case I18n.t('LocationHandler.buttons.hotdogs.text'): category = FOOD_CATEGORIES.HOTDOGS; break;
-      case I18n.t('LocationHandler.buttons.sandwiches.text'): category = FOOD_CATEGORIES.SANDWICHES; break;
-      case I18n.t('LocationHandler.buttons.salads.text'): category = FOOD_CATEGORIES.SALADS; break;
-      case I18n.t('LocationHandler.buttons.soups.text'): category = FOOD_CATEGORIES.SOUPS; break;
-      case I18n.t('LocationHandler.buttons.pasta.text'): category = FOOD_CATEGORIES.PASTA; break;
-      case I18n.t('LocationHandler.buttons.snacks.text'): category = FOOD_CATEGORIES.SNACKS; break;
-      case I18n.t('LocationHandler.buttons.desserts.text'): category = FOOD_CATEGORIES.DESSERTS; break;
-      case I18n.t('LocationHandler.buttons.children_menu.text'): category = FOOD_CATEGORIES.CHILDREN_MENU; break;
-      case I18n.t('LocationHandler.buttons.dont_know.text'):
+      case I18n.t('SectionHandler.buttons.foods.sushi.text'): category = FOOD_CATEGORIES.SUSHI; break;
+      case I18n.t('SectionHandler.buttons.foods.pizza.text'): category = FOOD_CATEGORIES.PIZZA; break;
+      case I18n.t('SectionHandler.buttons.foods.shawerma.text'): category = FOOD_CATEGORIES.SHAWERMA; break;
+      case I18n.t('SectionHandler.buttons.foods.vegetarian.text'): category = FOOD_CATEGORIES.VEGETARIAN; break;
+      case I18n.t('SectionHandler.buttons.foods.noodles_n_rice.text'): category = FOOD_CATEGORIES.NOODLES_N_RICE; break;
+      case I18n.t('SectionHandler.buttons.foods.homey.text'): category = FOOD_CATEGORIES.HOMEY; break;
+      case I18n.t('SectionHandler.buttons.foods.burgers.text'): category = FOOD_CATEGORIES.BURGERS; break;
+      case I18n.t('SectionHandler.buttons.foods.hotdogs.text'): category = FOOD_CATEGORIES.HOTDOGS; break;
+      case I18n.t('SectionHandler.buttons.foods.sandwiches.text'): category = FOOD_CATEGORIES.SANDWICHES; break;
+      case I18n.t('SectionHandler.buttons.foods.salads.text'): category = FOOD_CATEGORIES.SALADS; break;
+      case I18n.t('SectionHandler.buttons.foods.soups.text'): category = FOOD_CATEGORIES.SOUPS; break;
+      case I18n.t('SectionHandler.buttons.foods.pasta.text'): category = FOOD_CATEGORIES.PASTA; break;
+      case I18n.t('SectionHandler.buttons.foods.snacks.text'): category = FOOD_CATEGORIES.SNACKS; break;
+      case I18n.t('SectionHandler.buttons.foods.desserts.text'): category = FOOD_CATEGORIES.DESSERTS; break;
+      case I18n.t('SectionHandler.buttons.foods.children_menu.text'): category = FOOD_CATEGORIES.CHILDREN_MENU; break;
+      case I18n.t('SectionHandler.buttons.foods.dont_know.text'):
       default: category = FOOD_CATEGORIES.DONT_KNOW; break;
     }
 
@@ -113,7 +113,7 @@ export default class FoodCategoryHandler extends BaseHandler {
     for (let i = 0; i < places.length; i += 1) {
       const place = places[i];
       const placeCategories = place.kitchens ? place.categories.map(
-        (cat: string) => I18n.t(`LocationHandler.buttons.${ cat.toLowerCase() }.emoji`)
+        (cat: string) => I18n.t(`SectionHandler.buttons.foods.${ cat.toLowerCase() }.emoji`)
       ).join(' ') : '';
       const replacements: Replacements = { name: place.name, url: place.url, categories: placeCategories };
       verifiedMessage += `${ i + 1 }. ${ I18n.t('FoodCategoryHandler.placeTemplate', replacements) }\n`;
