@@ -13,6 +13,7 @@ import LosTelegramBot from '../../LosTelegramBot';
 import LosMongoClient from '../../LosMongoClient';
 
 import Replacements = i18n.Replacements;
+import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 
 const DEFAULT_NUMBER_OF_ANSWERS = 3;
 
@@ -25,6 +26,8 @@ export default class KitchenHandler extends BaseHandler {
     let kitchen: KITCHEN_CATEGORIES;
 
     switch (msg.text) {
+      case I18n.t('SectionHandler.buttons.kitchens.random.text'): kitchen = KITCHEN_CATEGORIES.RANDOM; break;
+
       case I18n.t('SectionHandler.buttons.kitchens.homey.text'): kitchen = KITCHEN_CATEGORIES.HOMEY; break;
       case I18n.t('SectionHandler.buttons.kitchens.ukrainian.text'): kitchen = KITCHEN_CATEGORIES.UKRAINIAN; break;
       case I18n.t('SectionHandler.buttons.kitchens.east.text'): kitchen = KITCHEN_CATEGORIES.EAST; break;
@@ -38,8 +41,11 @@ export default class KitchenHandler extends BaseHandler {
       case I18n.t('SectionHandler.buttons.kitchens.thai.text'): kitchen = KITCHEN_CATEGORIES.THAI; break;
       case I18n.t('SectionHandler.buttons.kitchens.mexican.text'): kitchen = KITCHEN_CATEGORIES.MEXICAN; break;
 
-      case I18n.t('SectionHandler.buttons.kitchens.random.text'):
-      default: kitchen = KITCHEN_CATEGORIES.RANDOM; break;
+      case I18n.t('BaseHandler.buttons.restart.text'):
+      default:
+        logger.info("User selected 'restart'");
+
+        return RepeatOrRestartHandler.handleRestart(msg);
     }
 
     logger.info(`User selected '${ msg.text }' kitchen, mapped to ${ kitchen }. Searching in '${ I18n.t(`cities.${ userState.currentCity }`) }' city`);

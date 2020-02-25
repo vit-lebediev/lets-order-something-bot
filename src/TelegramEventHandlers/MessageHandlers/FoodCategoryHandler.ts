@@ -11,6 +11,7 @@ import Logger from '../../Logger';
 import LosTelegramBot from '../../LosTelegramBot';
 import UserStateInterface, { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
+import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 
 import Replacements = i18n.Replacements;
 
@@ -25,6 +26,8 @@ export default class FoodCategoryHandler extends BaseHandler {
     let category: FOOD_CATEGORIES;
 
     switch (msg.text) {
+      case I18n.t('SectionHandler.buttons.foods.dont_know.text'): category = FOOD_CATEGORIES.DONT_KNOW; break;
+
       case I18n.t('SectionHandler.buttons.foods.sushi.text'): category = FOOD_CATEGORIES.SUSHI; break;
       case I18n.t('SectionHandler.buttons.foods.pizza.text'): category = FOOD_CATEGORIES.PIZZA; break;
       case I18n.t('SectionHandler.buttons.foods.shawerma.text'): category = FOOD_CATEGORIES.SHAWERMA; break;
@@ -40,8 +43,12 @@ export default class FoodCategoryHandler extends BaseHandler {
       case I18n.t('SectionHandler.buttons.foods.snacks.text'): category = FOOD_CATEGORIES.SNACKS; break;
       case I18n.t('SectionHandler.buttons.foods.desserts.text'): category = FOOD_CATEGORIES.DESSERTS; break;
       case I18n.t('SectionHandler.buttons.foods.children_menu.text'): category = FOOD_CATEGORIES.CHILDREN_MENU; break;
-      case I18n.t('SectionHandler.buttons.foods.dont_know.text'):
-      default: category = FOOD_CATEGORIES.DONT_KNOW; break;
+
+      case I18n.t('BaseHandler.buttons.restart.text'):
+      default:
+        logger.info("User selected 'restart'");
+
+        return RepeatOrRestartHandler.handleRestart(msg);
     }
 
     logger.info(`User selected '${ msg.text }' category, mapped to ${ category }. Searching in '${ I18n.t(`cities.${ userState.currentCity }`) }' city`);
