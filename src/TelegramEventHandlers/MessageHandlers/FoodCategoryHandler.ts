@@ -24,7 +24,7 @@ export default class FoodCategoryHandler extends BaseHandler {
     let category: FOOD_CATEGORIES;
 
     switch (msg.text) {
-      case I18n.t('SectionHandler.buttons.foods.dont_know.text'): category = FOOD_CATEGORIES.DONT_KNOW; break;
+      case I18n.t('SectionHandler.buttons.foods.random.text'): category = FOOD_CATEGORIES.RANDOM; break;
 
       case I18n.t('SectionHandler.buttons.foods.sushi.text'): category = FOOD_CATEGORIES.SUSHI; break;
       case I18n.t('SectionHandler.buttons.foods.pizza.text'): category = FOOD_CATEGORIES.PIZZA; break;
@@ -58,12 +58,12 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     const repeatSymbol: string = I18n.t(`SectionHandler.buttons.foods.${ category.toLowerCase() }.emoji`);
 
-    if (category === FOOD_CATEGORIES.DONT_KNOW) {
+    if (category === FOOD_CATEGORIES.RANDOM) {
       // get random kitchen category
       // @see https://stackblitz.com/edit/typescript-random-enum-value
       const foodCategoryKeys: string[] = Object.keys(FOOD_CATEGORIES);
       // in our ENUMs, key === enum value, so we can randomly select a key
-      while (category === FOOD_CATEGORIES.DONT_KNOW) category = foodCategoryKeys[Math.floor(Math.random() * foodCategoryKeys.length)] as FOOD_CATEGORIES;
+      while (category === FOOD_CATEGORIES.RANDOM) category = foodCategoryKeys[Math.floor(Math.random() * foodCategoryKeys.length)] as FOOD_CATEGORIES;
     }
 
     await FoodCategoryHandler.answerWithSearchingForCategory(msg.chat.id, category);

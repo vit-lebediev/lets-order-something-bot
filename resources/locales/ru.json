@@ -53,7 +53,7 @@
         "mexican": { "emoji": "\uD83C\uDDF2\uD83C\uDDFD", "text": "\uD83C\uDDF2\uD83C\uDDFD Мексиканскую" }
       },
       "foods": {
-        "dont_know": { "emoji": "\uD83D\uDC19", "text": "\uD83D\uDC19 Выбери за меня!" },
+        "random": { "emoji": "\uD83D\uDC19", "text": "\uD83D\uDC19 Выбери за меня!" },
         "sushi": { "emoji": "\uD83C\uDF63", "text": "\uD83C\uDF63 Суши" },
         "pizza": { "emoji": "\uD83C\uDF55", "text": "\uD83C\uDF55 Пиццу" },
         "shawerma": { "emoji": "\uD83C\uDF2F", "text": "\uD83C\uDF2F Шаурму" },

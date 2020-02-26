@@ -7,7 +7,7 @@ export enum LOCALES {
 }
 
 export enum FOOD_CATEGORIES {
-  DONT_KNOW = 'DONT_KNOW',
+  RANDOM = 'RANDOM',
   SUSHI = 'SUSHI',
   PIZZA = 'PIZZA',
   SHAWERMA = 'SHAWERMA',

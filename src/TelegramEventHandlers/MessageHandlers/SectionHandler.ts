@@ -60,7 +60,7 @@ export default class SectionHandler extends BaseHandler {
     const verifiedMessage: string = message || I18n.t('LocationHandler.whatFood');
 
     const functionButtons: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.foods.dont_know.text') },
+      { text: I18n.t('SectionHandler.buttons.foods.random.text') },
       { text: I18n.t('BaseHandler.buttons.restart.text') }
     ];
 
