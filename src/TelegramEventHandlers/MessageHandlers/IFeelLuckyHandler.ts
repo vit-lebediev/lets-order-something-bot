@@ -1,7 +1,6 @@
 import { Message, ReplyKeyboardMarkup, SendMessageOptions } from 'node-telegram-bot-api';
 import { Collection } from 'mongodb';
 import { BaseLogger } from 'pino';
-import i18n from 'i18n';
 
 import BaseHandler from '../BaseHandler';
 import UserStateInterface, { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../UserState/UserStateInterface';
@@ -10,8 +9,6 @@ import Logger from '../../Logger';
 import LosMongoClient from '../../LosMongoClient';
 import I18n from '../../I18n';
 import LosTelegramBot from '../../LosTelegramBot';
-
-import Replacements = i18n.Replacements;
 
 export default class IFeelLuckyHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -45,24 +42,7 @@ export default class IFeelLuckyHandler extends BaseHandler {
   }
 
   static answerWithRandomPlace (chatId: number, place: any): Promise<Message> {
-    let verifiedMessage: string = `${ I18n.t('IFeelLuckyHandler.found') }\n\n`;
-
-    const kitchenCategories = place.kitchens ? place.kitchens.map(
-      (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
-    ).join(' ') : '';
-
-    const foodCategories: string = place.categories ? place.categories.map(
-      (foodCat: string) => I18n.t(`SectionHandler.buttons.foods.${ foodCat.toLowerCase() }.emoji`)
-    ).join(' ') : '';
-
-    const replacements: Replacements = {
-      name: place.name,
-      url: place.url,
-      kitchens: kitchenCategories,
-      categories: foodCategories
-    };
-
-    verifiedMessage += I18n.t('FoodCategoryHandler.placeTemplate', replacements);
+    const verifiedMessage: string = `${ I18n.t('IFeelLuckyHandler.found') }\n\n${ BaseHandler.parsePlaceTemplate(place) }`;
 
     const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(I18n.t('LocationHandler.buttons.i_feel_lucky.emoji'));
 

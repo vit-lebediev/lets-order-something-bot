@@ -79,24 +79,7 @@ export default class BaseHandler {
     let verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found') }\n\n`;
 
     for (let i = 0; i < places.length; i += 1) {
-      const place = places[i];
-
-      const kitchenCategories = place.kitchens ? place.kitchens.map(
-        (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
-      ).join(' ') : '';
-
-      const foodCategories = place.categories ? place.categories.map(
-        (foodCat: string) => I18n.t(`SectionHandler.buttons.foods.${ foodCat.toLowerCase() }.emoji`)
-      ).join(' ') : '';
-
-      const replacements: Replacements = {
-        name: place.name,
-        url: place.url,
-        kitchens: kitchenCategories,
-        categories: foodCategories
-      };
-
-      verifiedMessage += `${ i + 1 }. ${ I18n.t('FoodCategoryHandler.placeTemplate', replacements) }\n`;
+      verifiedMessage += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(places[i]) }\n`;
     }
 
     const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(repeatSymbol);
@@ -123,5 +106,24 @@ export default class BaseHandler {
       keyboard: [ buttons ],
       resize_keyboard: true
     } as ReplyKeyboardMarkup;
+  }
+
+  static parsePlaceTemplate (place: any): string {
+    const kitchenCategories = place.kitchens ? place.kitchens.map(
+      (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
+    ).join(' ') : '';
+
+    const foodCategories = place.categories ? place.categories.map(
+      (foodCat: string) => I18n.t(`SectionHandler.buttons.foods.${ foodCat.toLowerCase() }.emoji`)
+    ).join(' ') : '';
+
+    const replacements: Replacements = {
+      name: place.name,
+      url: place.url,
+      kitchens: kitchenCategories,
+      categories: foodCategories
+    };
+
+    return I18n.t('FoodCategoryHandler.placeTemplate', replacements);
   }
 }
