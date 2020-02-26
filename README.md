@@ -6,12 +6,21 @@ The Bot to help order some food for a pleasant evening
 2. Install deps: `npm i`
 3. Create `.los_bog_env` file with crucial constants:
 ```
+LOS_BOT_ENV=DEV
+
 LOS_BOT_TG_TOKEN=<telegram_bog_api_token>
 LOS_BOT_OC_TOKEN=<open_cage_geocoder_api_token>
 
 LOS_REDIS_HOST=<redis_host>
 LOS_REDIS_PORT=<redis_port>
+
+LOS_MONGO_HOST=<mongo_host>
+LOS_MONGO_PORT=<mongo_port>
+LOS_MONGO_DB=<mongo_db>
+LOS_MONGO_USER=<mongo_user>
+LOS_MONGO_PASS=<mongo_pass>
 ```
+
 4. run `docker-compose up`
 5. run `npm run watchts`
 6. run `npm start`
