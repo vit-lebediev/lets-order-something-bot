@@ -79,7 +79,7 @@
   "FoodCategoryHandler": {
     "searchingForFoodCategory": "Ищем где бы заказать {{foodCat}}...",
     "found": "Вот что я нашел:",
-    "placeTemplate": "<a href=\"{{url}}\">{{name}}</a> {{categories}}"
+    "placeTemplate": "<a href=\"{{url}}\">{{name}}</a>\n\t\t\t\tКухни: {{kitchens}}\n\t\t\t\tЕда: {{categories}}\n"
   },
   "IFeelLuckyHandler": {
     "found": "Нашел случайное место, где сегодня можно вкусно покушать!"

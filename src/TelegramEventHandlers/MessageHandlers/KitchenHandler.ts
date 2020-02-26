@@ -1,4 +1,4 @@
-import { Message, ReplyKeyboardMarkup, SendMessageOptions } from 'node-telegram-bot-api';
+import { Message } from 'node-telegram-bot-api';
 import { Collection } from 'mongodb';
 import { BaseLogger } from 'pino';
 import i18n from 'i18n';
@@ -69,7 +69,7 @@ export default class KitchenHandler extends BaseHandler {
 
     logger.info(`${ places.length } places randomly selected: ${ places.map((item) => item.name).join(', ') }`);
 
-    return KitchenHandler.answerWithPlacesToOrder(msg.chat.id, places);
+    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places);
   }
 
   static getRandomPlacesForKitchen (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {
@@ -93,28 +93,5 @@ export default class KitchenHandler extends BaseHandler {
     const replacements: Replacements = { kitchen: I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.text`) };
 
     return LosTelegramBot.sendMessage(chatId, I18n.t('KitchenHandler.searchingForKitchen', replacements));
-  }
-
-  static answerWithPlacesToOrder (chatId: number, places: any[]): Promise<Message> {
-    let verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found') }\n\n`;
-
-    for (let i = 0; i < places.length; i += 1) {
-      const place = places[i];
-      const kitchenCategories = place.kitchens ? place.kitchens.map(
-        (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
-      ).join(' ') : '';
-      const replacements: Replacements = { name: place.name, url: place.url, categories: kitchenCategories };
-      verifiedMessage += `${ i + 1 }. ${ I18n.t('FoodCategoryHandler.placeTemplate', replacements) }\n`;
-    }
-
-    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup();
-
-    const messageOptions: SendMessageOptions = {
-      reply_markup: replyMarkup,
-      parse_mode: 'HTML',
-      disable_web_page_preview: true
-    };
-
-    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 }

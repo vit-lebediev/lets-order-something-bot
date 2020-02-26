@@ -1,4 +1,4 @@
-import { Message, ReplyKeyboardMarkup, SendMessageOptions } from 'node-telegram-bot-api';
+import { Message } from 'node-telegram-bot-api';
 import { Collection } from 'mongodb';
 import i18n from 'i18n';
 import { BaseLogger } from 'pino';
@@ -70,7 +70,7 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     logger.info(`${ places.length } places randomly selected: ${ places.map((item) => item.name).join(', ') }`);
 
-    return FoodCategoryHandler.answerWithPlacesToOrder(msg.chat.id, places);
+    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places);
   }
 
   static async getRandomPlacesForAllCategories (currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {
@@ -110,28 +110,5 @@ export default class FoodCategoryHandler extends BaseHandler {
     const replacements: Replacements = { foodCat: I18n.t(`SectionHandler.buttons.foods.${ foodCategory.toLowerCase() }.text`) };
 
     return LosTelegramBot.sendMessage(chatId, I18n.t('FoodCategoryHandler.searchingForFoodCategory', replacements));
-  }
-
-  static answerWithPlacesToOrder (chatId: number, places: any[]): Promise<Message> {
-    let verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found') }\n\n`;
-
-    for (let i = 0; i < places.length; i += 1) {
-      const place = places[i];
-      const placeCategories = place.kitchens ? place.categories.map(
-        (cat: string) => I18n.t(`SectionHandler.buttons.foods.${ cat.toLowerCase() }.emoji`)
-      ).join(' ') : '';
-      const replacements: Replacements = { name: place.name, url: place.url, categories: placeCategories };
-      verifiedMessage += `${ i + 1 }. ${ I18n.t('FoodCategoryHandler.placeTemplate', replacements) }\n`;
-    }
-
-    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup();
-
-    const messageOptions: SendMessageOptions = {
-      reply_markup: replyMarkup,
-      parse_mode: 'HTML',
-      disable_web_page_preview: true
-    };
-
-    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 }
