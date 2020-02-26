@@ -71,6 +71,7 @@ export default class UserStateManager {
 
     // @ts-ignore TODO
     await LosRedisClient.hmsetAsync(userRedisKey, updatedUserState);
+    await LosRedisClient.expireAsync(userRedisKey, 60 * 60 * 24); // expire in 24 hours
 
     return Promise.resolve(true);
   }

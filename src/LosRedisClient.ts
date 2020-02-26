@@ -38,6 +38,8 @@ class LosRedisClient extends RedisClient {
   // };
 
   public readonly hgetallAsync = promisify(this.hgetall).bind(this);
+
+  public readonly expireAsync = promisify(this.expire).bind(this);
 }
 
 const redisClient: LosRedisClient = new LosRedisClient({

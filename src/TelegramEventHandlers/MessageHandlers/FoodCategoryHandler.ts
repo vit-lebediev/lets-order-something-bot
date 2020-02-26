@@ -62,7 +62,7 @@ export default class FoodCategoryHandler extends BaseHandler {
       // get random kitchen category
       // @see https://stackblitz.com/edit/typescript-random-enum-value
       const foodCategoryKeys: string[] = Object.keys(FOOD_CATEGORIES);
-      // in our ENUMs, key === enum value
+      // in our ENUMs, key === enum value, so we can randomly select a key
       category = foodCategoryKeys[Math.floor(Math.random() * foodCategoryKeys.length)] as FOOD_CATEGORIES;
     }
 
