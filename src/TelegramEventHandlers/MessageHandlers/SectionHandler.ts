@@ -41,7 +41,6 @@ export default class SectionHandler extends BaseHandler {
       }
       case I18n.t('LocationHandler.buttons.i_feel_lucky.text'):
       default:
-        // TODO move to another state
         userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
         await UserStateManager.updateUserState(user.id, userState);
 

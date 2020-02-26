@@ -53,6 +53,8 @@ export default class KitchenHandler extends BaseHandler {
     userState.lastCategory = kitchen;
     await UserStateManager.updateUserState(userState.userId, userState);
 
+    const repeatSymbol: string = I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`);
+
     if (kitchen === KITCHEN_CATEGORIES.RANDOM) {
       // get random kitchen category
       // @see https://stackblitz.com/edit/typescript-random-enum-value
@@ -69,7 +71,7 @@ export default class KitchenHandler extends BaseHandler {
 
     logger.info(`${ places.length } places randomly selected: ${ places.map((item) => item.name).join(', ') }`);
 
-    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places);
+    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places, repeatSymbol);
   }
 
   static getRandomPlacesForKitchen (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {

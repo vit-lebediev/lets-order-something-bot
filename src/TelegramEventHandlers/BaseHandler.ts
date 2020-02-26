@@ -75,7 +75,7 @@ export default class BaseHandler {
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
-  static answerWithPlacesToOrder (chatId: number, places: any[]): Promise<Message> {
+  static answerWithPlacesToOrder (chatId: number, places: any[], repeatSymbol?: string): Promise<Message> {
     let verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found') }\n\n`;
 
     for (let i = 0; i < places.length; i += 1) {
@@ -86,7 +86,7 @@ export default class BaseHandler {
       ).join(' ') : '';
 
       const foodCategories = place.categories ? place.categories.map(
-        (cat: string) => I18n.t(`SectionHandler.buttons.foods.${ cat.toLowerCase() }.emoji`)
+        (foodCat: string) => I18n.t(`SectionHandler.buttons.foods.${ foodCat.toLowerCase() }.emoji`)
       ).join(' ') : '';
 
       const replacements: Replacements = {
@@ -99,7 +99,7 @@ export default class BaseHandler {
       verifiedMessage += `${ i + 1 }. ${ I18n.t('FoodCategoryHandler.placeTemplate', replacements) }\n`;
     }
 
-    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup();
+    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(repeatSymbol);
 
     const messageOptions: SendMessageOptions = {
       reply_markup: replyMarkup,
@@ -110,9 +110,12 @@ export default class BaseHandler {
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
-  static getRepeatOrRestartMarkup (): ReplyKeyboardMarkup {
+  static getRepeatOrRestartMarkup (repeatSymbol?: string): ReplyKeyboardMarkup {
+    const verifiedRepeatSymbol = repeatSymbol || I18n.t('BaseHandler.buttons.repeat');
+    const replacements: Replacements = { repeatSymbol: verifiedRepeatSymbol };
+
     const buttons: KeyboardButton[] = [
-      { text: I18n.t('BaseHandler.buttons.repeat.text') },
+      { text: I18n.t('BaseHandler.buttons.repeat.text', replacements) },
       { text: I18n.t('BaseHandler.buttons.restart.text') }
     ];
 

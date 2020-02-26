@@ -47,14 +47,24 @@ export default class IFeelLuckyHandler extends BaseHandler {
   static answerWithRandomPlace (chatId: number, place: any): Promise<Message> {
     let verifiedMessage: string = `${ I18n.t('IFeelLuckyHandler.found') }\n\n`;
 
-    const placeCategories: string = place.kitchens ? place.kitchens.map(
+    const kitchenCategories = place.kitchens ? place.kitchens.map(
       (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
     ).join(' ') : '';
 
-    const replacements: Replacements = { name: place.name, url: place.url, categories: placeCategories };
+    const foodCategories: string = place.categories ? place.categories.map(
+      (foodCat: string) => I18n.t(`SectionHandler.buttons.foods.${ foodCat.toLowerCase() }.emoji`)
+    ).join(' ') : '';
+
+    const replacements: Replacements = {
+      name: place.name,
+      url: place.url,
+      kitchens: kitchenCategories,
+      categories: foodCategories
+    };
+
     verifiedMessage += I18n.t('FoodCategoryHandler.placeTemplate', replacements);
 
-    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup();
+    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(I18n.t('LocationHandler.buttons.i_feel_lucky.emoji'));
 
     const messageOptions: SendMessageOptions = {
       reply_markup: replyMarkup,

@@ -8,7 +8,7 @@
   },
   "BaseHandler": {
     "buttons": {
-      "repeat": { "emoji": "\uD83D\uDD01", "text": "\uD83D\uDD01 Еще!" },
+      "repeat": { "emoji": "\uD83D\uDD01", "text": "{{repeatSymbol}} Еще!", "regExp": "Еще!" },
       "restart": { "emoji": "↩️️", "text": "↩️️ Сначала" }
     }
   },

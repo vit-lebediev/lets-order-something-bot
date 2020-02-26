@@ -16,17 +16,17 @@ export default class RepeatOrRestartHandler extends BaseHandler {
 
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:RepeatOrRestartHandler', userId: userState.userId });
 
-    switch (msg.text) {
-      case I18n.t('BaseHandler.buttons.repeat.text'):
-        logger.info("User selected 'repeat'");
+    const repeatRegExp: RegExp = new RegExp(`${ I18n.t('BaseHandler.buttons.repeat.regExp') }$`);
 
-        return RepeatOrRestartHandler.handleRepeat(msg);
-      case I18n.t('BaseHandler.buttons.restart.text'):
-      default:
-        logger.info("User selected 'restart'");
+    if (repeatRegExp.test(msg.text as string)) {
+      logger.info("User selected 'repeat'");
 
-        return RepeatOrRestartHandler.handleRestart(msg);
+      return RepeatOrRestartHandler.handleRepeat(msg);
     }
+
+    logger.info("User selected 'restart'");
+
+    return RepeatOrRestartHandler.handleRestart(msg);
   }
 
   static async handleRepeat (msg: Message): Promise<Message> {
