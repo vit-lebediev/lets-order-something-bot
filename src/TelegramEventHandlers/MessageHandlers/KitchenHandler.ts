@@ -60,7 +60,7 @@ export default class KitchenHandler extends BaseHandler {
       // @see https://stackblitz.com/edit/typescript-random-enum-value
       const kitchenCategoryKeys: string[] = Object.keys(KITCHEN_CATEGORIES);
       // in our ENUMs, key === enum value, so we can randomly select a key
-      kitchen = kitchenCategoryKeys[Math.floor(Math.random() * kitchenCategoryKeys.length)] as KITCHEN_CATEGORIES;
+      while (kitchen === KITCHEN_CATEGORIES.RANDOM) kitchen = kitchenCategoryKeys[Math.floor(Math.random() * kitchenCategoryKeys.length)] as KITCHEN_CATEGORIES;
     }
 
     await KitchenHandler.answerWithSearchingForKitchen(msg.chat.id, kitchen);
