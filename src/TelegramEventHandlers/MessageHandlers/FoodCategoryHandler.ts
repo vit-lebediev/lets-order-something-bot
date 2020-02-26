@@ -19,6 +19,11 @@ export default class FoodCategoryHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
 
+    if (!userState.currentCity) {
+      // TODO redirect to location request
+      throw new Error('User current City is not set');
+    }
+
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:FoodCategoryHandler', userId: userState.userId });
 
     let category: FOOD_CATEGORIES;
@@ -69,10 +74,11 @@ export default class FoodCategoryHandler extends BaseHandler {
     await FoodCategoryHandler.answerWithSearchingForCategory(msg.chat.id, category);
 
     const places = await FoodCategoryHandler.getRandomPlacesForCategory(category, userState.currentCity);
+    const totalPlacesNumber = await FoodCategoryHandler.getNumberOfPlacesInCategory(category, userState.currentCity);
 
-    logger.info(`${ places.length } places randomly selected: ${ places.map((item) => item.name).join(', ') }`);
+    logger.info(`${ places.length } places randomly selected (of ${ totalPlacesNumber }): ${ places.map((item: any) => item.name).join(', ') }`);
 
-    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places, repeatSymbol);
+    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places, totalPlacesNumber, repeatSymbol);
   }
 
   static async getRandomPlacesForAllCategories (currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {
@@ -89,7 +95,7 @@ export default class FoodCategoryHandler extends BaseHandler {
     ]).toArray();
   }
 
-  static async getRandomPlacesForCategory (category: FOOD_CATEGORIES, currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {
+  static async getRandomPlacesForCategory (category: FOOD_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<any[]> {
     // @ts-ignore
     const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
 
@@ -106,6 +112,18 @@ export default class FoodCategoryHandler extends BaseHandler {
       },
       { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
     ]).toArray();
+  }
+
+  static async getNumberOfPlacesInCategory (category: FOOD_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<number> {
+    // @ts-ignore
+    const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
+
+    return placesCollection.countDocuments({
+      categories: {
+        $elemMatch: { $eq: category }
+      },
+      city: currentUserCity
+    });
   }
 
   static answerWithSearchingForCategory (chatId: number, foodCategory: string): Promise<Message> {

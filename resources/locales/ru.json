@@ -78,7 +78,7 @@
   },
   "FoodCategoryHandler": {
     "searchingForFoodCategory": "Ищем где бы заказать {{foodCat}}...",
-    "found": "Вот что я нашел:",
+    "found": "Вот несколько мест (из {{numberOfPlaces}}):",
     "placeTemplate": "<a href=\"{{url}}\">{{name}}</a>\n\t\t\t\tКухни: {{kitchens}}\n\t\t\t\tЕда: {{categories}}\n"
   },
   "IFeelLuckyHandler": {

@@ -19,6 +19,11 @@ export default class KitchenHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
 
+    if (!userState.currentCity) {
+      // TODO redirect to location request
+      throw new Error('User current City is not set');
+    }
+
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:KitchenHandler', userId: userState.userId });
 
     let kitchen: KITCHEN_CATEGORIES;
@@ -66,13 +71,14 @@ export default class KitchenHandler extends BaseHandler {
     await KitchenHandler.answerWithSearchingForKitchen(msg.chat.id, kitchen);
 
     const places = await KitchenHandler.getRandomPlacesForKitchen(kitchen, userState.currentCity);
+    const totalPlacesNumber = await KitchenHandler.getNumberOfPlacesInCategory(kitchen, userState.currentCity);
 
-    logger.info(`${ places.length } places randomly selected: ${ places.map((item) => item.name).join(', ') }`);
+    logger.info(`${ places.length } places randomly selected (of ${ totalPlacesNumber }): ${ places.map((item) => item.name).join(', ') }`);
 
-    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places, repeatSymbol);
+    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places, totalPlacesNumber, repeatSymbol);
   }
 
-  static getRandomPlacesForKitchen (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {
+  static getRandomPlacesForKitchen (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<any[]> {
     // @ts-ignore
     const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
 
@@ -87,6 +93,18 @@ export default class KitchenHandler extends BaseHandler {
       },
       { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
     ]).toArray();
+  }
+
+  static async getNumberOfPlacesInCategory (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<number> {
+    // @ts-ignore
+    const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
+
+    return placesCollection.countDocuments({
+      kitchens: {
+        $elemMatch: { $eq: kitchen }
+      },
+      city: currentUserCity
+    });
   }
 
   static answerWithSearchingForKitchen (chatId: number, kitchen: string): Promise<Message> {

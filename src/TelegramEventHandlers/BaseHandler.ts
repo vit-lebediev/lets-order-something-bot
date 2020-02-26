@@ -75,8 +75,9 @@ export default class BaseHandler {
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
-  static answerWithPlacesToOrder (chatId: number, places: any[], repeatSymbol?: string): Promise<Message> {
-    let verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found') }\n\n`;
+  static answerWithPlacesToOrder (chatId: number, places: any[], totalNumberOfPlaces: number, repeatSymbol?: string): Promise<Message> {
+    const replacements: Replacements = { numberOfPlaces: totalNumberOfPlaces as unknown as string };
+    let verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found', replacements) }\n\n`;
 
     for (let i = 0; i < places.length; i += 1) {
       verifiedMessage += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(places[i]) }\n`;
