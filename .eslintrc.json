@@ -27,6 +27,13 @@
         "space-before-function-paren": ["warn", "always"],
         "comma-dangle": ["error", "never"],
         "max-len": ["warn", 160],
+        "indent": ["error", 2, {
+            "SwitchCase": 1,
+            "FunctionDeclaration": { "body": 1, "parameters": 2 },
+            "FunctionExpression": { "body": 1, "parameters": 2 },
+            "ArrayExpression": 2,
+            "CallExpression": { "arguments": 2 }
+        }],
         "@typescript-eslint/no-unused-vars": "error"
     }
 }

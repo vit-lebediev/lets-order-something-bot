@@ -9,6 +9,7 @@ import i18n from 'i18n';
 
 import LosTelegramBot from '../LosTelegramBot';
 import I18n from '../I18n';
+import Util from '../Util';
 
 import Replacements = i18n.Replacements;
 
@@ -55,14 +56,14 @@ export default class BaseHandler {
 
     const surpriseMeButton: KeyboardButton = { text: I18n.t('LocationHandler.buttons.i_feel_lucky.text') };
     const sections: KeyboardButton[] = [
-      { text: I18n.t('LocationHandler.buttons.kitchens.text') },
-      { text: I18n.t('LocationHandler.buttons.categories.text') }
+        { text: I18n.t('LocationHandler.buttons.kitchens.text') },
+        { text: I18n.t('LocationHandler.buttons.categories.text') }
     ];
 
     const replyMarkup: ReplyKeyboardMarkup = {
       keyboard: [
-        [ surpriseMeButton ],
-        sections
+          [ surpriseMeButton ],
+          sections
       ],
       resize_keyboard: true
     };
@@ -75,12 +76,17 @@ export default class BaseHandler {
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
-  static answerWithPlacesToOrder (chatId: number, places: any[], totalNumberOfPlaces: number, repeatSymbol?: string): Promise<Message> {
+  static answerWithPlacesToOrder (
+      chatId: number,
+      places: any[],
+      totalNumberOfPlaces: number,
+      repeatSymbol?: string
+  ): Promise<Message> {
     const replacements: Replacements = { numberOfPlaces: totalNumberOfPlaces as unknown as string };
     let verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found', replacements) }\n\n`;
 
     for (let i = 0; i < places.length; i += 1) {
-      verifiedMessage += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(places[i]) }\n`;
+      verifiedMessage += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(places[i], repeatSymbol) }\n`;
     }
 
     const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(repeatSymbol);
@@ -99,8 +105,8 @@ export default class BaseHandler {
     const replacements: Replacements = { repeatSymbol: verifiedRepeatSymbol };
 
     const buttons: KeyboardButton[] = [
-      { text: I18n.t('BaseHandler.buttons.repeat.text', replacements) },
-      { text: I18n.t('BaseHandler.buttons.restart.text') }
+        { text: I18n.t('BaseHandler.buttons.repeat.text', replacements) },
+        { text: I18n.t('BaseHandler.buttons.restart.text') }
     ];
 
     return {
@@ -109,14 +115,38 @@ export default class BaseHandler {
     } as ReplyKeyboardMarkup;
   }
 
-  static parsePlaceTemplate (place: any): string {
-    const kitchenCategories = place.kitchens ? place.kitchens.map(
-      (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
-    ).join(' ') : '';
+  static parsePlaceTemplate (place: any, repeatSymbol?: string): string {
+    let kitchenCategoriesArray: string[] = place.kitchens ? place.kitchens.map(
+        (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
+    ) : [];
 
-    const foodCategories = place.categories ? place.categories.map(
-      (foodCat: string) => I18n.t(`SectionHandler.buttons.foods.${ foodCat.toLowerCase() }.emoji`)
-    ).join(' ') : '';
+    kitchenCategoriesArray = Util.shuffle(kitchenCategoriesArray);
+
+    if (repeatSymbol) {
+      const symbol: string[] = kitchenCategoriesArray.splice(kitchenCategoriesArray.indexOf(repeatSymbol), 1);
+
+      if (symbol.length > 0) {
+        kitchenCategoriesArray = symbol.concat(kitchenCategoriesArray);
+      }
+    }
+
+    const kitchenCategories = kitchenCategoriesArray.join(' ');
+
+    let foodCategoriesArray: string[] = place.categories ? place.categories.map(
+        (foodCat: string) => I18n.t(`SectionHandler.buttons.foods.${ foodCat.toLowerCase() }.emoji`)
+    ) : [];
+
+    foodCategoriesArray = Util.shuffle(foodCategoriesArray);
+
+    if (repeatSymbol) {
+      const symbol: string[] = foodCategoriesArray.splice(foodCategoriesArray.indexOf(repeatSymbol), 1);
+
+      if (symbol.length > 0) {
+        foodCategoriesArray = symbol.concat(foodCategoriesArray);
+      }
+    }
+
+    const foodCategories = foodCategoriesArray.join(' ');
 
     const replacements: Replacements = {
       name: place.name,
