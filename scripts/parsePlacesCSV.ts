@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { URL } from 'url';
 import * as csv from 'fast-csv'; // eslint-disable-line import/no-extraneous-dependencies
 import { Collection } from 'mongodb';
 
@@ -9,6 +10,17 @@ import Logger from '../src/Logger';
 
 const logger = Logger.child({ module: 'parsePlaces' });
 
+type InsertRow = {
+  num_id: number, // eslint-disable-line camelcase
+  city: string,
+  name: string,
+  categories: string | string[],
+  kitchens: string | string[],
+  added: string,
+  url: string,
+  notes: string
+}
+
 setTimeout(async () => {
   // @ts-ignore
   const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
@@ -16,6 +28,7 @@ setTimeout(async () => {
   await placesCollection.remove({});
 
   const warnings: string[] = [];
+  const urlsAdded: string[] = [];
 
   fs.createReadStream(path.resolve(__dirname, '..', 'resources', 'places.csv'))
     .pipe(csv.parse({ headers: true }))
@@ -24,14 +37,15 @@ setTimeout(async () => {
       logger.info('Inserting Row:');
       console.log(row);
 
-      const insertRow = row;
+      const insertRow: InsertRow = row;
 
+      // duplicate categories
       if (insertRow.categories !== '') {
-        insertRow.categories = row.categories.split(',');
+        insertRow.categories = row.categories.split(',') as [];
 
         // get rid of duplicates
         // @see https://stackoverflow.com/a/14438954/852399
-        insertRow.categories = insertRow.categories.filter((value: string, index: number, self: string) => self.indexOf(value) === index);
+        insertRow.categories = insertRow.categories.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
 
         for (let i = 0; i < insertRow.categories.length; i += 1) {
           const cat = insertRow.categories[i];
@@ -43,12 +57,13 @@ setTimeout(async () => {
         }
       }
 
+      // duplicate kitchens
       if (insertRow.kitchens !== '') {
-        insertRow.kitchens = row.kitchens.split(',');
+        insertRow.kitchens = row.kitchens.split(',') as [];
 
         // get rid of duplicates
         // @see https://stackoverflow.com/a/14438954/852399
-        insertRow.kitchens = insertRow.kitchens.filter((value: string, index: number, self: string) => self.indexOf(value) === index);
+        insertRow.kitchens = insertRow.kitchens.filter((value: string, index: number, self: string[]) => self.indexOf(value) === index);
 
         for (let i = 0; i < insertRow.kitchens.length; i += 1) {
           const kitchen = insertRow.kitchens[i];
@@ -59,6 +74,15 @@ setTimeout(async () => {
           }
         }
       }
+
+      // duplicate places (by URL)
+      const placeUrl: URL = new URL(insertRow.url);
+      if (urlsAdded.indexOf(placeUrl.hostname) !== -1) {
+        // already added this URL! Add warning
+        warnings.push(`Place with ${ placeUrl.href } url has been already added! Found in ${ insertRow.name } (${ insertRow.num_id })`);
+      }
+
+      urlsAdded.push(placeUrl.hostname);
 
       await placesCollection.insertOne(insertRow);
     })
