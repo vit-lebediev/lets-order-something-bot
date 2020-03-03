@@ -1,10 +1,10 @@
 # lets-order-something-bot
-The Bot to help order some food for a pleasant evening
+The Bot to help choose the food delivery place for a pleasant evening.
 
 # How to start Development
 1. Clone the repo
 2. Install deps: `npm i`
-3. Create `.los_bog_env` file with crucial constants:
+3. Create `.env` file with crucial constants:
 ```
 LOS_BOT_ENV=DEV
 
@@ -21,6 +21,6 @@ LOS_MONGO_USER=<mongo_user>
 LOS_MONGO_PASS=<mongo_pass>
 ```
 
-4. run `docker-compose up`
-5. run `npm run watchts`
-6. run `npm start`
+4. run `docker-compose up` (in separate window)
+5. run `npm run watchts` (in separate window)
+6. run `npm start` (in separate window)
