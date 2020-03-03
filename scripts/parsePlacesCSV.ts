@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 import { URL } from 'url';
 import * as csv from 'fast-csv'; // eslint-disable-line import/no-extraneous-dependencies
@@ -30,8 +29,7 @@ setTimeout(async () => {
   const warnings: string[] = [];
   const urlsAdded: string[] = [];
 
-  fs.createReadStream(path.resolve(__dirname, '..', 'resources', 'places.csv'))
-    .pipe(csv.parse({ headers: true }))
+  csv.parseFile(path.resolve(__dirname, '..', 'resources', 'places.csv'), { headers: true })
     .on('error', (error) => logger.error(error))
     .on('data', async (row) => {
       logger.info('Inserting Row:');
@@ -89,11 +87,10 @@ setTimeout(async () => {
     .on('end', async (rowCount: number) => {
       logger.info(`Parsed ${ rowCount } rows`);
 
-      // logger.info('Reading documents from Mongo collection...');
-      //
-      // const documents = placesCollection.find({});
-      //
-      // console.log(await documents.toArray());
+      logger.info('Reading documents from Mongo collection, to initiate batch insert (THIS IS QUICKFIX FOR A BUG)...');
+      const documents = placesCollection.find({});
+
+      logger.info(`Documents actually inserted: ${ (await documents.toArray()).length }`);
 
       for (let i = 0; i < warnings.length; i += 1) {
         logger.warn(warnings[i]);
