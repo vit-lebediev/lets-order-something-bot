@@ -60,48 +60,48 @@ export default class SectionHandler extends BaseHandler {
     const verifiedMessage: string = message || I18n.t('LocationHandler.whatFood');
 
     const functionButtons: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.foods.random.text') },
-      { text: I18n.t('BaseHandler.buttons.restart.text') }
+        { text: I18n.t('SectionHandler.buttons.foods.random.text') },
+        { text: I18n.t('BaseHandler.buttons.restart.text') }
     ];
 
     const firstRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.foods.sushi.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.pizza.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.shawerma.text') }
+        { text: I18n.t('SectionHandler.buttons.foods.sushi.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.pizza.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.shawerma.text') }
     ];
 
     const secondRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.foods.vegetarian.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.noodles_n_rice.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.homey.text') }
+        { text: I18n.t('SectionHandler.buttons.foods.vegetarian.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.noodles_n_rice.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.homey.text') }
     ];
 
     const thirdRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.foods.burgers.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.hotdogs.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.sandwiches.text') }
+        { text: I18n.t('SectionHandler.buttons.foods.burgers.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.hotdogs.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.sandwiches.text') }
     ];
 
     const fourthRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.foods.salads.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.soups.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.pasta.text') }
+        { text: I18n.t('SectionHandler.buttons.foods.salads.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.soups.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.pasta.text') }
     ];
 
     const fifthRowOfCategories: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.foods.snacks.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.desserts.text') },
-      { text: I18n.t('SectionHandler.buttons.foods.children_menu.text') }
+        { text: I18n.t('SectionHandler.buttons.foods.snacks.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.desserts.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.children_menu.text') }
     ];
 
     const replyMarkup: ReplyKeyboardMarkup = {
       keyboard: [
-        functionButtons,
-        firstRowOfCategories,
-        secondRowOfCategories,
-        thirdRowOfCategories,
-        fourthRowOfCategories,
-        fifthRowOfCategories
+          functionButtons,
+          firstRowOfCategories,
+          secondRowOfCategories,
+          thirdRowOfCategories,
+          fourthRowOfCategories,
+          fifthRowOfCategories
       ],
       resize_keyboard: true
     };
@@ -118,49 +118,49 @@ export default class SectionHandler extends BaseHandler {
     const verifiedMessage: string = message || I18n.t('SectionHandler.whatKitchen');
 
     const functionButtons: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.kitchens.random.text') },
-      { text: I18n.t('BaseHandler.buttons.restart.text') }
+        { text: I18n.t('SectionHandler.buttons.kitchens.random.text') },
+        { text: I18n.t('BaseHandler.buttons.restart.text') }
     ];
 
     const firstRowOfKitchens: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.kitchens.homey.text') },
-      { text: I18n.t('SectionHandler.buttons.kitchens.ukrainian.text') }
+        { text: I18n.t('SectionHandler.buttons.kitchens.homey.text') },
+        { text: I18n.t('SectionHandler.buttons.kitchens.ukrainian.text') }
     ];
 
     const secondRowOfKitchens: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.kitchens.east.text') },
-      { text: I18n.t('SectionHandler.buttons.kitchens.italian.text') }
+        { text: I18n.t('SectionHandler.buttons.kitchens.east.text') },
+        { text: I18n.t('SectionHandler.buttons.kitchens.italian.text') }
     ];
 
     const thirdRowOfKitchens: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.kitchens.european.text') },
-      { text: I18n.t('SectionHandler.buttons.kitchens.american.text') }
+        { text: I18n.t('SectionHandler.buttons.kitchens.european.text') },
+        { text: I18n.t('SectionHandler.buttons.kitchens.american.text') }
     ];
 
     const fourthRowOfKitchens: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.kitchens.japanese.text') },
-      { text: I18n.t('SectionHandler.buttons.kitchens.chinese.text') }
+        { text: I18n.t('SectionHandler.buttons.kitchens.japanese.text') },
+        { text: I18n.t('SectionHandler.buttons.kitchens.chinese.text') }
     ];
 
     const fifthRowOfKitchens: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.kitchens.korean.text') },
-      { text: I18n.t('SectionHandler.buttons.kitchens.georgian.text') }
+        { text: I18n.t('SectionHandler.buttons.kitchens.korean.text') },
+        { text: I18n.t('SectionHandler.buttons.kitchens.georgian.text') }
     ];
 
     const sixthRowOfKitchens: KeyboardButton[] = [
-      { text: I18n.t('SectionHandler.buttons.kitchens.thai.text') },
-      { text: I18n.t('SectionHandler.buttons.kitchens.mexican.text') }
+        { text: I18n.t('SectionHandler.buttons.kitchens.thai.text') },
+        { text: I18n.t('SectionHandler.buttons.kitchens.mexican.text') }
     ];
 
     const replyMarkup: ReplyKeyboardMarkup = {
       keyboard: [
-        functionButtons,
-        firstRowOfKitchens,
-        secondRowOfKitchens,
-        thirdRowOfKitchens,
-        fourthRowOfKitchens,
-        fifthRowOfKitchens,
-        sixthRowOfKitchens
+          functionButtons,
+          firstRowOfKitchens,
+          secondRowOfKitchens,
+          thirdRowOfKitchens,
+          fourthRowOfKitchens,
+          fifthRowOfKitchens,
+          sixthRowOfKitchens
       ],
       resize_keyboard: true
     };

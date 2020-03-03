@@ -83,15 +83,15 @@ export default class KitchenHandler extends BaseHandler {
     const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
 
     return placesCollection.aggregate([
-      {
-        $match: {
-          kitchens: {
-            $elemMatch: { $eq: kitchen }
-          },
-          city: currentUserCity
-        }
-      },
-      { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
+        {
+          $match: {
+            kitchens: {
+              $elemMatch: { $eq: kitchen }
+            },
+            city: currentUserCity
+          }
+        },
+        { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
     ]).toArray();
   }
 

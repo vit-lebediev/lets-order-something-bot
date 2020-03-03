@@ -32,12 +32,12 @@ export default class IFeelLuckyHandler extends BaseHandler {
     const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
 
     return placesCollection.aggregate([
-      {
-        $match: {
-          city: currentUserCity
-        }
-      },
-      { $sample: { size: 1 } } // @see https://stackoverflow.com/a/33578506/852399
+        {
+          $match: {
+            city: currentUserCity
+          }
+        },
+        { $sample: { size: 1 } } // @see https://stackoverflow.com/a/33578506/852399
     ]).toArray();
   }
 
