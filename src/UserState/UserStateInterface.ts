@@ -4,7 +4,7 @@ import { FOOD_CATEGORIES, KITCHEN_CATEGORIES } from '../Constants';
 export enum SUPPORTED_CITIES {
   UNKNOWN = 'unknown',
   ODESA = 'odesa',
-  // KIEV
+  // KYIV = 'kyiv'
 }
 
 // TODO Move to Constants

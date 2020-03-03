@@ -8,6 +8,7 @@ import { FOOD_CATEGORIES, KITCHEN_CATEGORIES } from '../Constants';
 const logger = Logger.child({ module: 'UserStateManagerHandler' });
 
 const CITY_STRING_ODESA = 'Odesa';
+// const CITY_STRING_KYIV = 'Kyiv';
 
 export default class UserStateManager {
   /**

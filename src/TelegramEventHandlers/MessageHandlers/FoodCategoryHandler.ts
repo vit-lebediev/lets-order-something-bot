@@ -86,12 +86,12 @@ export default class FoodCategoryHandler extends BaseHandler {
     const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
 
     return placesCollection.aggregate([
-      {
-        $match: {
-          city: currentUserCity
-        }
-      },
-      { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
+        {
+          $match: {
+            city: currentUserCity
+          }
+        },
+        { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
     ]).toArray();
   }
 
@@ -102,15 +102,15 @@ export default class FoodCategoryHandler extends BaseHandler {
     // TODO $sample may output the same document more than once in its result set. For more information, see Cursor Isolation.
     //  @see https://docs.mongodb.com/master/reference/operator/aggregation/sample/#pipe._S_sample
     return placesCollection.aggregate([
-      {
-        $match: {
-          categories: {
-            $elemMatch: { $eq: category }
-          },
-          city: currentUserCity
-        }
-      },
-      { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
+        {
+          $match: {
+            categories: {
+              $elemMatch: { $eq: category }
+            },
+            city: currentUserCity
+          }
+        },
+        { $sample: { size: DEFAULT_NUMBER_OF_ANSWERS } } // @see https://stackoverflow.com/a/33578506/852399
     ]).toArray();
   }
 

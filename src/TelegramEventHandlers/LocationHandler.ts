@@ -68,8 +68,8 @@ export default class LocationHandler extends BaseHandler {
     if (userCity === null) {
       logger.warn('User city not supported');
       return BaseHandler.answerWithStartFromBeginning(
-        msg.chat.id,
-        I18n.t('LocationHandler.errorCityNotSupported', { city: userCityString } as Replacements)
+          msg.chat.id,
+          I18n.t('LocationHandler.errorCityNotSupported', { city: userCityString } as Replacements)
       );
     }
 
