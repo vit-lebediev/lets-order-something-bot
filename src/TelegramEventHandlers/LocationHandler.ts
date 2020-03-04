@@ -10,11 +10,12 @@ import NodeGeocoder, {
 // Projects imports
 import i18n from 'i18n';
 import LosTelegramBot from '../LosTelegramBot';
-import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
+import UserStateInterface from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
 import BaseHandler from './BaseHandler';
 import Logger from '../Logger';
 import I18n from '../I18n';
+import { SUPPORTED_CITIES, USER_STATES } from '../Constants';
 
 import Replacements = i18n.Replacements;
 

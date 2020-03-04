@@ -1,6 +1,6 @@
 import { Message } from 'node-telegram-bot-api';
 
-import UserStateInterface, { USER_STATES } from '../UserState/UserStateInterface';
+import UserStateInterface from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
 // Message Handlers
 import FoodCategoryHandler from './MessageHandlers/FoodCategoryHandler';
@@ -10,6 +10,7 @@ import BaseHandler from './BaseHandler';
 import SectionHandler from './MessageHandlers/SectionHandler';
 import KitchenHandler from './MessageHandlers/KitchenHandler';
 import RepeatOrRestartHandler from './MessageHandlers/RepeatOrRestartHandler';
+import { USER_STATES } from '../Constants';
 
 const startCommandRegExp = /^\/start/;
 const helpCommandRegExp = /^\/help/;

@@ -3,12 +3,13 @@ import { Collection } from 'mongodb';
 import { BaseLogger } from 'pino';
 
 import BaseHandler from '../BaseHandler';
-import UserStateInterface, { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../UserState/UserStateInterface';
+import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import Logger from '../../Logger';
 import LosMongoClient from '../../LosMongoClient';
 import I18n from '../../I18n';
 import LosTelegramBot from '../../LosTelegramBot';
+import { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../Constants';
 
 export default class IFeelLuckyHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {

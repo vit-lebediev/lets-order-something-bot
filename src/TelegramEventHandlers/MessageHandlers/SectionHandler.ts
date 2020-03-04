@@ -8,11 +8,12 @@ import { BaseLogger } from 'pino';
 
 import I18n from '../../I18n';
 import LosTelegramBot from '../../LosTelegramBot';
-import UserStateInterface, { USER_STATES } from '../../UserState/UserStateInterface';
+import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import Logger from '../../Logger';
 import BaseHandler from '../BaseHandler';
 import IFeelLuckyHandler from './IFeelLuckyHandler';
+import { USER_STATES } from '../../Constants';
 
 export default class SectionHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {

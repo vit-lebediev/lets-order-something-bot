@@ -2,13 +2,14 @@ import { Message } from 'node-telegram-bot-api';
 import { BaseLogger } from 'pino';
 
 import BaseHandler from '../BaseHandler';
-import UserStateInterface, { SECTIONS, USER_STATES } from '../../UserState/UserStateInterface';
+import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import FoodCategoryHandler from './FoodCategoryHandler';
 import KitchenHandler from './KitchenHandler';
 import IFeelLuckyHandler from './IFeelLuckyHandler';
 import I18n from '../../I18n';
 import Logger from '../../Logger';
+import { SECTIONS, USER_STATES } from '../../Constants';
 
 export default class RepeatOrRestartHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {

@@ -4,10 +4,16 @@ import { BaseLogger } from 'pino';
 import i18n from 'i18n';
 
 import BaseHandler from '../BaseHandler';
-import UserStateInterface, { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../UserState/UserStateInterface';
+import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import Logger from '../../Logger';
-import { DEFAULT_NUMBER_OF_ANSWERS, KITCHEN_CATEGORIES } from '../../Constants';
+import {
+  DEFAULT_NUMBER_OF_ANSWERS,
+  KITCHEN_CATEGORIES,
+  SECTIONS,
+  SUPPORTED_CITIES,
+  USER_STATES
+} from '../../Constants';
 import I18n from '../../I18n';
 import LosTelegramBot from '../../LosTelegramBot';
 import LosMongoClient from '../../LosMongoClient';

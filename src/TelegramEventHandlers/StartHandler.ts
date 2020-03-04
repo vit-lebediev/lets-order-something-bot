@@ -6,12 +6,13 @@ import {
   User
 } from 'node-telegram-bot-api';
 
-import UserStateInterface, { SUPPORTED_CITIES, USER_STATES } from '../UserState/UserStateInterface';
+import UserStateInterface from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
 import LosTelegramBot from '../LosTelegramBot';
 import BaseHandler from './BaseHandler';
 import Logger from '../Logger';
 import I18n from '../I18n';
+import { SUPPORTED_CITIES, USER_STATES } from '../Constants';
 
 const logger = Logger.child({ module: 'StartHandler' });
 

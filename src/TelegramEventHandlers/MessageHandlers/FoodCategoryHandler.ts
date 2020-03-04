@@ -6,10 +6,16 @@ import { BaseLogger } from 'pino';
 import BaseHandler from '../BaseHandler';
 import LosMongoClient from '../../LosMongoClient';
 import I18n from '../../I18n';
-import { DEFAULT_NUMBER_OF_ANSWERS, FOOD_CATEGORIES } from '../../Constants';
+import {
+  DEFAULT_NUMBER_OF_ANSWERS,
+  FOOD_CATEGORIES,
+  SECTIONS,
+  SUPPORTED_CITIES,
+  USER_STATES
+} from '../../Constants';
 import Logger from '../../Logger';
 import LosTelegramBot from '../../LosTelegramBot';
-import UserStateInterface, { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../UserState/UserStateInterface';
+import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 
