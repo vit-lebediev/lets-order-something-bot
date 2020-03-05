@@ -42,7 +42,7 @@ export enum KITCHEN_CATEGORIES {
 }
 
 export enum SUPPORTED_CITIES {
-  UNKNOWN = 'unknown',
+  OTHER = 'other',
   ODESA = 'odesa',
   // KYIV = 'kyiv'
 }

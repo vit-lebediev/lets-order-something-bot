@@ -24,7 +24,7 @@ export default class StartHandler extends BaseHandler {
 
     const userState: UserStateInterface = {
       currentState: USER_STATES.WAIT_FOR_LOCATION,
-      currentCity: SUPPORTED_CITIES.UNKNOWN,
+      currentCity: SUPPORTED_CITIES.OTHER,
       lastUpdated: Math.round(Date.now() / 1000)
     } as UserStateInterface;
 
@@ -44,10 +44,13 @@ export default class StartHandler extends BaseHandler {
     // const verifiedMessage: string = message || "Great! Let's start. First things first, I'll need your location to only show you places around you.";
     const verifiedMessage: string = message || I18n.t('StartHandler.start');
 
-    const sendLocationButton: KeyboardButton = { text: I18n.t('StartHandler.buttons.sendLocation'), request_location: true };
+    const sendLocationCity: KeyboardButton[] = [
+        { text: I18n.t('StartHandler.buttons.locations.sendLocationOdesa.text') },
+        { text: I18n.t('StartHandler.buttons.locations.sendLocationOther.text') }
+    ];
 
     const replyMarkup: ReplyKeyboardMarkup = {
-      keyboard: [[ sendLocationButton ]],
+      keyboard: [ sendLocationCity ],
       resize_keyboard: true
     };
 

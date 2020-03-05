@@ -15,7 +15,10 @@
   "StartHandler": {
     "start": "Во-первых, мне нужно знать где вы находитесь, чтобы не предлагать доставку из других городов. Нажмите на кнопку \"\uD83D\uDCCD Отправить местоположение\"",
     "buttons": {
-      "sendLocation": "\uD83D\uDCCD Отправить местоположение"
+      "locations": {
+        "sendLocationOdesa": { "emoji": "\u2693", "text":"\u2693Одесса" },
+        "sendLocationOther": { "text": "Другой..." }
+      }
     }
   },
   "LocationHandler": {
