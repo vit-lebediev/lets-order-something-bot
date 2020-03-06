@@ -4,6 +4,9 @@ import {
   SendMessageOptions
 } from 'node-telegram-bot-api';
 import { BaseLogger } from 'pino';
+import { Collection } from 'mongodb';
+
+import LosMongoClient from '../../LosMongoClient';
 import LosTelegramBot from '../../LosTelegramBot';
 import BaseHandler from '../BaseHandler';
 import I18n from '../../I18n';
@@ -18,7 +21,15 @@ export default class OtherCityHandler extends BaseHandler {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:OtherCityHandler', userId: userState.userId });
     logger.info(`User entered '${ msg.text }' city.`);
-
+    // @ts-ignore
+    const otherCitiesCollection: Collection = LosMongoClient.dbHandler.collection('otherCities');
+    otherCitiesCollection.createIndex({ userTgId: 1 }, { unique: true });
+    otherCitiesCollection.updateOne(
+        { userTgId: userState.userId },
+        { $set: { userTgId: userState.userId, city: msg.text } },
+        { upsert: true }
+    );
+    logger.info(`Save city '${ msg.text }' for user '${ userState.userId }' to db.otherCities`);
     userState.currentState = USER_STATES.WAIT_FOR_LOCATION;
     await UserStateManager.updateUserState(userState.userId, userState);
 
