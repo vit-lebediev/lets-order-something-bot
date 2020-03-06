@@ -7,6 +7,7 @@ import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import Logger from '../../Logger';
 import RepeatOrRestartHandler from './RepeatOrRestartHandler';
+import OtherCityHandler from './OtherCityHandler';
 import { SUPPORTED_CITIES, USER_STATES } from '../../Constants';
 
 export default class TextLocationHandler extends BaseHandler {
@@ -28,7 +29,10 @@ export default class TextLocationHandler extends BaseHandler {
 
     logger.info(`User selected '${ msg.text }' city, mapped to ${ city }. `);
     if (city === SUPPORTED_CITIES.OTHER) {
-      return BaseHandler.answerWithStartFromBeginning(msg.chat.id);
+      userState.currentState = USER_STATES.WAIT_FOR_TEXT_CITY_OTHER;
+      userState.currentCity = city;
+      await UserStateManager.updateUserState(userState.userId, userState);
+      return OtherCityHandler.answerWithPromptEnterCity(msg.chat.id);
     }
 
     userState.currentState = USER_STATES.WAIT_FOR_SECTION;
