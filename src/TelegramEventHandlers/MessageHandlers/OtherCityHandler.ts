@@ -20,16 +20,19 @@ export default class OtherCityHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:OtherCityHandler', userId: userState.userId });
+
     logger.info(`User entered '${ msg.text }' city.`);
+
     // @ts-ignore
     const otherCitiesCollection: Collection = LosMongoClient.dbHandler.collection('otherCities');
-    otherCitiesCollection.createIndex({ userTgId: 1 }, { unique: true });
-    otherCitiesCollection.updateOne(
+    await otherCitiesCollection.updateOne(
         { userTgId: userState.userId },
         { $set: { userTgId: userState.userId, city: msg.text } },
         { upsert: true }
     );
+
     logger.info(`Save city '${ msg.text }' for user '${ userState.userId }' to db.otherCities`);
+
     userState.currentState = USER_STATES.WAIT_FOR_LOCATION;
     await UserStateManager.updateUserState(userState.userId, userState);
 
