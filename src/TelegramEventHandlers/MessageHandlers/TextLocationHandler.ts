@@ -12,10 +12,6 @@ import { SUPPORTED_CITIES, USER_STATES } from '../../Constants';
 
 export default class TextLocationHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
-    // TODO IF requesting user is in USER_STATES.WAIT_FOR_LOCATION:
-    //  - take msg.text and try to identify city.
-    //  - update current state to USER_STATES.WAIT_FOR_CITY_CONFIRM
-    //  - send user confirmation message with YES and NO buttons
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:TextLocationHandler', userId: userState.userId });
     let city: SUPPORTED_CITIES = SUPPORTED_CITIES.OTHER;
@@ -27,7 +23,8 @@ export default class TextLocationHandler extends BaseHandler {
         logger.info('Error!!! not selected city');
     }
 
-    logger.info(`User selected '${ msg.text }' city, mapped to ${ city }. `);
+    logger.info(`User selected '${ msg.text }' city, mapped to ${ city }.`);
+
     if (city === SUPPORTED_CITIES.OTHER) {
       userState.currentState = USER_STATES.WAIT_FOR_TEXT_CITY_OTHER;
       userState.currentCity = city;

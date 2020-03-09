@@ -16,7 +16,7 @@
     "start": "Во-первых, мне нужно знать где вы находитесь, чтобы не предлагать доставку из других городов. Нажмите на кнопку \"\uD83D\uDCCD Отправить местоположение\"",
     "buttons": {
       "locations": {
-        "sendLocationOdesa": { "emoji": "\u2693", "text":"\u2693Одесса" },
+        "sendLocationOdesa": { "emoji": "\u2693", "text":"\u2693 Одесса" },
         "sendLocationOther": { "text": "Другой..." }
       }
     }
