@@ -13,11 +13,12 @@ import UserStateManager from '../../UserState/UserStateManager';
 import Logger from '../../Logger';
 import BaseHandler from '../BaseHandler';
 import IFeelLuckyHandler from './IFeelLuckyHandler';
+import UserProfileManager from '../../UserProfile/UserProfileManager';
 import { USER_STATES } from '../../Constants';
 
 export default class SectionHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
-    const user: User = UserStateManager.getUserFromMessage(msg);
+    const user: User = UserProfileManager.getUserFromMessage(msg);
 
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
 

@@ -18,14 +18,20 @@ import I18n from '../../I18n';
 import LosTelegramBot from '../../LosTelegramBot';
 import LosMongoClient from '../../LosMongoClient';
 import RepeatOrRestartHandler from './RepeatOrRestartHandler';
+import UserProfileInterface from '../../UserProfile/UserProfileInterface';
+import UserProfileManager from '../../UserProfile/UserProfileManager';
 
 import Replacements = i18n.Replacements;
+
+const PLACES_COLLECTION = 'places';
 
 export default class KitchenHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
 
-    if (!userState.currentCity) {
+    const userProfile: UserProfileInterface = await UserProfileManager.getUserProfile(msg);
+
+    if (!userProfile.currentCity) {
       // TODO redirect to location request
       throw new Error('User current City is not set');
     }
@@ -57,7 +63,7 @@ export default class KitchenHandler extends BaseHandler {
         return RepeatOrRestartHandler.handleRestart(msg);
     }
 
-    logger.info(`User selected '${ msg.text }' kitchen, mapped to ${ kitchen }. Searching in '${ I18n.t(`cities.${ userState.currentCity }`) }' city`);
+    logger.info(`User selected '${ msg.text }' kitchen, mapped to ${ kitchen }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);
 
     userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
     userState.lastSection = SECTIONS.KITCHEN;
@@ -76,8 +82,8 @@ export default class KitchenHandler extends BaseHandler {
 
     await KitchenHandler.answerWithSearchingForKitchen(msg.chat.id, kitchen);
 
-    const places = await KitchenHandler.getRandomPlacesForKitchen(kitchen, userState.currentCity);
-    const totalPlacesNumber = await KitchenHandler.getNumberOfPlacesInCategory(kitchen, userState.currentCity);
+    const places = await KitchenHandler.getRandomPlacesForKitchen(kitchen, userProfile.currentCity);
+    const totalPlacesNumber = await KitchenHandler.getNumberOfPlacesInCategory(kitchen, userProfile.currentCity);
 
     logger.info(`${ places.length } places randomly selected (of ${ totalPlacesNumber }): ${ places.map((item) => item.name).join(', ') }`);
 
@@ -86,7 +92,7 @@ export default class KitchenHandler extends BaseHandler {
 
   static getRandomPlacesForKitchen (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<any[]> {
     // @ts-ignore
-    const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
+    const placesCollection: Collection = LosMongoClient.dbHandler.collection(PLACES_COLLECTION);
 
     return placesCollection.aggregate([
         {
@@ -103,7 +109,7 @@ export default class KitchenHandler extends BaseHandler {
 
   static async getNumberOfPlacesInCategory (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<number> {
     // @ts-ignore
-    const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
+    const placesCollection: Collection = LosMongoClient.dbHandler.collection(PLACES_COLLECTION);
 
     return placesCollection.countDocuments({
       kitchens: {

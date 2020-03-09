@@ -10,14 +10,21 @@ import LosMongoClient from '../../LosMongoClient';
 import I18n from '../../I18n';
 import LosTelegramBot from '../../LosTelegramBot';
 import { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../Constants';
+import UserProfileInterface from '../../UserProfile/UserProfileInterface';
+import UserProfileManager from '../../UserProfile/UserProfileManager';
 
 export default class IFeelLuckyHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+    const userProfile: UserProfileInterface = await UserProfileManager.getUserProfile(msg);
 
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:IFeelLuckyHandler', userId: userState.userId });
 
-    const place: any = await IFeelLuckyHandler.getRandomPlace(userState.currentCity);
+    const place: any[] = await IFeelLuckyHandler.getRandomPlace(userProfile.currentCity);
+
+    if (place.length === 0) {
+      throw new Error(`No places stored for the city! ${ userProfile.currentCity }`);
+    }
 
     userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
     userState.lastSection = SECTIONS.LUCKY;

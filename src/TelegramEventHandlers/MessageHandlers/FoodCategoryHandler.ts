@@ -18,14 +18,17 @@ import LosTelegramBot from '../../LosTelegramBot';
 import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import RepeatOrRestartHandler from './RepeatOrRestartHandler';
+import UserProfileInterface from '../../UserProfile/UserProfileInterface';
+import UserProfileManager from '../../UserProfile/UserProfileManager';
 
 import Replacements = i18n.Replacements;
 
 export default class FoodCategoryHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+    const userProfile: UserProfileInterface = await UserProfileManager.getUserProfile(msg);
 
-    if (!userState.currentCity) {
+    if (!userProfile.currentCity) {
       // TODO redirect to location request
       throw new Error('User current City is not set');
     }
@@ -60,7 +63,7 @@ export default class FoodCategoryHandler extends BaseHandler {
         return RepeatOrRestartHandler.handleRestart(msg);
     }
 
-    logger.info(`User selected '${ msg.text }' category, mapped to ${ category }. Searching in '${ I18n.t(`cities.${ userState.currentCity }`) }' city`);
+    logger.info(`User selected '${ msg.text }' category, mapped to ${ category }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);
 
     userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
     userState.lastSection = SECTIONS.FOOD;
@@ -79,8 +82,8 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     await FoodCategoryHandler.answerWithSearchingForCategory(msg.chat.id, category);
 
-    const places = await FoodCategoryHandler.getRandomPlacesForCategory(category, userState.currentCity);
-    const totalPlacesNumber = await FoodCategoryHandler.getNumberOfPlacesInCategory(category, userState.currentCity);
+    const places = await FoodCategoryHandler.getRandomPlacesForCategory(category, userProfile.currentCity);
+    const totalPlacesNumber = await FoodCategoryHandler.getNumberOfPlacesInCategory(category, userProfile.currentCity);
 
     logger.info(`${ places.length } places randomly selected (of ${ totalPlacesNumber }): ${ places.map((item: any) => item.name).join(', ') }`);
 

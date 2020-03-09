@@ -19,7 +19,7 @@ const settingsCommandRegExp = /^\/settings/;
 
 export default class MessageHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
-    // leave 'location' requests for dedicated handle
+    // leave 'location' requests for dedicated handler
     if (msg.location) return new Promise(() => {});
 
     if (msg.text && (

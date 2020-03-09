@@ -12,10 +12,12 @@ import i18n from 'i18n';
 import LosTelegramBot from '../LosTelegramBot';
 import UserStateInterface from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
+import UserProfileManager from '../UserProfile/UserProfileManager';
 import BaseHandler from './BaseHandler';
 import Logger from '../Logger';
 import I18n from '../I18n';
 import { SUPPORTED_CITIES, USER_STATES } from '../Constants';
+import UserProfileInterface from '../UserProfile/UserProfileInterface';
 
 import Replacements = i18n.Replacements;
 
@@ -38,11 +40,12 @@ const geocoderClient: Geocoder = NodeGeocoder(geocoderOptions);
 
 export default class LocationHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
-    const user: User = UserStateManager.getUserFromMessage(msg);
+    const user: User = UserProfileManager.getUserFromMessage(msg);
 
     logger.info(`/location command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+    const userProfile: UserProfileInterface = await UserProfileManager.getUserProfile(msg);
 
     // verify we're in a proper state for this event...
     if (userState.currentState !== USER_STATES.WAIT_FOR_LOCATION) {
@@ -74,8 +77,10 @@ export default class LocationHandler extends BaseHandler {
       );
     }
 
+    userProfile.currentCity = userCity;
+    await UserProfileManager.updateUserProfile(user.id, userProfile);
+
     // update user state
-    userState.currentCity = userCity;
     userState.currentState = USER_STATES.WAIT_FOR_SECTION;
     await UserStateManager.updateUserState(user.id, userState);
 
