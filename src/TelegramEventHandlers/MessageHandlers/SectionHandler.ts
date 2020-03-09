@@ -14,6 +14,7 @@ import Logger from '../../Logger';
 import BaseHandler from '../BaseHandler';
 import IFeelLuckyHandler from './IFeelLuckyHandler';
 import UserProfileManager from '../../UserProfile/UserProfileManager';
+import FeedBackHandler from "./FeedBackHandler";
 import { USER_STATES } from '../../Constants';
 
 export default class SectionHandler extends BaseHandler {
@@ -40,6 +41,14 @@ export default class SectionHandler extends BaseHandler {
         logger.info(`User selected ${ I18n.t('LocationHandler.buttons.categories.text') } section`);
 
         return this.answerWithFoodCategoriesMenu(msg.chat.id);
+      }
+      case I18n.t('LocationHandler.buttons.feedback.text'): {
+          userState.currentState = USER_STATES.WAIT_FOR_FEEDBACK;
+          await UserStateManager.updateUserState(user.id, userState);
+
+          logger.info(`User selected ${ I18n.t('LocationHandler.buttons.feedback.text') } button`);
+
+          return FeedBackHandler.answerWithFeedBack(msg.chat.id);
       }
       case I18n.t('LocationHandler.buttons.i_feel_lucky.text'):
       default:

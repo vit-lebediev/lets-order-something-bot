@@ -11,6 +11,7 @@ import SectionHandler from './MessageHandlers/SectionHandler';
 import KitchenHandler from './MessageHandlers/KitchenHandler';
 import RepeatOrRestartHandler from './MessageHandlers/RepeatOrRestartHandler';
 import OtherCityHandler from './MessageHandlers/OtherCityHandler';
+import FeedBackHandler from './MessageHandlers/FeedBackHandler';
 import { USER_STATES } from '../Constants';
 
 const startCommandRegExp = /^\/start/;
@@ -41,6 +42,7 @@ export default class MessageHandler extends BaseHandler {
       // not active state at the moment
       case USER_STATES.WAIT_FOR_CITY_CONFIRM: return CityConfirmationHandler.handle(msg);
       case USER_STATES.WAIT_FOR_SECTION: return SectionHandler.handle(msg);
+      case USER_STATES.WAIT_FOR_FEEDBACK: return FeedBackHandler.handle(msg);
       case USER_STATES.WAIT_FOR_FOOD_CATEGORY: return FoodCategoryHandler.handle(msg);
       case USER_STATES.WAIT_FOR_KITCHEN: return KitchenHandler.handle(msg);
       case USER_STATES.WAIT_FOR_REPEAT_OR_RESTART: return RepeatOrRestartHandler.handle(msg);
