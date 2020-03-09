@@ -1,4 +1,4 @@
-import { Message } from 'node-telegram-bot-api';
+import {Message, ReplyKeyboardRemove, SendMessageOptions} from 'node-telegram-bot-api';
 import { BaseLogger } from 'pino';
 
 import BaseHandler from '../BaseHandler';
@@ -9,6 +9,7 @@ import Logger from '../../Logger';
 import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 import OtherCityHandler from './OtherCityHandler';
 import { SUPPORTED_CITIES, USER_STATES } from '../../Constants';
+import LosTelegramBot from "../../LosTelegramBot";
 
 export default class TextLocationHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -29,7 +30,7 @@ export default class TextLocationHandler extends BaseHandler {
       userState.currentState = USER_STATES.WAIT_FOR_TEXT_CITY_OTHER;
       userState.currentCity = city;
       await UserStateManager.updateUserState(userState.userId, userState);
-      return OtherCityHandler.answerWithPromptEnterCity(msg.chat.id);
+      return TextLocationHandler.answerWithPromptEnterCity(msg.chat.id);
     }
 
     userState.currentState = USER_STATES.WAIT_FOR_SECTION;
@@ -37,5 +38,20 @@ export default class TextLocationHandler extends BaseHandler {
     await UserStateManager.updateUserState(userState.userId, userState);
 
     return BaseHandler.answerWithSectionsMenu(msg.chat.id);
+  }
+
+  static answerWithPromptEnterCity (chatId: number, message?: string): Promise<Message> {
+    const verifiedMessage: string = message || I18n.t('OtherCityHandler.inputPrompt');
+
+    const replyMarkup: ReplyKeyboardRemove = {
+        remove_keyboard: true
+    };
+
+    const messageOptions: SendMessageOptions = {
+        reply_markup: replyMarkup,
+        parse_mode: 'Markdown'
+    };
+
+    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 }

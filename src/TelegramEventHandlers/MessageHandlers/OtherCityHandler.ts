@@ -36,21 +36,6 @@ export default class OtherCityHandler extends BaseHandler {
     userState.currentState = USER_STATES.WAIT_FOR_LOCATION;
     await UserStateManager.updateUserState(userState.userId, userState);
 
-    return StartHandler.handle(msg);
-  }
-
-  static answerWithPromptEnterCity (chatId: number, message?: string): Promise<Message> {
-    const verifiedMessage: string = message || I18n.t('OtherCityHandler.inputPrompt');
-
-    const replyMarkup: ReplyKeyboardRemove = {
-      remove_keyboard: true
-    };
-
-    const messageOptions: SendMessageOptions = {
-      reply_markup: replyMarkup,
-      parse_mode: 'Markdown'
-    };
-
-    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
+    return StartHandler.answerWithWaitForLocation(msg.chat.id);
   }
 }
