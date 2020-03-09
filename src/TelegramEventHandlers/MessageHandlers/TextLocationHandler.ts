@@ -1,4 +1,4 @@
-import {Message, ReplyKeyboardRemove, SendMessageOptions} from 'node-telegram-bot-api';
+import { Message, ReplyKeyboardRemove, SendMessageOptions } from 'node-telegram-bot-api';
 import { BaseLogger } from 'pino';
 
 import BaseHandler from '../BaseHandler';
@@ -6,14 +6,15 @@ import I18n from '../../I18n';
 import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import Logger from '../../Logger';
-import RepeatOrRestartHandler from './RepeatOrRestartHandler';
-import OtherCityHandler from './OtherCityHandler';
 import { SUPPORTED_CITIES, USER_STATES } from '../../Constants';
-import LosTelegramBot from "../../LosTelegramBot";
+import LosTelegramBot from '../../LosTelegramBot';
+import UserProfileInterface from '../../UserProfile/UserProfileInterface';
+import UserProfileManager from '../../UserProfile/UserProfileManager';
 
 export default class TextLocationHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+    const userProfile: UserProfileInterface = await UserProfileManager.getUserProfile(msg);
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:TextLocationHandler', userId: userState.userId });
     let city: SUPPORTED_CITIES = SUPPORTED_CITIES.OTHER;
 
@@ -28,14 +29,19 @@ export default class TextLocationHandler extends BaseHandler {
 
     if (city === SUPPORTED_CITIES.OTHER) {
       userState.currentState = USER_STATES.WAIT_FOR_TEXT_CITY_OTHER;
-      userState.currentCity = city;
       await UserStateManager.updateUserState(userState.userId, userState);
+
+      userProfile.currentCity = city;
+      await UserProfileManager.updateUserProfile(userProfile.tgUserId, userProfile);
+
       return TextLocationHandler.answerWithPromptEnterCity(msg.chat.id);
     }
 
     userState.currentState = USER_STATES.WAIT_FOR_SECTION;
-    userState.currentCity = city;
     await UserStateManager.updateUserState(userState.userId, userState);
+
+    userProfile.currentCity = city;
+    await UserProfileManager.updateUserProfile(userProfile.tgUserId, userProfile);
 
     return BaseHandler.answerWithSectionsMenu(msg.chat.id);
   }
@@ -44,12 +50,12 @@ export default class TextLocationHandler extends BaseHandler {
     const verifiedMessage: string = message || I18n.t('OtherCityHandler.inputPrompt');
 
     const replyMarkup: ReplyKeyboardRemove = {
-        remove_keyboard: true
+      remove_keyboard: true
     };
 
     const messageOptions: SendMessageOptions = {
-        reply_markup: replyMarkup,
-        parse_mode: 'Markdown'
+      reply_markup: replyMarkup,
+      parse_mode: 'Markdown'
     };
 
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
