@@ -36,6 +36,6 @@ export default class TextLocationHandler extends BaseHandler {
     userState.currentCity = city;
     await UserStateManager.updateUserState(userState.userId, userState);
 
-    return RepeatOrRestartHandler.handle(msg);
+    return BaseHandler.answerWithSectionsMenu(msg.chat.id);
   }
 }
