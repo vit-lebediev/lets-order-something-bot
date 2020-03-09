@@ -10,6 +10,7 @@ import {
   SUPPORTED_CITIES,
   USER_STATES
 } from '../Constants';
+import UserProfileManager from '../UserProfile/UserProfileManager';
 
 const logger = Logger.child({ module: 'UserStateManagerHandler' });
 
@@ -28,18 +29,15 @@ export default class UserStateManager {
 
     const obj = await LosRedisClient.hgetallAsync(userRedisKey);
 
-    if (!obj.currentState) return Promise.resolve(null);
+    if (!obj.currentState) return null;
 
-    const userState: UserStateInterface = {
+    return {
       userId,
       currentState: obj.currentState as USER_STATES,
-      currentCity: obj.currentCity as SUPPORTED_CITIES,
       lastSection: obj.lastSection as SECTIONS,
       lastCategory: obj.lastCategory as KITCHEN_CATEGORIES | FOOD_CATEGORIES,
       lastUpdated: parseInt(obj.lastUpdated, 10)
-    };
-
-    return Promise.resolve(userState);
+    } as UserStateInterface;
   }
 
   /**
@@ -50,7 +48,7 @@ export default class UserStateManager {
    * @throws Error
    */
   static async getUserState (msg: Message): Promise<UserStateInterface> {
-    const user: User = UserStateManager.getUserFromMessage(msg);
+    const user: User = UserProfileManager.getUserFromMessage(msg);
 
     const userState: UserStateInterface | null = await UserStateManager.getUserStateById(user.id);
 
@@ -76,19 +74,11 @@ export default class UserStateManager {
 
     logger.info(`Storing user state in Redis with key ${ userRedisKey }`);
 
-    // @ts-ignore TODO
+    // @ts-ignore TODO fix this ts-ignore
     await LosRedisClient.hmsetAsync(userRedisKey, updatedUserState);
     await LosRedisClient.expireAsync(userRedisKey, 60 * 60 * 24); // expire in 24 hours
 
     return Promise.resolve(true);
-  }
-
-  static getUserFromMessage (msg: Message): User {
-    const user: User | undefined = msg.from;
-
-    if (user === undefined) throw new Error("User is not found in message 'from' field");
-
-    return user;
   }
 
   static getCityFromString (city: string | undefined): SUPPORTED_CITIES | null {
