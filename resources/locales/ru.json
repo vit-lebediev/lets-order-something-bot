@@ -15,7 +15,10 @@
   "StartHandler": {
     "start": "Во-первых, мне нужно знать где вы находитесь, чтобы не предлагать доставку из других городов. Нажмите на кнопку \"\uD83D\uDCCD Отправить местоположение\"",
     "buttons": {
-      "sendLocation": "\uD83D\uDCCD Отправить местоположение"
+      "locations": {
+        "sendLocationOdesa": { "emoji": "\u2693", "text":"\u2693 Одесса" },
+        "sendLocationOther": { "text": "Другой..." }
+      }
     }
   },
   "LocationHandler": {
@@ -89,5 +92,8 @@
   },
   "SettingsHandler": {
     "notSupported": "Настройки бота еще не поддерживаются."
+  },
+  "OtherCityHandler": {
+    "inputPrompt": "Мы ваш город не поддерживаем, но скажите где вы находитесь и мы вас уведомим:"
   }
 }

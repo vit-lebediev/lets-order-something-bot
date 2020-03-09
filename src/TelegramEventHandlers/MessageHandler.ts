@@ -10,6 +10,7 @@ import BaseHandler from './BaseHandler';
 import SectionHandler from './MessageHandlers/SectionHandler';
 import KitchenHandler from './MessageHandlers/KitchenHandler';
 import RepeatOrRestartHandler from './MessageHandlers/RepeatOrRestartHandler';
+import OtherCityHandler from './MessageHandlers/OtherCityHandler';
 import { USER_STATES } from '../Constants';
 
 const startCommandRegExp = /^\/start/;
@@ -36,6 +37,7 @@ export default class MessageHandler extends BaseHandler {
     // switch userState
     switch (userState.currentState) {
       case USER_STATES.WAIT_FOR_LOCATION: return TextLocationHandler.handle(msg);
+      case USER_STATES.WAIT_FOR_TEXT_CITY_OTHER: return OtherCityHandler.handle(msg);
       // not active state at the moment
       case USER_STATES.WAIT_FOR_CITY_CONFIRM: return CityConfirmationHandler.handle(msg);
       case USER_STATES.WAIT_FOR_SECTION: return SectionHandler.handle(msg);
