@@ -1,20 +1,14 @@
-import {
-  Message,
-  ReplyKeyboardRemove,
-  SendMessageOptions
-} from 'node-telegram-bot-api';
+import { Message } from 'node-telegram-bot-api';
 import { BaseLogger } from 'pino';
 import { Collection } from 'mongodb';
 
 import LosMongoClient from '../../LosMongoClient';
-import LosTelegramBot from '../../LosTelegramBot';
+import Logger from '../../Logger';
 import BaseHandler from '../BaseHandler';
-import I18n from '../../I18n';
+import StartHandler from '../StartHandler';
 import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
-import Logger from '../../Logger';
 import { USER_STATES } from '../../Constants';
-import StartHandler from '../StartHandler';
 
 export default class OtherCityHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -26,8 +20,8 @@ export default class OtherCityHandler extends BaseHandler {
     // @ts-ignore
     const otherCitiesCollection: Collection = LosMongoClient.dbHandler.collection('otherCities');
     await otherCitiesCollection.updateOne(
-        { userTgId: userState.userId },
-        { $set: { userTgId: userState.userId, city: msg.text } },
+        { tgUserId: userState.userId },
+        { $set: { tgUserId: userState.userId, city: msg.text } },
         { upsert: true }
     );
 

@@ -35,7 +35,7 @@
         "text": "\uD83C\uDDEF\uD83C\uDDF5\uD83C\uDDFA\uD83C\uDDE6\uD83C\uDDEE\uD83C\uDDF9 Кухни"
       },
       "categories": { "emoji": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54", "text": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54 Категории" },
-      "feedback": { "emoji": "\uD83E\uDD1E", "text": "\uD83E\uDD1E ostavit otziv" }
+      "feedback": { "emoji": "\uD83D\uDE0A", "text": "\uD83D\uDE0A Оставить отзыв" }
     }
   },
   "SectionHandler": {
@@ -98,6 +98,9 @@
     "inputPrompt": "Мы ваш город не поддерживаем, но скажите где вы находитесь и мы вас уведомим:"
   },
   "FeedBackHandler": {
-    "inputPrompt": "Write your feedback for us:"
+    "inputPrompt": "Оставьте свой отзыв:",
+    "buttons": {
+      "back": { "emoji": "↩️️", "text": "↩️️ Назад" }
+    }
   }
 }
