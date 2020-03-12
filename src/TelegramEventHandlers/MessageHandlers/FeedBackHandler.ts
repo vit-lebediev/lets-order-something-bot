@@ -40,7 +40,7 @@ export default class FeedBackHandler extends BaseHandler {
     userState.currentState = USER_STATES.WAIT_FOR_SECTION;
     await UserStateManager.updateUserState(userState.userId, userState);
 
-    return BaseHandler.answerWithSectionsMenu(msg.chat.id);
+    return BaseHandler.answerWithSectionsMenu(msg.chat.id, I18n.t('FeedBackHandler.messageThanks'));
   }
 
   static answerWithFeedBack (chatId: number, message?: string): Promise<Message> {
