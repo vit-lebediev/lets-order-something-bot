@@ -4,7 +4,7 @@ import * as csv from 'fast-csv'; // eslint-disable-line import/no-extraneous-dep
 import { Collection } from 'mongodb';
 
 import { FOOD_CATEGORIES, KITCHEN_CATEGORIES } from '../src/Constants';
-import LosMongoClient from '../src/LosMongoClient';
+import LosMongoClient, { PLACES_COLLECTION } from '../src/LosMongoClient';
 import Logger from '../src/Logger';
 
 const logger = Logger.child({ module: 'parsePlaces' });
@@ -22,7 +22,7 @@ type InsertRow = {
 
 setTimeout(async () => {
   // @ts-ignore
-  const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
+  const placesCollection: Collection = LosMongoClient.dbHandler.collection(PLACES_COLLECTION);
 
   await placesCollection.remove({});
 

@@ -34,7 +34,8 @@
         "emoji": "\uD83C\uDDEF\uD83C\uDDF5\uD83C\uDDFA\uD83C\uDDE6\uD83C\uDDEE\uD83C\uDDF9",
         "text": "\uD83C\uDDEF\uD83C\uDDF5\uD83C\uDDFA\uD83C\uDDE6\uD83C\uDDEE\uD83C\uDDF9 Кухни"
       },
-      "categories": { "emoji": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54", "text": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54 Категории" }
+      "categories": { "emoji": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54", "text": "\uD83C\uDF55\uD83C\uDF63\uD83C\uDF54 Категории" },
+      "feedback": { "emoji": "📫", "text": "📫 Оставить отзыв" }
     }
   },
   "SectionHandler": {
@@ -95,5 +96,12 @@
   },
   "OtherCityHandler": {
     "inputPrompt": "Мы ваш город не поддерживаем, но скажите где вы находитесь и мы вас уведомим:"
+  },
+  "FeedbackHandler": {
+    "inputPrompt": "Оставьте свой отзыв:",
+    "messageThanks": "Спасибо за оставленный отзыв! Он поможет нам стать еще лучше",
+    "buttons": {
+      "back": { "emoji": "↩️️", "text": "↩️️ Назад" }
+    }
   }
 }

@@ -6,7 +6,7 @@ import BaseHandler from '../BaseHandler';
 import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import Logger from '../../Logger';
-import LosMongoClient from '../../LosMongoClient';
+import LosMongoClient, { PLACES_COLLECTION } from '../../LosMongoClient';
 import I18n from '../../I18n';
 import LosTelegramBot from '../../LosTelegramBot';
 import { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../Constants';
@@ -45,7 +45,7 @@ export default class IFeelLuckyHandler extends BaseHandler {
 
   static getRandomPlace (currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {
     // @ts-ignore
-    const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
+    const placesCollection: Collection = LosMongoClient.dbHandler.collection(PLACES_COLLECTION);
 
     return placesCollection.aggregate([
         {
