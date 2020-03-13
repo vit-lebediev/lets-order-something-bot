@@ -55,15 +55,19 @@ export default class BaseHandler {
     const verifiedMessage: string = message || I18n.t('LocationHandler.menu');
 
     const surpriseMeButton: KeyboardButton = { text: I18n.t('LocationHandler.buttons.i_feel_lucky.text') };
+
     const sections: KeyboardButton[] = [
         { text: I18n.t('LocationHandler.buttons.kitchens.text') },
         { text: I18n.t('LocationHandler.buttons.categories.text') }
     ];
 
+    const feedBackButton: KeyboardButton = { text: I18n.t('LocationHandler.buttons.feedback.text') };
+
     const replyMarkup: ReplyKeyboardMarkup = {
       keyboard: [
           [ surpriseMeButton ],
-          sections
+          sections,
+          [ feedBackButton ]
       ],
       resize_keyboard: true
     };
