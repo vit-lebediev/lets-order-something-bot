@@ -12,6 +12,7 @@ import LosTelegramBot from '../../LosTelegramBot';
 import { SECTIONS, SUPPORTED_CITIES, USER_STATES } from '../../Constants';
 import UserProfileInterface from '../../UserProfile/UserProfileInterface';
 import UserProfileManager from '../../UserProfile/UserProfileManager';
+import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
 
 export default class IFeelLuckyHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -20,19 +21,26 @@ export default class IFeelLuckyHandler extends BaseHandler {
 
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:IFeelLuckyHandler', userId: userState.userId });
 
-    const place: any[] = await IFeelLuckyHandler.getRandomPlace(userProfile.currentCity);
+    const places: any[] = await IFeelLuckyHandler.getRandomPlace(userProfile.currentCity);
 
-    if (place.length === 0) {
+    if (places.length === 0) {
       throw new Error(`No places stored for the city! ${ userProfile.currentCity }`);
     }
+
+    const place = places.pop();
+
+    await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_I_FEEL_LUCKY, {
+      placeName: place.name,
+      placeId: place.num_id
+    });
 
     userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
     userState.lastSection = SECTIONS.LUCKY;
     await UserStateManager.updateUserState(userState.userId, userState);
 
-    logger.info(`Random place selected: ${ place[0].name }`);
+    logger.info(`Random place selected: ${ place.name }`);
 
-    return IFeelLuckyHandler.answerWithRandomPlace(msg.chat.id, place[0]);
+    return IFeelLuckyHandler.answerWithRandomPlace(msg.chat.id, place);
   }
 
   static getRandomPlace (currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {
@@ -59,6 +67,8 @@ export default class IFeelLuckyHandler extends BaseHandler {
       parse_mode: 'HTML',
       disable_web_page_preview: true
     };
+
+    Amplitude.flush();
 
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }

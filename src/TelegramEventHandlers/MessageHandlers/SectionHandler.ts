@@ -2,7 +2,7 @@ import {
   KeyboardButton,
   Message,
   ReplyKeyboardMarkup,
-  SendMessageOptions, User
+  SendMessageOptions
 } from 'node-telegram-bot-api';
 import { BaseLogger } from 'pino';
 
@@ -13,21 +13,21 @@ import UserStateManager from '../../UserState/UserStateManager';
 import Logger from '../../Logger';
 import BaseHandler from '../BaseHandler';
 import IFeelLuckyHandler from './IFeelLuckyHandler';
-import UserProfileManager from '../../UserProfile/UserProfileManager';
 import { USER_STATES } from '../../Constants';
+import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
 
 export default class SectionHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
-    const user: User = UserProfileManager.getUserFromMessage(msg);
-
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
 
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:SectionHandler', userId: userState.userId });
 
     switch (msg.text) {
       case I18n.t('LocationHandler.buttons.kitchens.text'): {
+        await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_KITCHENS_SECTION);
+
         userState.currentState = USER_STATES.WAIT_FOR_KITCHEN;
-        await UserStateManager.updateUserState(user.id, userState);
+        await UserStateManager.updateUserState(userState.userId, userState);
 
         logger.info(`User selected ${ I18n.t('LocationHandler.buttons.kitchens.text') } section`);
 
@@ -35,8 +35,10 @@ export default class SectionHandler extends BaseHandler {
       }
 
       case I18n.t('LocationHandler.buttons.categories.text'): {
+        await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_FOOD_SECTION);
+
         userState.currentState = USER_STATES.WAIT_FOR_FOOD_CATEGORY;
-        await UserStateManager.updateUserState(user.id, userState);
+        await UserStateManager.updateUserState(userState.userId, userState);
 
         logger.info(`User selected ${ I18n.t('LocationHandler.buttons.categories.text') } section`);
 
@@ -45,7 +47,7 @@ export default class SectionHandler extends BaseHandler {
 
       case I18n.t('LocationHandler.buttons.i_feel_lucky.text'): {
         userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
-        await UserStateManager.updateUserState(user.id, userState);
+        await UserStateManager.updateUserState(userState.userId, userState);
 
         logger.info(`'User selected ${ I18n.t('LocationHandler.buttons.i_feel_lucky.text') } section'`);
 
@@ -53,10 +55,11 @@ export default class SectionHandler extends BaseHandler {
       }
 
       case I18n.t('LocationHandler.buttons.feedback.text'):
-      default:
-      {
+      default: {
+        await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_FEEDBACK_SECTION);
+
         userState.currentState = USER_STATES.WAIT_FOR_FEEDBACK;
-        await UserStateManager.updateUserState(user.id, userState);
+        await UserStateManager.updateUserState(userState.userId, userState);
 
         logger.info(`User selected ${ I18n.t('LocationHandler.buttons.feedback.text') } section`);
 
@@ -126,6 +129,8 @@ export default class SectionHandler extends BaseHandler {
       parse_mode: 'Markdown'
     };
 
+    Amplitude.flush();
+
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
@@ -184,6 +189,8 @@ export default class SectionHandler extends BaseHandler {
       reply_markup: replyMarkup,
       parse_mode: 'Markdown'
     };
+
+    Amplitude.flush();
 
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
