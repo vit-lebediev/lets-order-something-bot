@@ -97,7 +97,7 @@
   "OtherCityHandler": {
     "inputPrompt": "Мы ваш город не поддерживаем, но скажите где вы находитесь и мы вас уведомим:"
   },
-  "FeedBackHandler": {
+  "FeedbackHandler": {
     "inputPrompt": "Оставьте свой отзыв:",
     "messageThanks": "Спасибо за оставленный отзыв! Он поможет нам стать еще лучше",
     "buttons": {

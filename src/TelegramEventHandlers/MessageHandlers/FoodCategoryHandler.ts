@@ -4,7 +4,7 @@ import i18n from 'i18n';
 import { BaseLogger } from 'pino';
 
 import BaseHandler from '../BaseHandler';
-import LosMongoClient from '../../LosMongoClient';
+import LosMongoClient, { PLACES_COLLECTION } from '../../LosMongoClient';
 import I18n from '../../I18n';
 import {
   DEFAULT_NUMBER_OF_ANSWERS,
@@ -92,7 +92,7 @@ export default class FoodCategoryHandler extends BaseHandler {
 
   static async getRandomPlacesForAllCategories (currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {
     // @ts-ignore
-    const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
+    const placesCollection: Collection = LosMongoClient.dbHandler.collection(PLACES_COLLECTION);
 
     return placesCollection.aggregate([
         {
@@ -106,7 +106,7 @@ export default class FoodCategoryHandler extends BaseHandler {
 
   static async getRandomPlacesForCategory (category: FOOD_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<any[]> {
     // @ts-ignore
-    const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
+    const placesCollection: Collection = LosMongoClient.dbHandler.collection(PLACES_COLLECTION);
 
     // TODO $sample may output the same document more than once in its result set. For more information, see Cursor Isolation.
     //  @see https://docs.mongodb.com/master/reference/operator/aggregation/sample/#pipe._S_sample
@@ -125,7 +125,7 @@ export default class FoodCategoryHandler extends BaseHandler {
 
   static async getNumberOfPlacesInCategory (category: FOOD_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<number> {
     // @ts-ignore
-    const placesCollection: Collection = LosMongoClient.dbHandler.collection('places');
+    const placesCollection: Collection = LosMongoClient.dbHandler.collection(PLACES_COLLECTION);
 
     return placesCollection.countDocuments({
       categories: {

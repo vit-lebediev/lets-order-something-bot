@@ -10,6 +10,10 @@ if (MONGO_HOST === undefined || !MONGO_PORT === undefined || MONGO_DB === undefi
   throw new Error('You need to set MONGO_HOST and MONGO_PORT env vars');
 }
 
+export const PLACES_COLLECTION = 'places';
+export const OTHER_CITIES_COLLECTION = 'otherCities';
+export const FEEDBACKS_COLLECTION = 'feedbacks';
+
 class LosMongoClient {
   clientHandler: MongoClient | null;
 

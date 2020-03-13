@@ -2,7 +2,7 @@ import { Message } from 'node-telegram-bot-api';
 import { BaseLogger } from 'pino';
 import { Collection } from 'mongodb';
 
-import LosMongoClient from '../../LosMongoClient';
+import LosMongoClient, { OTHER_CITIES_COLLECTION } from '../../LosMongoClient';
 import Logger from '../../Logger';
 import BaseHandler from '../BaseHandler';
 import StartHandler from '../StartHandler';
@@ -18,7 +18,7 @@ export default class OtherCityHandler extends BaseHandler {
     logger.info(`User entered '${ msg.text }' city.`);
 
     // @ts-ignore
-    const otherCitiesCollection: Collection = LosMongoClient.dbHandler.collection('otherCities');
+    const otherCitiesCollection: Collection = LosMongoClient.dbHandler.collection(OTHER_CITIES_COLLECTION);
     await otherCitiesCollection.updateOne(
         { tgUserId: userState.userId },
         { $set: { tgUserId: userState.userId, city: msg.text } },

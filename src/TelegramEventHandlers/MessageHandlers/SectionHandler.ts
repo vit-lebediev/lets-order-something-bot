@@ -14,7 +14,6 @@ import Logger from '../../Logger';
 import BaseHandler from '../BaseHandler';
 import IFeelLuckyHandler from './IFeelLuckyHandler';
 import UserProfileManager from '../../UserProfile/UserProfileManager';
-import FeedBackHandler from './FeedBackHandler';
 import { USER_STATES } from '../../Constants';
 
 export default class SectionHandler extends BaseHandler {
@@ -34,6 +33,7 @@ export default class SectionHandler extends BaseHandler {
 
         return this.answerWithKitchensMenu(msg.chat.id);
       }
+
       case I18n.t('LocationHandler.buttons.categories.text'): {
         userState.currentState = USER_STATES.WAIT_FOR_FOOD_CATEGORY;
         await UserStateManager.updateUserState(user.id, userState);
@@ -42,22 +42,26 @@ export default class SectionHandler extends BaseHandler {
 
         return this.answerWithFoodCategoriesMenu(msg.chat.id);
       }
-      case I18n.t('LocationHandler.buttons.feedback.text'): {
-        userState.currentState = USER_STATES.WAIT_FOR_FEEDBACK;
-        await UserStateManager.updateUserState(user.id, userState);
 
-        logger.info(`User selected ${ I18n.t('LocationHandler.buttons.feedback.text') } button`);
-
-        return FeedBackHandler.answerWithFeedBack(msg.chat.id);
-      }
-      case I18n.t('LocationHandler.buttons.i_feel_lucky.text'):
-      default:
+      case I18n.t('LocationHandler.buttons.i_feel_lucky.text'): {
         userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
         await UserStateManager.updateUserState(user.id, userState);
 
         logger.info(`'User selected ${ I18n.t('LocationHandler.buttons.i_feel_lucky.text') } section'`);
 
         return IFeelLuckyHandler.handle(msg);
+      }
+
+      case I18n.t('LocationHandler.buttons.feedback.text'):
+      default:
+      {
+        userState.currentState = USER_STATES.WAIT_FOR_FEEDBACK;
+        await UserStateManager.updateUserState(user.id, userState);
+
+        logger.info(`User selected ${ I18n.t('LocationHandler.buttons.feedback.text') } section`);
+
+        return this.answerWithFeedback(msg.chat.id);
+      }
     }
   }
 
@@ -172,6 +176,26 @@ export default class SectionHandler extends BaseHandler {
           fourthRowOfKitchens,
           fifthRowOfKitchens,
           sixthRowOfKitchens
+      ],
+      resize_keyboard: true
+    };
+
+    const messageOptions: SendMessageOptions = {
+      reply_markup: replyMarkup,
+      parse_mode: 'Markdown'
+    };
+
+    return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
+  }
+
+  static answerWithFeedback (chatId: number, message?: string): Promise<Message> {
+    const verifiedMessage: string = message || I18n.t('FeedbackHandler.inputPrompt');
+
+    const backButton: KeyboardButton = { text: I18n.t('FeedbackHandler.buttons.back.text') };
+
+    const replyMarkup: ReplyKeyboardMarkup = {
+      keyboard: [
+          [ backButton ]
       ],
       resize_keyboard: true
     };
