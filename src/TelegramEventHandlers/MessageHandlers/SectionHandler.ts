@@ -55,10 +55,11 @@ export default class SectionHandler extends BaseHandler {
       }
 
       case I18n.t('LocationHandler.buttons.feedback.text'):
-      default:
-      {
+      default: {
+        await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_FEEDBACK_SECTION);
+
         userState.currentState = USER_STATES.WAIT_FOR_FEEDBACK;
-        await UserStateManager.updateUserState(user.id, userState);
+        await UserStateManager.updateUserState(userState.userId, userState);
 
         logger.info(`User selected ${ I18n.t('LocationHandler.buttons.feedback.text') } section`);
 

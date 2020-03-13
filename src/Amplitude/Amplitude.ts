@@ -27,6 +27,8 @@ export enum AMPLITUDE_EVENTS {
   USER_SELECTED_KITCHEN = 'userSelectedKitchen',
   USER_SELECTED_FOOD_SECTION = 'userSelectedFoodSection',
   USER_SELECTED_FOOD = 'userSelectedFood',
+  USER_SELECTED_FEEDBACK_SECTION = 'userSelectedFeedbackSection',
+  USER_LEFT_FEEDBACK = 'userLeftFeedback',
 }
 
 class Amplitude {
