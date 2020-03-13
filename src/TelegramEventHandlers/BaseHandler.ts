@@ -8,6 +8,7 @@ import {
 import i18n from 'i18n';
 
 import LosTelegramBot from '../LosTelegramBot';
+import Amplitude from '../Amplitude/Amplitude';
 import I18n from '../I18n';
 import Util from '../Util';
 
@@ -31,6 +32,8 @@ export default class BaseHandler {
       reply_markup: replyMarkup,
       parse_mode: 'Markdown'
     };
+
+    Amplitude.flush();
 
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
@@ -73,6 +76,8 @@ export default class BaseHandler {
       parse_mode: 'Markdown'
     };
 
+    Amplitude.flush();
+
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
@@ -96,6 +101,8 @@ export default class BaseHandler {
       parse_mode: 'HTML',
       disable_web_page_preview: true
     };
+
+    Amplitude.flush();
 
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }

@@ -20,6 +20,7 @@ import LosMongoClient from '../../LosMongoClient';
 import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 import UserProfileInterface from '../../UserProfile/UserProfileInterface';
 import UserProfileManager from '../../UserProfile/UserProfileManager';
+import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
 
 import Replacements = i18n.Replacements;
 
@@ -28,7 +29,6 @@ const PLACES_COLLECTION = 'places';
 export default class KitchenHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
-
     const userProfile: UserProfileInterface = await UserProfileManager.getUserProfile(msg);
 
     if (!userProfile.currentCity) {
@@ -64,6 +64,10 @@ export default class KitchenHandler extends BaseHandler {
     }
 
     logger.info(`User selected '${ msg.text }' kitchen, mapped to ${ kitchen }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);
+
+    await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_KITCHEN, {
+      kitchenCategory: kitchen
+    });
 
     userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
     userState.lastSection = SECTIONS.KITCHEN;

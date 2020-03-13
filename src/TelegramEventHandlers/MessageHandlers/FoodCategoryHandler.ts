@@ -20,6 +20,7 @@ import UserStateManager from '../../UserState/UserStateManager';
 import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 import UserProfileInterface from '../../UserProfile/UserProfileInterface';
 import UserProfileManager from '../../UserProfile/UserProfileManager';
+import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
 
 import Replacements = i18n.Replacements;
 
@@ -64,6 +65,10 @@ export default class FoodCategoryHandler extends BaseHandler {
     }
 
     logger.info(`User selected '${ msg.text }' category, mapped to ${ category }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);
+
+    await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_FOOD, {
+      foodCategory: category
+    });
 
     userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
     userState.lastSection = SECTIONS.FOOD;

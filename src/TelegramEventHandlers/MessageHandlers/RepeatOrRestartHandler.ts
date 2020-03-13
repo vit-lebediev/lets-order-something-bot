@@ -10,6 +10,7 @@ import IFeelLuckyHandler from './IFeelLuckyHandler';
 import I18n from '../../I18n';
 import Logger from '../../Logger';
 import { SECTIONS, USER_STATES } from '../../Constants';
+import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
 
 export default class RepeatOrRestartHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -32,6 +33,11 @@ export default class RepeatOrRestartHandler extends BaseHandler {
 
   static async handleRepeat (msg: Message): Promise<Message> {
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+
+    await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_REPEAT, {
+      lastSection: userState.lastSection,
+      lastCategory: userState.lastCategory
+    });
 
     const logger: BaseLogger = Logger.child({ module: 'MessageHandler:RepeatOrRestartHandler', userId: userState.userId });
     logger.info(`Last user section was '${ userState.lastSection }', last category - '${ userState.lastCategory }'`);
@@ -56,6 +62,8 @@ export default class RepeatOrRestartHandler extends BaseHandler {
   static async handleRestart (msg: Message): Promise<Message> {
     // update user state to WAIT_FOR_SECTION
     const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+
+    await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_RESTART);
 
     userState.currentState = USER_STATES.WAIT_FOR_SECTION;
     await UserStateManager.updateUserState(userState.userId, userState);
