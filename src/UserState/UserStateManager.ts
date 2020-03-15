@@ -27,7 +27,7 @@ export default class UserStateManager {
 
     const obj = await LosRedisClient.hgetallAsync(userRedisKey);
 
-    if (!obj.currentState) return null;
+    if (!obj || !obj.currentState) return null;
 
     return {
       userId,

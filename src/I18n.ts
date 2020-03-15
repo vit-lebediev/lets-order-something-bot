@@ -6,7 +6,7 @@ import ConfigurationOptions = i18n.ConfigurationOptions;
 import Replacements = i18n.Replacements;
 
 
-const ENV = process.env.LOS_BOT_ENV;
+const ENV: string | undefined = process.env.LOS_BOT_ENV;
 
 const logger = Logger.child({ module: 'i18n' });
 

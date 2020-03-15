@@ -49,7 +49,13 @@ export default class BaseHandler {
   }
 
   static answerWithSectionsMenu (chatId: number, message?: string): Promise<Message> {
-    const verifiedMessage: string = message || I18n.t('LocationHandler.menu');
+    const replacements: Replacements = {
+      IFeelLuckySection: I18n.t('LocationHandler.buttons.i_feel_lucky.text'),
+      kitchenCategories: I18n.t('LocationHandler.buttons.kitchens.text'),
+      foodCategories: I18n.t('LocationHandler.buttons.categories.text'),
+      feedbackSection: I18n.t('LocationHandler.buttons.feedback.text')
+    };
+    const verifiedMessage: string = message || I18n.t('LocationHandler.menu', replacements);
 
     const surpriseMeButton: KeyboardButton = { text: I18n.t('LocationHandler.buttons.i_feel_lucky.text') };
 
