@@ -36,6 +36,7 @@ export default class StartHandler extends BaseHandler {
 
     const userProfile: UserProfileInterface = {
       tgUserId: user.id,
+      tgUserChatId: msg.chat.id,
       tgIsBot: user.is_bot,
       tgFirstName: user.first_name,
       tgLastName: user.last_name,

@@ -1,6 +1,7 @@
 import { Message } from 'node-telegram-bot-api';
 import { BaseLogger } from 'pino';
 import { Collection } from 'mongodb';
+import i18n from 'i18n';
 
 import LosMongoClient, { OTHER_CITIES_COLLECTION } from '../../LosMongoClient';
 import Logger from '../../Logger';
@@ -10,6 +11,8 @@ import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import { USER_STATES } from '../../Constants';
 import I18n from '../../I18n';
+
+import Replacements = i18n.Replacements;
 
 export default class OtherCityHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -26,11 +29,11 @@ export default class OtherCityHandler extends BaseHandler {
         { upsert: true }
     );
 
-    logger.info(`Save city '${ msg.text }' for user '${ userState.userId }' to db.otherCities`);
+    logger.info(`Save city '${ msg.text }' for user '${ userState.userId }' to db.${ OTHER_CITIES_COLLECTION }`);
 
     userState.currentState = USER_STATES.WAIT_FOR_LOCATION;
     await UserStateManager.updateUserState(userState.userId, userState);
 
-    return StartHandler.answerWithWaitForLocation(msg.chat.id, I18n.t('OtherCityHandler.thankYou'));
+    return StartHandler.answerWithWaitForLocation(msg.chat.id, I18n.t('OtherCityHandler.thankYou', { city: msg.text } as Replacements));
   }
 }
