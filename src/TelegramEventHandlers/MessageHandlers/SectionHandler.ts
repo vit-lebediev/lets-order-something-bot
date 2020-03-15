@@ -212,6 +212,8 @@ export default class SectionHandler extends BaseHandler {
       parse_mode: 'Markdown'
     };
 
+    Amplitude.flush();
+
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 }

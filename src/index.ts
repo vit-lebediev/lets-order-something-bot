@@ -1,7 +1,7 @@
 // Projects imports
 import LosTelegramBot from './LosTelegramBot';
 
-// Evnet Handlers
+// Event Handlers
 import LocationHandler from './TelegramEventHandlers/LocationHandler';
 import ErrorHandler from './TelegramEventHandlers/ErrorHandler';
 import SettingsHandler from './TelegramEventHandlers/SettingsHandler';

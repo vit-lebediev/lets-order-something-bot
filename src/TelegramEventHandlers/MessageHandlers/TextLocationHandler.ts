@@ -55,7 +55,7 @@ export default class TextLocationHandler extends BaseHandler {
 
     const messageOptions: SendMessageOptions = {
       reply_markup: replyMarkup,
-      parse_mode: 'Markdown'
+      parse_mode: 'HTML'
     };
 
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);

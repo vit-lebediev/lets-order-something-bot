@@ -2,7 +2,6 @@ import {
   KeyboardButton,
   Message,
   ReplyKeyboardMarkup,
-  ReplyKeyboardRemove,
   SendMessageOptions
 } from 'node-telegram-bot-api';
 import i18n from 'i18n';
@@ -24,12 +23,7 @@ export default class BaseHandler {
   static answerWithStartFromBeginning (chatId: number, message?: string): Promise<Message> {
     const verifiedMessage: string = message || I18n.t('general.fromTheStart');
 
-    const replyMarkup: ReplyKeyboardRemove = {
-      remove_keyboard: true
-    };
-
     const messageOptions: SendMessageOptions = {
-      reply_markup: replyMarkup,
       parse_mode: 'Markdown'
     };
 

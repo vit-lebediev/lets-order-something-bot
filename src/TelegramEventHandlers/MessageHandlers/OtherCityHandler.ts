@@ -9,6 +9,7 @@ import StartHandler from '../StartHandler';
 import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import { USER_STATES } from '../../Constants';
+import I18n from '../../I18n';
 
 export default class OtherCityHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -30,6 +31,6 @@ export default class OtherCityHandler extends BaseHandler {
     userState.currentState = USER_STATES.WAIT_FOR_LOCATION;
     await UserStateManager.updateUserState(userState.userId, userState);
 
-    return StartHandler.answerWithWaitForLocation(msg.chat.id);
+    return StartHandler.answerWithWaitForLocation(msg.chat.id, I18n.t('OtherCityHandler.thankYou'));
   }
 }

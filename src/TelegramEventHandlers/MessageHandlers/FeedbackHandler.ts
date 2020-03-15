@@ -26,7 +26,7 @@ export default class FeedbackHandler extends BaseHandler {
     // @ts-ignore
     const feedbacksCollection: Collection = LosMongoClient.dbHandler.collection(FEEDBACKS_COLLECTION);
 
-    logger.info(`User entered a feedback: '${ msg.text?.substr(0, 20) + (msg.text!.length > 20 ? "'...'" : "'") }. Saving it to Mongo...`);
+    logger.info(`User entered a feedback: '${ msg.text?.substr(0, 20) + (msg.text!.length > 20 ? "...'" : "'") }. Saving it to Mongo...`);
 
     await feedbacksCollection.insertOne({ tgUserId: userState.userId, feedBackText: msg.text });
 

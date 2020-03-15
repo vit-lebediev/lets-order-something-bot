@@ -17,6 +17,6 @@ export default class HelpHandler extends BaseHandler {
     logger.info(`Retrieved user state from Redis (typeof ${ typeof userState }), 
       last updated: ${ Math.round(Date.now() / 1000) - (userState.lastUpdated ? userState.lastUpdated : 0) } seconds ago`);
 
-    return BaseHandler.answerWithStartFromBeginning(msg.chat.id, I18n.t('HelpHandler.notSupported'));
+    return BaseHandler.answerWithStartFromBeginning(msg.chat.id, I18n.t('HelpHandler.text'));
   }
 }

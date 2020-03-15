@@ -28,3 +28,14 @@ LOS_MONGO_PASS=<mongo_pass>
 
 # Environment Variables
 `NTBA_FIX_319` should be set in order to address [promise cancellation issue](https://github.com/yagop/node-telegram-bot-api/issues/319#issuecomment-324963294).
+
+# Bot menu list
+The bot supports next hierarchy of menu (each corresponds to a state user in):
+1. City select Menu
+2. Section select Menu
+3. I Feel Lucky Menu
+4. Kitchen Categories Menu
+4.1 Kitchen Menu
+5. Food Categories Menu
+5.1 Food Menu
+6. Feedback Menu
