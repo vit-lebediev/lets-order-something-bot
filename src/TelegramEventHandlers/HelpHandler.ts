@@ -1,22 +1,21 @@
-import { Message } from 'node-telegram-bot-api';
+import { Message, User } from 'node-telegram-bot-api';
 
-import UserStateInterface from '../UserState/UserStateInterface';
-import UserStateManager from '../UserState/UserStateManager';
 import BaseHandler from './BaseHandler';
 import Logger from '../Logger';
 import I18n from '../I18n';
-
-const logger = Logger.child({ module: 'HelpHandler' });
+import UserProfileManager from '../UserProfile/UserProfileManager';
+import Amplitude, { AMPLITUDE_EVENTS } from '../Amplitude/Amplitude';
 
 export default class HelpHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
-    logger.info('/start command received.');
+    const user: User = UserProfileManager.getUserFromMessage(msg);
 
-    const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+    const logger = Logger.child({ module: 'HelpHandler', userId: user.id });
 
-    logger.info(`Retrieved user state from Redis (typeof ${ typeof userState }), 
-      last updated: ${ Math.round(Date.now() / 1000) - (userState.lastUpdated ? userState.lastUpdated : 0) } seconds ago`);
+    logger.info('/help command received.');
 
-    return BaseHandler.answerWithStartFromBeginning(msg.chat.id, I18n.t('HelpHandler.notSupported'));
+    await Amplitude.logEvent(user.id, AMPLITUDE_EVENTS.USER_SELECTED_HELP);
+
+    return BaseHandler.answerWithStartFromBeginning(msg.chat.id, I18n.t('HelpHandler.text'));
   }
 }

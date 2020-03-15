@@ -1,6 +1,6 @@
 import Pino, { LoggerOptions } from 'pino';
 
-const ENV = process.env.LOS_BOT_ENV;
+const ENV: string | undefined = process.env.LOS_BOT_ENV;
 
 let pinoOptions: LoggerOptions;
 

@@ -10,6 +10,7 @@ import { SUPPORTED_CITIES, USER_STATES } from '../../Constants';
 import LosTelegramBot from '../../LosTelegramBot';
 import UserProfileInterface from '../../UserProfile/UserProfileInterface';
 import UserProfileManager from '../../UserProfile/UserProfileManager';
+import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
 
 export default class TextLocationHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -26,6 +27,10 @@ export default class TextLocationHandler extends BaseHandler {
     }
 
     logger.info(`User selected '${ msg.text }' city, mapped to ${ city }.`);
+
+    await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_CITY, {
+      city
+    });
 
     if (city === SUPPORTED_CITIES.OTHER) {
       userState.currentState = USER_STATES.WAIT_FOR_TEXT_CITY_OTHER;

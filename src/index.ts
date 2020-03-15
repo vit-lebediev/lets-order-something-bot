@@ -1,7 +1,7 @@
 // Projects imports
 import LosTelegramBot from './LosTelegramBot';
 
-// Evnet Handlers
+// Event Handlers
 import LocationHandler from './TelegramEventHandlers/LocationHandler';
 import ErrorHandler from './TelegramEventHandlers/ErrorHandler';
 import SettingsHandler from './TelegramEventHandlers/SettingsHandler';
@@ -24,12 +24,14 @@ LosTelegramBot.on('polling_error', ErrorHandler.handle);
 
 process.on('uncaughtException', (e: Error) => {
   logger.fatal(`Unhandled exception: ${ e.message }`);
+  if (e.stack) logger.fatal(e.stack);
 });
 
 process.on('unhandledRejection', async (reason) => {
   if (reason) {
     const errReason = reason as Error;
     logger.fatal(`Unhandled promise rejection: ${ errReason.stack?.split('\n')[0] }.\n${ errReason.stack?.split('\n')[1] }`);
+    if (errReason.stack) logger.fatal(errReason.stack);
   } else {
     logger.fatal('Unhandled promise rejection.');
   }

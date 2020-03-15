@@ -17,13 +17,13 @@ import { SUPPORTED_CITIES, USER_STATES } from '../Constants';
 import UserProfileInterface from '../UserProfile/UserProfileInterface';
 import Amplitude, { AMPLITUDE_EVENTS } from '../Amplitude/Amplitude';
 
-const logger = Logger.child({ module: 'StartHandler' });
-
 export default class StartHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
     const user: User = UserProfileManager.getUserFromMessage(msg);
 
     await Amplitude.logEvent(user.id, AMPLITUDE_EVENTS.USER_SELECTED_START);
+
+    const logger = Logger.child({ module: 'StartHandler', userId: user.id });
 
     logger.info(`/start command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
@@ -36,6 +36,7 @@ export default class StartHandler extends BaseHandler {
 
     const userProfile: UserProfileInterface = {
       tgUserId: user.id,
+      tgUserChatId: msg.chat.id,
       tgIsBot: user.is_bot,
       tgFirstName: user.first_name,
       tgLastName: user.last_name,
