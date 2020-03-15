@@ -12,8 +12,6 @@ import {
 } from '../Constants';
 import UserProfileManager from '../UserProfile/UserProfileManager';
 
-const logger = Logger.child({ module: 'UserStateManagerHandler' });
-
 const CITY_STRING_ODESA = 'Odesa';
 // const CITY_STRING_KYIV = 'Kyiv';
 
@@ -71,6 +69,8 @@ export default class UserStateManager {
     const updatedUserState: UserStateInterface = newUserState;
 
     updatedUserState.lastUpdated = Math.round(Date.now() / 1000);
+
+    const logger = Logger.child({ module: 'UserStateManagerHandler', userId });
 
     logger.info(`Storing user state in Redis with key ${ userRedisKey }`);
 

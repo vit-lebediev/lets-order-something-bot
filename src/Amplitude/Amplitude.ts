@@ -20,6 +20,8 @@ if (AMPLITUDE_API_KEY === undefined) {
 
 export enum AMPLITUDE_EVENTS {
   USER_SELECTED_START = 'userSelectedStart',
+  USER_SELECTED_SETTINGS = 'userSelectedSettings',
+  USER_SELECTED_HELP = 'userSelectedHelp',
   USER_SELECTED_I_FEEL_LUCKY = 'userSelectedIFeelLucky',
   USER_SELECTED_REPEAT = 'userSelectedRepeat',
   USER_SELECTED_RESTART = 'userSelectedRestart',
@@ -28,7 +30,9 @@ export enum AMPLITUDE_EVENTS {
   USER_SELECTED_FOOD_SECTION = 'userSelectedFoodSection',
   USER_SELECTED_FOOD = 'userSelectedFood',
   USER_SELECTED_FEEDBACK_SECTION = 'userSelectedFeedbackSection',
+  USER_SELECTED_CITY = 'userSelectedCity',
   USER_LEFT_FEEDBACK = 'userLeftFeedback',
+  USER_ENTERED_OTHER_CITY = 'userEnteredOtherCity',
 }
 
 class Amplitude {
