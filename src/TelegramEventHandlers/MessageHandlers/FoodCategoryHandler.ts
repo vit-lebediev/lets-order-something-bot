@@ -96,7 +96,7 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     await Util.wait(1.4);
 
-    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places, msg.text, totalPlacesNumber, repeatSymbol);
+    return BaseHandler.answerWithPlacesToOrder(userProfile.tgUserId, msg.chat.id, places, msg.text, totalPlacesNumber, repeatSymbol);
   }
 
   static async getRandomPlacesForAllCategories (currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {

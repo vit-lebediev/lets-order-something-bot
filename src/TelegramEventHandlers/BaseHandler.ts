@@ -10,8 +10,17 @@ import LosTelegramBot from '../LosTelegramBot';
 import Amplitude from '../Amplitude/Amplitude';
 import I18n from '../I18n';
 import Util from '../Util';
+import LosRedisClient from '../LosRedisClient';
 
 import Replacements = i18n.Replacements;
+
+const uuid = require('uuid');
+
+const { LOS_EXPRESS_HOST, LOS_EXPRESS_PORT } = process.env;
+
+if (!LOS_EXPRESS_HOST || !LOS_EXPRESS_PORT) {
+  throw new Error('LOS_EXPRESS_HOST and LOS_EXPRESS_PORT env vars need to be set');
+}
 
 export default class BaseHandler {
   /**
@@ -85,7 +94,8 @@ export default class BaseHandler {
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
-  static answerWithPlacesToOrder (
+  static async answerWithPlacesToOrder (
+      userId: number,
       chatId: number,
       places: any[],
       searchCategory: string,
@@ -97,7 +107,12 @@ export default class BaseHandler {
     let placesList = '';
 
     for (let i = 0; i < places.length; i += 1) {
-      placesList += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(places[i], repeatSymbol) }\n`;
+      const place = places[i];
+
+      // eslint-disable-next-line no-await-in-loop
+      const redirectUUIDKey = await this.storeRedirectData(userId, place.num_id, i + 1, place.url);
+
+      placesList += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(places[i], redirectUUIDKey, repeatSymbol) }\n`;
     }
 
     const replacements: Replacements = { numberOfPlaces: totalNumberOfPlaces as unknown as string };
@@ -134,7 +149,25 @@ export default class BaseHandler {
     } as ReplyKeyboardMarkup;
   }
 
-  static parsePlaceTemplate (place: any, repeatSymbol?: string): string {
+  static async storeRedirectData (userId: number, placeId: number, placePosition: number, placeUrl: string): Promise<string> {
+    const redirectUUIDKey = uuid.v4();
+    const redirectRedisKey = `redirect_${ redirectUUIDKey }`;
+
+    const redirectDoc = {
+      userId,
+      placeId,
+      placePosition,
+      placeUrl
+    };
+
+    // @ts-ignore TODO fix this ts-ignore
+    await LosRedisClient.hmsetAsync(redirectRedisKey, redirectDoc);
+    await LosRedisClient.expireAsync(redirectRedisKey, 60 * 60 * 24); // expire in 24 hours
+
+    return redirectUUIDKey;
+  }
+
+  static parsePlaceTemplate (place: any, redirectUUIDKey: string, repeatSymbol?: string): string {
     let kitchenCategoriesArray: string[] = place.kitchens ? place.kitchens.map(
         (kitchen: string) => I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`)
     ) : [];
@@ -167,9 +200,11 @@ export default class BaseHandler {
 
     const foodCategories = foodCategoriesArray.join(' ');
 
+    const losBotFullUrl = `http://${ LOS_EXPRESS_HOST }${ LOS_EXPRESS_PORT ? `:${ LOS_EXPRESS_PORT }` : '' }`;
+
     const replacements: Replacements = {
       name: place.name,
-      url: place.url,
+      url: `${ losBotFullUrl }/r?rid=${ redirectUUIDKey }`,
       kitchens: kitchenCategories,
       categories: foodCategories
     };

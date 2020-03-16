@@ -40,7 +40,7 @@ export default class IFeelLuckyHandler extends BaseHandler {
 
     logger.info(`Random place selected: ${ place.name }`);
 
-    return IFeelLuckyHandler.answerWithRandomPlace(msg.chat.id, place);
+    return IFeelLuckyHandler.answerWithRandomPlace(userProfile.tgUserId, msg.chat.id, place);
   }
 
   static getRandomPlace (currentUserCity: SUPPORTED_CITIES | undefined): Promise<any[]> {
@@ -57,8 +57,9 @@ export default class IFeelLuckyHandler extends BaseHandler {
     ]).toArray();
   }
 
-  static answerWithRandomPlace (chatId: number, place: any): Promise<Message> {
-    const verifiedMessage: string = `${ I18n.t('IFeelLuckyHandler.found') }\n\n${ BaseHandler.parsePlaceTemplate(place) }`;
+  static async answerWithRandomPlace (userId: number, chatId: number, place: any): Promise<Message> {
+    const redirectUUIDKey = await this.storeRedirectData(userId, place.num_id, 0, place.url);
+    const verifiedMessage: string = `${ I18n.t('IFeelLuckyHandler.found') }\n\n${ BaseHandler.parsePlaceTemplate(place, redirectUUIDKey) }`;
 
     const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(I18n.t('LocationHandler.buttons.i_feel_lucky.emoji'));
 
