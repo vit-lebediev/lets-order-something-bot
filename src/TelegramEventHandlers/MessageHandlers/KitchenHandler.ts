@@ -21,6 +21,7 @@ import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 import UserProfileInterface from '../../UserProfile/UserProfileInterface';
 import UserProfileManager from '../../UserProfile/UserProfileManager';
 import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
+import Util from '../../Util';
 
 import Replacements = i18n.Replacements;
 
@@ -57,10 +58,11 @@ export default class KitchenHandler extends BaseHandler {
       case I18n.t('SectionHandler.buttons.kitchens.mexican.text'): kitchen = KITCHEN_CATEGORIES.MEXICAN; break;
 
       case I18n.t('BaseHandler.buttons.restart.text'):
-      default:
         logger.info("User selected 'restart'");
-
         return RepeatOrRestartHandler.handleRestart(msg);
+
+      default:
+        return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
     }
 
     logger.info(`User selected '${ msg.text }' kitchen, mapped to ${ kitchen }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);
@@ -91,7 +93,9 @@ export default class KitchenHandler extends BaseHandler {
 
     logger.info(`${ places.length } places randomly selected (of ${ totalPlacesNumber }): ${ places.map((item) => item.name).join(', ') }`);
 
-    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places, totalPlacesNumber, repeatSymbol);
+    await Util.wait(1.4);
+
+    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places, msg.text, totalPlacesNumber, repeatSymbol);
   }
 
   static getRandomPlacesForKitchen (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<any[]> {

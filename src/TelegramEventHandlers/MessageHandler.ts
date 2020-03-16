@@ -1,4 +1,4 @@
-import { Message } from 'node-telegram-bot-api';
+import { Message, User } from 'node-telegram-bot-api';
 
 import UserStateInterface from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
@@ -13,8 +13,12 @@ import KitchenHandler from './MessageHandlers/KitchenHandler';
 import RepeatOrRestartHandler from './MessageHandlers/RepeatOrRestartHandler';
 import OtherCityHandler from './MessageHandlers/OtherCityHandler';
 import FeedbackHandler from './MessageHandlers/FeedbackHandler';
+import { USER_STATE_EXPIRED_ERROR_CODE } from '../Errors/UserStateExpiredError';
 
 import { USER_STATES } from '../Constants';
+import UserProfileManager from '../UserProfile/UserProfileManager';
+import LosTelegramBot from '../LosTelegramBot';
+import I18n from '../I18n';
 
 const startCommandRegExp = /^\/start/;
 const helpCommandRegExp = /^\/help/;
@@ -34,8 +38,28 @@ export default class MessageHandler extends BaseHandler {
       return new Promise(() => {});
     }
 
+    if (!msg.text) {
+      // if there's no text (e.g. an image upload), send 'unrecognized command' & ignore
+      await LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
+      return new Promise(() => {});
+    }
+
     // get user state
-    const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+    let userState: UserStateInterface;
+    try {
+      userState = await UserStateManager.getUserState(msg);
+    } catch (e) {
+      if (e.code === USER_STATE_EXPIRED_ERROR_CODE) {
+        const user: User = UserProfileManager.getUserFromMessage(msg);
+
+        await UserStateManager.resetUserState(user.id);
+        await LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.stateExpired'));
+
+        return BaseHandler.answerWithSectionsMenu(msg.chat.id);
+      }
+
+      throw e;
+    }
 
     // switch userState
     switch (userState.currentState) {
@@ -49,7 +73,15 @@ export default class MessageHandler extends BaseHandler {
       case USER_STATES.WAIT_FOR_KITCHEN: return KitchenHandler.handle(msg);
       case USER_STATES.WAIT_FOR_REPEAT_OR_RESTART: return RepeatOrRestartHandler.handle(msg);
 
-      default: return BaseHandler.answerWithStartFromBeginning(msg.chat.id);
+      // this would probably never happen
+      default: {
+        const user: User = UserProfileManager.getUserFromMessage(msg);
+
+        await UserStateManager.resetUserState(user.id);
+        await LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.stateExpired'));
+
+        return BaseHandler.answerWithSectionsMenu(msg.chat.id);
+      }
     }
   }
 }
