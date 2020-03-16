@@ -82,7 +82,8 @@
   },
   "FoodCategoryHandler": {
     "searchingForFoodCategory": "Ищем где бы заказать {{foodCat}}...",
-    "found": "Вот получилось найти. Как тебе?\n\nЕсли понравилось - \uD83D\uDC49 жми на название заведения для перехода на сайт. Или ищем ещё?",
+    "found": "Вот что получилось найти \uD83D\uDD0E\n\nВ каждом из этих мест точно доставляют {{searchCategory}}",
+    "foundFollowup": "Как тебе?\n\nЕсли понравилось - \uD83D\uDC49 жми на название заведения для перехода на сайт. Или ищем ещё?",
     "placeTemplate": "\uD83D\uDC49 <a href=\"{{url}}\">{{name}}</a>\n\t\t\t\tКухни: {{kitchens}}\n\t\t\t\tЕда: {{categories}}\n"
   },
   "IFeelLuckyHandler": {

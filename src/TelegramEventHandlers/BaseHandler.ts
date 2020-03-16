@@ -88,15 +88,23 @@ export default class BaseHandler {
   static answerWithPlacesToOrder (
       chatId: number,
       places: any[],
+      searchCategory: string,
       totalNumberOfPlaces: number,
       repeatSymbol?: string
   ): Promise<Message> {
-    const replacements: Replacements = { numberOfPlaces: totalNumberOfPlaces as unknown as string };
-    let verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found', replacements) }\n\n`;
+    const foundText = I18n.t('FoodCategoryHandler.found', { searchCategory });
+
+    let placesList = '';
 
     for (let i = 0; i < places.length; i += 1) {
-      verifiedMessage += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(places[i], repeatSymbol) }\n`;
+      placesList += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(places[i], repeatSymbol) }\n`;
     }
+
+    const replacements: Replacements = { numberOfPlaces: totalNumberOfPlaces as unknown as string };
+    const foundTextFollowup = I18n.t('FoodCategoryHandler.foundFollowup', replacements);
+
+    // const verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found', replacements) }\n\n`;
+    const verifiedMessage: string = `${ foundText }\n\n${ placesList }${ foundTextFollowup }`;
 
     const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(repeatSymbol);
 
