@@ -72,11 +72,6 @@ export default class FoodCategoryHandler extends BaseHandler {
       foodCategory: category
     });
 
-    userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
-    userState.lastSection = SECTIONS.FOOD;
-    userState.lastCategory = category;
-    await UserStateManager.updateUserState(userState.userId, userState);
-
     const repeatSymbol: string = I18n.t(`SectionHandler.buttons.foods.${ category.toLowerCase() }.emoji`);
 
     if (category === FOOD_CATEGORIES.RANDOM) {
@@ -90,6 +85,13 @@ export default class FoodCategoryHandler extends BaseHandler {
     await FoodCategoryHandler.answerWithSearchingForCategory(msg.chat.id, category);
 
     const places = await FoodCategoryHandler.getRandomPlacesForCategory(category, userProfile.currentCity);
+
+    userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
+    userState.lastSection = SECTIONS.FOOD;
+    userState.lastCategory = category;
+    userState.lastSelectedPlaces = JSON.stringify(places);
+    await UserStateManager.updateUserState(userState.userId, userState);
+
     const totalPlacesNumber = await FoodCategoryHandler.getNumberOfPlacesInCategory(category, userProfile.currentCity);
 
     logger.info(`${ places.length } places randomly selected (of ${ totalPlacesNumber }): ${ places.map((item: any) => item.name).join(', ') }`);

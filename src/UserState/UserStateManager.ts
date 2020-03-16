@@ -35,7 +35,8 @@ export default class UserStateManager {
       currentState: obj.currentState as USER_STATES,
       lastSection: obj.lastSection as SECTIONS,
       lastCategory: obj.lastCategory as KITCHEN_CATEGORIES | FOOD_CATEGORIES,
-      lastUpdated: parseInt(obj.lastUpdated, 10)
+      lastUpdated: parseInt(obj.lastUpdated, 10),
+      lastSelectedPlaces: obj.lastSelectedPlaces
     } as UserStateInterface;
   }
 
