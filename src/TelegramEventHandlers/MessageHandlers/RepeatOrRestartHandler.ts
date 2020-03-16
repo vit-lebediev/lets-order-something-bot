@@ -11,6 +11,7 @@ import I18n from '../../I18n';
 import Logger from '../../Logger';
 import { SECTIONS, USER_STATES } from '../../Constants';
 import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
+import LosTelegramBot from '../../LosTelegramBot';
 
 export default class RepeatOrRestartHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -26,9 +27,13 @@ export default class RepeatOrRestartHandler extends BaseHandler {
       return RepeatOrRestartHandler.handleRepeat(msg);
     }
 
-    logger.info("User selected 'restart'");
+    if (msg.text === I18n.t('BaseHandler.buttons.restart.text')) {
+      logger.info("User selected 'restart'");
 
-    return RepeatOrRestartHandler.handleRestart(msg);
+      return RepeatOrRestartHandler.handleRestart(msg);
+    }
+
+    return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
   }
 
   static async handleRepeat (msg: Message): Promise<Message> {

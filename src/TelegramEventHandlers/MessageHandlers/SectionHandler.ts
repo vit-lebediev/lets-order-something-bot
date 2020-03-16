@@ -54,8 +54,7 @@ export default class SectionHandler extends BaseHandler {
         return IFeelLuckyHandler.handle(msg);
       }
 
-      case I18n.t('LocationHandler.buttons.feedback.text'):
-      default: {
+      case I18n.t('LocationHandler.buttons.feedback.text'): {
         await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_FEEDBACK_SECTION);
 
         userState.currentState = USER_STATES.WAIT_FOR_FEEDBACK;
@@ -65,6 +64,9 @@ export default class SectionHandler extends BaseHandler {
 
         return this.answerWithFeedback(msg.chat.id);
       }
+
+      default:
+        return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
     }
   }
 

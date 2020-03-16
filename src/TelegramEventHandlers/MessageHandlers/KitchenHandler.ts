@@ -58,10 +58,11 @@ export default class KitchenHandler extends BaseHandler {
       case I18n.t('SectionHandler.buttons.kitchens.mexican.text'): kitchen = KITCHEN_CATEGORIES.MEXICAN; break;
 
       case I18n.t('BaseHandler.buttons.restart.text'):
-      default:
         logger.info("User selected 'restart'");
-
         return RepeatOrRestartHandler.handleRestart(msg);
+
+      default:
+        return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
     }
 
     logger.info(`User selected '${ msg.text }' kitchen, mapped to ${ kitchen }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);
