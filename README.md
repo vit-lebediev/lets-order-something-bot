@@ -22,6 +22,9 @@ LOS_MONGO_PORT=<mongo_port>
 LOS_MONGO_DB=<mongo_db>
 LOS_MONGO_USER=<mongo_user>
 LOS_MONGO_PASS=<mongo_pass>
+
+LOS_EXPRESS_HOST=losbot.in.ua
+LOS_EXPRESS_PORT=3000
 ```
 4. run `npm run stack` (in separate window)
 5. run `npm run watchts` (in separate window)
@@ -29,8 +32,9 @@ LOS_MONGO_PASS=<mongo_pass>
 7. run `npm run parsePlaces` (in separate window)
 
 # Environment Variables
-`NTBA_FIX_319` should be set in order to address [promise cancellation issue](https://github.com/yagop/node-telegram-bot-api/issues/319#issuecomment-324963294).
-`LOS_BOT_FEEDBACK_TG_CHAT_ID` should be set to LOSbot-user chat ID for Feedback Handler to deliver user feedbacks right away. This corresponds to userId in private conversation with a bot.
+* `NTBA_FIX_319` should be set in order to address [promise cancellation issue](https://github.com/yagop/node-telegram-bot-api/issues/319#issuecomment-324963294).
+* `LOS_BOT_FEEDBACK_TG_CHAT_ID` should be set to LOSbot-user chat ID for Feedback Handler to deliver user feedbacks right away. This corresponds to userId in private conversation with a bot.
+* In order for `LOS_EXPRESS_HOST` to work, dev need to add this line to his `/var/hosts` file: `127.0.0.1 losbot.in.ua`  
 
 # Bot menu list
 The bot supports next hierarchy of menu (each corresponds to a state user in):

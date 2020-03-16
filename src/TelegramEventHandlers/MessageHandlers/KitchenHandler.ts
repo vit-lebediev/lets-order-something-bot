@@ -95,7 +95,7 @@ export default class KitchenHandler extends BaseHandler {
 
     await Util.wait(1.4);
 
-    return BaseHandler.answerWithPlacesToOrder(msg.chat.id, places, msg.text, totalPlacesNumber, repeatSymbol);
+    return BaseHandler.answerWithPlacesToOrder(userProfile.tgUserId, msg.chat.id, places, msg.text, totalPlacesNumber, repeatSymbol);
   }
 
   static getRandomPlacesForKitchen (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<any[]> {

@@ -12,10 +12,10 @@ const logger = Logger.child({ module: 'Amplitude' });
 
 const AMPLITUDE_API_URL = 'https://api.amplitude.com/2/httpapi';
 
-const { AMPLITUDE_API_KEY } = process.env;
+const { LOS_AMPLITUDE_API_KEY } = process.env;
 
-if (AMPLITUDE_API_KEY === undefined) {
-  throw new Error('You need to specify AMPLITUDE_API_KEY env parameter');
+if (LOS_AMPLITUDE_API_KEY === undefined) {
+  throw new Error('You need to specify LOS_AMPLITUDE_API_KEY env parameter');
 }
 
 export enum AMPLITUDE_EVENTS {
@@ -33,6 +33,7 @@ export enum AMPLITUDE_EVENTS {
   USER_SELECTED_CITY = 'userSelectedCity',
   USER_LEFT_FEEDBACK = 'userLeftFeedback',
   USER_ENTERED_OTHER_CITY = 'userEnteredOtherCity',
+  USER_CLICKED_ON_PLACE = 'userClickedOnPlace'
 }
 
 class Amplitude {
@@ -115,4 +116,4 @@ class Amplitude {
   }
 }
 
-export default new Amplitude(AMPLITUDE_API_KEY, version);
+export default new Amplitude(LOS_AMPLITUDE_API_KEY, version);
