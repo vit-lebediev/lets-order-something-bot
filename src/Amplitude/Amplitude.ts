@@ -42,10 +42,13 @@ class Amplitude {
 
   private readonly eventsBatch: AmplitudeEvent[];
 
+  private flushInProgress: boolean;
+
   constructor (apiKey: string, appVersion: string) {
     this.apiKey = apiKey;
     this.appVersion = appVersion;
     this.eventsBatch = [];
+    this.flushInProgress = false;
   }
 
   async logEvent (
@@ -86,7 +89,9 @@ class Amplitude {
    * in "answer" functions. Need to keep an eye to call it only once.
    */
   async flush (): Promise<void> {
-    if (this.eventsBatch.length === 0) return;
+    if (this.eventsBatch.length === 0 || this.flushInProgress) return;
+
+    this.flushInProgress = true;
 
     logger.info(`Flushing event batch of size ${ this.eventsBatch.length }`);
 
@@ -105,6 +110,7 @@ class Amplitude {
       logger.error(`Error sending amplitude events: ${ e.message }`, { userId: this.eventsBatch[0].user_id });
     } finally {
       this.eventsBatch.length = 0;
+      this.flushInProgress = false;
     }
   }
 }
