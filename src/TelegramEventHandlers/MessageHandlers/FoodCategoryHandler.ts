@@ -72,7 +72,6 @@ export default class FoodCategoryHandler extends BaseHandler {
       foodCategory: category
     });
 
-
     const repeatSymbol: string = I18n.t(`SectionHandler.buttons.foods.${ category.toLowerCase() }.emoji`);
 
     if (category === FOOD_CATEGORIES.RANDOM) {
