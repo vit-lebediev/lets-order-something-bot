@@ -12,6 +12,7 @@ import Logger from '../../Logger';
 import { SECTIONS, USER_STATES } from '../../Constants';
 import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
 import LosTelegramBot from '../../LosTelegramBot';
+import ChooseForMeHandler from './ChooseForMeHandler';
 
 export default class RepeatOrRestartHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -31,6 +32,12 @@ export default class RepeatOrRestartHandler extends BaseHandler {
       logger.info("User selected 'restart'");
 
       return RepeatOrRestartHandler.handleRestart(msg);
+    }
+
+    if (msg.text === I18n.t('BaseHandler.buttons.chooseForMe.text')) {
+      logger.info("User selected 'chooseForMe'");
+
+      return RepeatOrRestartHandler.handleChooseForMe(msg);
     }
 
     return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
@@ -75,5 +82,25 @@ export default class RepeatOrRestartHandler extends BaseHandler {
 
     // answer with sections menu
     return BaseHandler.answerWithSectionsMenu(msg.chat.id);
+  }
+
+  static async handleChooseForMe (msg: Message): Promise<Message> {
+    const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+    const logger: BaseLogger = Logger.child({ module: 'MessageHandler:FoodCategoryHandler', userId: userState.userId });
+
+    await Amplitude.logEvent(userState.userId, AMPLITUDE_EVENTS.USER_SELECTED_CHOOSE_FOR_ME);
+
+    let places = [];
+    if (userState.lastSelectedPlaces) {
+      places = JSON.parse(userState.lastSelectedPlaces);
+    }
+
+    const placeNumber = Math.floor(Math.random() * places.length);
+    logger.info(`${ places[placeNumber].name } place randomly selected (of ${ places.length }): ${ places.map((item: any) => item.name).join(', ') }`);
+
+    userState.currentState = USER_STATES.WAIT_FOR_CHOOSE_AFTER_SELECT;
+    await UserStateManager.updateUserState(userState.userId, userState);
+
+    return ChooseForMeHandler.answerWithBtnGoToSectionsMenu(msg.chat.id, [ places[placeNumber] ]);
   }
 }

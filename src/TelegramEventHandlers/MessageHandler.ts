@@ -14,6 +14,7 @@ import RepeatOrRestartHandler from './MessageHandlers/RepeatOrRestartHandler';
 import OtherCityHandler from './MessageHandlers/OtherCityHandler';
 import FeedbackHandler from './MessageHandlers/FeedbackHandler';
 import { USER_STATE_EXPIRED_ERROR_CODE } from '../Errors/UserStateExpiredError';
+import ChooseForMeHandler from './MessageHandlers/ChooseForMeHandler';
 
 import { USER_STATES } from '../Constants';
 import UserProfileManager from '../UserProfile/UserProfileManager';
@@ -72,6 +73,7 @@ export default class MessageHandler extends BaseHandler {
       case USER_STATES.WAIT_FOR_FOOD_CATEGORY: return FoodCategoryHandler.handle(msg);
       case USER_STATES.WAIT_FOR_KITCHEN: return KitchenHandler.handle(msg);
       case USER_STATES.WAIT_FOR_REPEAT_OR_RESTART: return RepeatOrRestartHandler.handle(msg);
+      case USER_STATES.WAIT_FOR_CHOOSE_AFTER_SELECT: return ChooseForMeHandler.handle(msg);
 
       // this would probably never happen
       default: {

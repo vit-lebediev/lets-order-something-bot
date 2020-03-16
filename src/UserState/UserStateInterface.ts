@@ -11,4 +11,5 @@ export default interface UserStateInterface {
   lastSection: SECTIONS | undefined,
   lastCategory: KITCHEN_CATEGORIES | FOOD_CATEGORIES | undefined,
   lastUpdated: number | undefined,
+  lastSelectedPlaces: string | undefined,
 } // eslint-disable-line semi
