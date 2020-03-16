@@ -138,13 +138,17 @@ export default class BaseHandler {
     const verifiedRepeatSymbol = repeatSymbol || I18n.t('BaseHandler.buttons.repeat');
     const replacements: Replacements = { repeatSymbol: verifiedRepeatSymbol };
 
+    const chooseForMe: KeyboardButton = { text: I18n.t('BaseHandler.buttons.chooseForMe.text') };
     const buttons: KeyboardButton[] = [
         { text: I18n.t('BaseHandler.buttons.repeat.text', replacements) },
         { text: I18n.t('BaseHandler.buttons.restart.text') }
     ];
 
     return {
-      keyboard: [ buttons ],
+      keyboard: [
+          [ chooseForMe ],
+          buttons
+      ],
       resize_keyboard: true
     } as ReplyKeyboardMarkup;
   }
