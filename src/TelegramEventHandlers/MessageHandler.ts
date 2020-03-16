@@ -1,4 +1,4 @@
-import { Message } from 'node-telegram-bot-api';
+import { Message, User } from 'node-telegram-bot-api';
 
 import UserStateInterface from '../UserState/UserStateInterface';
 import UserStateManager from '../UserState/UserStateManager';
@@ -13,8 +13,12 @@ import KitchenHandler from './MessageHandlers/KitchenHandler';
 import RepeatOrRestartHandler from './MessageHandlers/RepeatOrRestartHandler';
 import OtherCityHandler from './MessageHandlers/OtherCityHandler';
 import FeedbackHandler from './MessageHandlers/FeedbackHandler';
+import { USER_STATE_EXPIRED_ERROR_CODE } from '../Errors/UserStateExpiredError';
 
 import { USER_STATES } from '../Constants';
+import UserProfileManager from '../UserProfile/UserProfileManager';
+import LosTelegramBot from '../LosTelegramBot';
+import I18n from '../I18n';
 
 const startCommandRegExp = /^\/start/;
 const helpCommandRegExp = /^\/help/;
@@ -35,7 +39,26 @@ export default class MessageHandler extends BaseHandler {
     }
 
     // get user state
-    const userState: UserStateInterface = await UserStateManager.getUserState(msg);
+    let userState: UserStateInterface;
+    try {
+      userState = await UserStateManager.getUserState(msg);
+    } catch (e) {
+      if (e.code === USER_STATE_EXPIRED_ERROR_CODE) {
+        const user: User = UserProfileManager.getUserFromMessage(msg);
+
+        const newUserState: UserStateInterface = {
+          currentState: USER_STATES.WAIT_FOR_SECTION
+        } as UserStateInterface;
+
+        await UserStateManager.updateUserState(user.id, newUserState);
+
+        await LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.stateExpired'));
+
+        return BaseHandler.answerWithSectionsMenu(msg.chat.id);
+      }
+
+      throw e;
+    }
 
     // switch userState
     switch (userState.currentState) {

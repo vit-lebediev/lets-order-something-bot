@@ -11,6 +11,7 @@ import {
   USER_STATES
 } from '../Constants';
 import UserProfileManager from '../UserProfile/UserProfileManager';
+import UserStateExpiredError from '../Errors/UserStateExpiredError';
 
 const CITY_STRING_ODESA = 'Odesa';
 // const CITY_STRING_KYIV = 'Kyiv';
@@ -51,7 +52,7 @@ export default class UserStateManager {
     const userState: UserStateInterface | null = await UserStateManager.getUserStateById(user.id);
 
     if (userState === null) {
-      throw new Error('User state is not set');
+      throw new UserStateExpiredError('User state is not set');
     }
 
     return Promise.resolve(userState);

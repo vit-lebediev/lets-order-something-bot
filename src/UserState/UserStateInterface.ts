@@ -7,7 +7,7 @@ import {
 
 export default interface UserStateInterface {
   userId: number,
-  currentState: USER_STATES | undefined,
+  currentState: USER_STATES,
   lastSection: SECTIONS | undefined,
   lastCategory: KITCHEN_CATEGORIES | FOOD_CATEGORIES | undefined,
   lastUpdated: number | undefined,

@@ -28,8 +28,7 @@ export default class StartHandler extends BaseHandler {
     logger.info(`/start command received. User name: ${ user.first_name }, ${ user.last_name }, User id: ${ user.id }, username: ${ user.username }`);
 
     const userState: UserStateInterface = {
-      currentState: USER_STATES.WAIT_FOR_LOCATION,
-      lastUpdated: Math.round(Date.now() / 1000)
+      currentState: USER_STATES.WAIT_FOR_LOCATION
     } as UserStateInterface;
 
     await UserStateManager.updateUserState(user.id, userState);
