@@ -82,6 +82,14 @@ export default class UserStateManager {
     return Promise.resolve(true);
   }
 
+  static async resetUserState (userId: number): Promise<boolean> {
+    const newUserState: UserStateInterface = {
+      currentState: USER_STATES.WAIT_FOR_SECTION
+    } as UserStateInterface;
+
+    return UserStateManager.updateUserState(userId, newUserState);
+  }
+
   static getCityFromString (city: string | undefined): SUPPORTED_CITIES | null {
     switch (city) {
       case CITY_STRING_ODESA:
