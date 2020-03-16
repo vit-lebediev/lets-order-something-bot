@@ -16,9 +16,9 @@ import IndexHandler from './ExpressHandlers/IndexHandler';
 
 const express = Experss();
 
-const { LOS_EXPRESS_HOST, LOS_EXPRESS_PORT } = process.env;
+const { LOS_EXPRESS_PORT } = process.env;
 
-if (!LOS_EXPRESS_HOST || !LOS_EXPRESS_PORT) {
+if (!LOS_EXPRESS_PORT) {
   throw new Error('LOS_EXPRESS_HOST and LOS_EXPRESS_PORT env vars need to be set');
 }
 
@@ -36,8 +36,8 @@ LosTelegramBot.on('polling_error', ErrorHandler.handle);
 express.get('/', IndexHandler.handle);
 express.get('/r', RedirectHandler.handle);
 
-express.listen(3000, () => {
-  logger.info('Express is listening on 3000 port');
+express.listen(LOS_EXPRESS_PORT, () => {
+  logger.info(`Express is listening on port ${ LOS_EXPRESS_PORT }`);
 });
 
 process.on('uncaughtException', (e: Error) => {

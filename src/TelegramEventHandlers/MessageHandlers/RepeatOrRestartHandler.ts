@@ -2,7 +2,7 @@ import {
   KeyboardButton,
   Message,
   ReplyKeyboardMarkup,
-  SendMessageOptions
+  SendMessageOptions, User
 } from 'node-telegram-bot-api';
 import { BaseLogger } from 'pino';
 
@@ -17,6 +17,7 @@ import Logger from '../../Logger';
 import { SECTIONS, USER_STATES } from '../../Constants';
 import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
 import LosTelegramBot from '../../LosTelegramBot';
+import UserProfileManager from '../../UserProfile/UserProfileManager';
 
 export default class RepeatOrRestartHandler extends BaseHandler {
   static async handle (msg: Message): Promise<Message> {
@@ -97,15 +98,22 @@ export default class RepeatOrRestartHandler extends BaseHandler {
     let places = [];
     if (userState.lastSelectedPlaces) {
       places = JSON.parse(userState.lastSelectedPlaces);
+
+      const placeNumber = Math.floor(Math.random() * places.length);
+      logger.info(`${ places[placeNumber].name } place randomly selected (of ${ places.length }): ${ places.map((item: any) => item.name).join(', ') }`);
+
+      userState.currentState = USER_STATES.WAIT_FOR_CHOOSE_AFTER_SELECT;
+      await UserStateManager.updateUserState(userState.userId, userState);
+
+      return this.answerWithRandomPlace(userState.userId, msg.chat.id, places[placeNumber]);
     }
 
-    const placeNumber = Math.floor(Math.random() * places.length);
-    logger.info(`${ places[placeNumber].name } place randomly selected (of ${ places.length }): ${ places.map((item: any) => item.name).join(', ') }`);
+    const user: User = UserProfileManager.getUserFromMessage(msg);
 
-    userState.currentState = USER_STATES.WAIT_FOR_CHOOSE_AFTER_SELECT;
-    await UserStateManager.updateUserState(userState.userId, userState);
+    await UserStateManager.resetUserState(user.id);
+    await LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.stateExpired'));
 
-    return this.answerWithRandomPlace(userState.userId, msg.chat.id, places[placeNumber]);
+    return BaseHandler.answerWithSectionsMenu(msg.chat.id);
   }
 
   static async answerWithRandomPlace (userId: number, chatId: number, place: any): Promise<Message> {

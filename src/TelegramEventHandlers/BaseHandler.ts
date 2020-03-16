@@ -204,7 +204,7 @@ export default class BaseHandler {
 
     const foodCategories = foodCategoriesArray.join(' ');
 
-    const losBotFullUrl = `http://${ LOS_EXPRESS_HOST }${ LOS_EXPRESS_PORT ? `:${ LOS_EXPRESS_PORT }` : '' }`;
+    const losBotFullUrl = `http://${ LOS_EXPRESS_HOST }${ LOS_EXPRESS_PORT as unknown as number === 80 ? `:${ LOS_EXPRESS_PORT }` : '' }`;
 
     const replacements: Replacements = {
       name: place.name,

@@ -71,11 +71,6 @@ export default class KitchenHandler extends BaseHandler {
       kitchenCategory: kitchen
     });
 
-    userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
-    userState.lastSection = SECTIONS.KITCHEN;
-    userState.lastCategory = kitchen;
-    await UserStateManager.updateUserState(userState.userId, userState);
-
     const repeatSymbol: string = I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`);
 
     if (kitchen === KITCHEN_CATEGORIES.RANDOM) {
@@ -90,6 +85,12 @@ export default class KitchenHandler extends BaseHandler {
 
     const places = await KitchenHandler.getRandomPlacesForKitchen(kitchen, userProfile.currentCity);
     const totalPlacesNumber = await KitchenHandler.getNumberOfPlacesInCategory(kitchen, userProfile.currentCity);
+
+    userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
+    userState.lastSection = SECTIONS.KITCHEN;
+    userState.lastCategory = kitchen;
+    userState.lastSelectedPlaces = JSON.stringify(places);
+    await UserStateManager.updateUserState(userState.userId, userState);
 
     logger.info(`${ places.length } places randomly selected (of ${ totalPlacesNumber }): ${ places.map((item) => item.name).join(', ') }`);
 
