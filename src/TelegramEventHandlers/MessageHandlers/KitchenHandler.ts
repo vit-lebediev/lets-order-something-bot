@@ -73,6 +73,8 @@ export default class KitchenHandler extends BaseHandler {
 
     const repeatSymbol: string = I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.emoji`);
 
+    userState.lastCategory = kitchen;
+
     if (kitchen === KITCHEN_CATEGORIES.RANDOM) {
       // get random kitchen category
       // @see https://stackblitz.com/edit/typescript-random-enum-value
@@ -88,7 +90,6 @@ export default class KitchenHandler extends BaseHandler {
 
     userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
     userState.lastSection = SECTIONS.KITCHEN;
-    userState.lastCategory = kitchen;
     userState.lastSelectedPlaces = JSON.stringify(places);
     await UserStateManager.updateUserState(userState.userId, userState);
 
@@ -96,7 +97,14 @@ export default class KitchenHandler extends BaseHandler {
 
     await Util.wait(1.4);
 
-    return BaseHandler.answerWithPlacesToOrder(userProfile.tgUserId, msg.chat.id, places, msg.text, totalPlacesNumber, repeatSymbol);
+    return BaseHandler.answerWithPlacesToOrder(
+        userProfile.tgUserId,
+        msg.chat.id,
+        places,
+        I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.text`),
+        totalPlacesNumber,
+        repeatSymbol
+    );
   }
 
   static getRandomPlacesForKitchen (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<any[]> {

@@ -118,7 +118,6 @@ export default class BaseHandler {
     const replacements: Replacements = { numberOfPlaces: totalNumberOfPlaces as unknown as string };
     const foundTextFollowup = I18n.t('FoodCategoryHandler.foundFollowup', replacements);
 
-    // const verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found', replacements) }\n\n`;
     const verifiedMessage: string = `${ foundText }\n\n${ placesList }${ foundTextFollowup }`;
 
     const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(repeatSymbol, true);
