@@ -21,6 +21,6 @@ export default class ChooseForMeHandler extends BaseHandler {
       return BaseHandler.answerWithSectionsMenu(msg.chat.id);
     }
 
-    return this.answerWithUnrecognizedCommand(msg.chat.id);
+    return BaseHandler.answerWithUnrecognizedCommand(msg.chat.id);
   }
 }

@@ -41,7 +41,7 @@ export default class MessageHandler extends BaseHandler {
 
     if (!msg.text) {
       // if there's no text (e.g. an image upload), send 'unrecognized command' & ignore
-      await this.answerWithUnrecognizedCommand(msg.chat.id);
+      await BaseHandler.answerWithUnrecognizedCommand(msg.chat.id);
       return new Promise(() => {});
     }
 

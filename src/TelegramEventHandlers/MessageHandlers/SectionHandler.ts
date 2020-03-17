@@ -66,7 +66,7 @@ export default class SectionHandler extends BaseHandler {
       }
 
       default:
-        return this.answerWithUnrecognizedCommand(msg.chat.id);
+        return BaseHandler.answerWithUnrecognizedCommand(msg.chat.id);
     }
   }
 

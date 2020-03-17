@@ -45,7 +45,7 @@ export default class RepeatOrRestartHandler extends BaseHandler {
       return RepeatOrRestartHandler.handleChooseForMe(msg);
     }
 
-    return this.answerWithUnrecognizedCommand(msg.chat.id);
+    return BaseHandler.answerWithUnrecognizedCommand(msg.chat.id);
   }
 
   static async handleRepeat (msg: Message): Promise<Message> {

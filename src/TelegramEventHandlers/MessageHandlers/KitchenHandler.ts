@@ -61,7 +61,7 @@ export default class KitchenHandler extends BaseHandler {
         return RepeatOrRestartHandler.handleRestart(msg);
 
       default:
-        return this.answerWithUnrecognizedCommand(msg.chat.id);
+        return BaseHandler.answerWithUnrecognizedCommand(msg.chat.id);
     }
 
     logger.info(`User selected '${ msg.text }' kitchen, mapped to ${ kitchen }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);

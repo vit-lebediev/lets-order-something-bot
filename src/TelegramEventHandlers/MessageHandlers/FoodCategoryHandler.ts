@@ -62,7 +62,7 @@ export default class FoodCategoryHandler extends BaseHandler {
         return RepeatOrRestartHandler.handleRestart(msg);
 
       default:
-        return this.answerWithUnrecognizedCommand(msg.chat.id);
+        return BaseHandler.answerWithUnrecognizedCommand(msg.chat.id);
     }
 
     logger.info(`User selected '${ msg.text }' category, mapped to ${ category }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);
