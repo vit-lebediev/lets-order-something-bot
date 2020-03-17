@@ -1,4 +1,5 @@
 import Experss from 'express';
+import bodyParser from 'body-parser';
 
 // Projects imports
 import LosTelegramBot from './LosTelegramBot';
@@ -14,7 +15,7 @@ import Logger from './Logger';
 import RedirectHandler from './ExpressHandlers/RedirectHandler';
 import IndexHandler from './ExpressHandlers/IndexHandler';
 
-const express = Experss();
+const { LOS_BOT_TG_TOKEN } = process.env;
 
 const logger = Logger.child({ module: 'Index' });
 
@@ -26,6 +27,15 @@ LosTelegramBot.on('message', MessageHandler.handle);
 // LosTelegramBot.on('location', LocationHandler.handle);
 
 LosTelegramBot.on('polling_error', ErrorHandler.handle);
+
+const express = Experss();
+
+express.use(bodyParser.json());
+
+express.post(`/bot${ LOS_BOT_TG_TOKEN }`, (req, res) => {
+  LosTelegramBot.processUpdate(req.body);
+  res.sendStatus(200);
+});
 
 express.get('/', IndexHandler.handle);
 express.get('/r', RedirectHandler.handle);

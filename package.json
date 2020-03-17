@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "stack": "docker-compose -f stack.yml up -d",
     "start": "export $(cat .env | xargs) && nodemon build/src/index.js",
-    "parsePlaces": "export $(cat .env | xargs) && node scripts/parsePlacesCSV"
+    "parsePlaces": "export $(cat .env | xargs) && node build/scripts/parsePlacesCSV"
   },
   "repository": {
     "type": "git",
@@ -33,6 +33,7 @@
   "dependencies": {
     "amplitude-js": "^5.9.0",
     "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "i18n": "^0.8.5",
     "js-levenshtein": "^1.1.6",
@@ -46,6 +47,7 @@
   "devDependencies": {
     "@types/amplitude-js": "^5.8.0",
     "@types/axios": "^0.14.0",
+    "@types/body-parser": "^1.19.0",
     "@types/express": "^4.17.3",
     "@types/i18n": "^0.8.6",
     "@types/mongodb": "^3.3.15",
