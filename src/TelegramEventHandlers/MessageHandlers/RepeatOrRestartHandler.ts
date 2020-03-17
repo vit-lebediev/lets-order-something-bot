@@ -45,7 +45,7 @@ export default class RepeatOrRestartHandler extends BaseHandler {
       return RepeatOrRestartHandler.handleChooseForMe(msg);
     }
 
-    return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
+    return this.answerWithUnrecognizedCommand(msg.chat.id);
   }
 
   static async handleRepeat (msg: Message): Promise<Message> {

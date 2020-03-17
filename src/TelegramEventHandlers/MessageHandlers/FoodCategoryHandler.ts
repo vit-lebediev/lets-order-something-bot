@@ -62,7 +62,7 @@ export default class FoodCategoryHandler extends BaseHandler {
         return RepeatOrRestartHandler.handleRestart(msg);
 
       default:
-        return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
+        return this.answerWithUnrecognizedCommand(msg.chat.id);
     }
 
     logger.info(`User selected '${ msg.text }' category, mapped to ${ category }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);
