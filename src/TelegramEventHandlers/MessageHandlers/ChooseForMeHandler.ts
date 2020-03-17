@@ -5,7 +5,6 @@ import BaseHandler from '../BaseHandler';
 import UserStateInterface from '../../UserState/UserStateInterface';
 import UserStateManager from '../../UserState/UserStateManager';
 import { USER_STATES } from '../../Constants';
-import LosTelegramBot from '../../LosTelegramBot';
 
 import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
 
@@ -22,6 +21,6 @@ export default class ChooseForMeHandler extends BaseHandler {
       return BaseHandler.answerWithSectionsMenu(msg.chat.id);
     }
 
-    return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
+    return this.answerWithUnrecognizedCommand(msg.chat.id);
   }
 }

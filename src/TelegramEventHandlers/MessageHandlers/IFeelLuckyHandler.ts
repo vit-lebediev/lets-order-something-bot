@@ -1,4 +1,9 @@
-import { Message, ReplyKeyboardMarkup, SendMessageOptions } from 'node-telegram-bot-api';
+import {
+  Message,
+  ReplyKeyboardMarkup,
+  ReplyKeyboardRemove,
+  SendMessageOptions
+} from 'node-telegram-bot-api';
 import { Collection } from 'mongodb';
 import { BaseLogger } from 'pino';
 
@@ -40,7 +45,16 @@ export default class IFeelLuckyHandler extends BaseHandler {
 
     logger.info(`Random place selected: ${ place.name }`);
 
-    await LosTelegramBot.sendMessage(msg.chat.id, I18n.t('IFeelLuckyHandler.searching'));
+
+    const replyMarkup: ReplyKeyboardRemove = {
+      remove_keyboard: true
+    };
+
+    const messageOptions: SendMessageOptions = {
+      reply_markup: replyMarkup
+    };
+
+    await LosTelegramBot.sendMessage(msg.chat.id, I18n.t('IFeelLuckyHandler.searching'), messageOptions);
 
     await this.runSearchSequence(msg.chat.id, 3);
 

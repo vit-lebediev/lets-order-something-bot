@@ -41,7 +41,7 @@ export default class MessageHandler extends BaseHandler {
 
     if (!msg.text) {
       // if there's no text (e.g. an image upload), send 'unrecognized command' & ignore
-      await LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
+      await this.answerWithUnrecognizedCommand(msg.chat.id);
       return new Promise(() => {});
     }
 

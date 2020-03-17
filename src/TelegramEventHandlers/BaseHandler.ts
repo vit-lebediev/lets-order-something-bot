@@ -220,7 +220,7 @@ export default class BaseHandler {
   }
 
   static async runSearchSequence (chatId: number, numOfSteps: number = DEFAULT_NUMBER_OF_SEARCH_SEQ_STEPS): Promise<void> {
-    const searchSequenceOptionsNum = 10;
+    const searchSequenceOptionsNum = 12;
 
     const indexArray = [ ...Array(searchSequenceOptionsNum).keys() ];
 
@@ -234,5 +234,11 @@ export default class BaseHandler {
     }
 
     await Util.wait(3);
+  }
+
+  static answerWithUnrecognizedCommand (chatId: number): Promise<Message> {
+    const unrecognizedCommandsSupported = 5;
+
+    return LosTelegramBot.sendMessage(chatId, I18n.t(`general.unrecognizedCommands.${ Math.floor(Math.random() * unrecognizedCommandsSupported) }`));
   }
 }

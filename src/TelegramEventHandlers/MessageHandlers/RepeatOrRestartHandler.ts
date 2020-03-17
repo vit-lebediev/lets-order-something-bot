@@ -45,7 +45,7 @@ export default class RepeatOrRestartHandler extends BaseHandler {
       return RepeatOrRestartHandler.handleChooseForMe(msg);
     }
 
-    return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
+    return this.answerWithUnrecognizedCommand(msg.chat.id);
   }
 
   static async handleRepeat (msg: Message): Promise<Message> {
@@ -118,7 +118,7 @@ export default class RepeatOrRestartHandler extends BaseHandler {
 
   static async answerWithRandomPlace (userId: number, chatId: number, place: any): Promise<Message> {
     const redirectUUIDKey = await this.storeRedirectData(userId, place.num_id, 0, place.url);
-    const verifiedMessage: string = `${ I18n.t('IFeelLuckyHandler.found') }\n\n${ BaseHandler.parsePlaceTemplate(place, redirectUUIDKey) }`;
+    const verifiedMessage: string = `${ BaseHandler.parsePlaceTemplate(place, redirectUUIDKey) }\n${ I18n.t('IFeelLuckyHandler.found') }`;
 
     const chooseSelectMenuButton: KeyboardButton = { text: I18n.t('ChooseForMeHandler.buttons.chooseSelectMenu.text') };
     const replyMarkup: ReplyKeyboardMarkup = {

@@ -1,4 +1,4 @@
-import { Message } from 'node-telegram-bot-api';
+import { Message, ReplyKeyboardRemove, SendMessageOptions } from 'node-telegram-bot-api';
 import { Collection } from 'mongodb';
 import { BaseLogger } from 'pino';
 import i18n from 'i18n';
@@ -61,7 +61,7 @@ export default class KitchenHandler extends BaseHandler {
         return RepeatOrRestartHandler.handleRestart(msg);
 
       default:
-        return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
+        return this.answerWithUnrecognizedCommand(msg.chat.id);
     }
 
     logger.info(`User selected '${ msg.text }' kitchen, mapped to ${ kitchen }. Searching in '${ I18n.t(`cities.${ userProfile.currentCity }`) }' city`);
@@ -138,6 +138,14 @@ export default class KitchenHandler extends BaseHandler {
   static answerWithSearchingForKitchen (chatId: number, kitchen: string): Promise<Message> {
     const replacements: Replacements = { kitchen: I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.text`) };
 
-    return LosTelegramBot.sendMessage(chatId, I18n.t('KitchenHandler.searchingForKitchen', replacements));
+    const replyMarkup: ReplyKeyboardRemove = {
+      remove_keyboard: true
+    };
+
+    const messageOptions: SendMessageOptions = {
+      reply_markup: replyMarkup
+    };
+
+    return LosTelegramBot.sendMessage(chatId, I18n.t('KitchenHandler.searchingForKitchen', replacements), messageOptions);
   }
 }

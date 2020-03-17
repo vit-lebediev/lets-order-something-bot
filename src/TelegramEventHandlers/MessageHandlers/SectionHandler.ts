@@ -66,7 +66,7 @@ export default class SectionHandler extends BaseHandler {
       }
 
       default:
-        return LosTelegramBot.sendMessage(msg.chat.id, I18n.t('general.unrecognizedCommand'));
+        return this.answerWithUnrecognizedCommand(msg.chat.id);
     }
   }
 
