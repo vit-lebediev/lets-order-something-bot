@@ -131,7 +131,7 @@
     "buttons": {
       "back": { "emoji": "↩️️", "text": "↩️️ Назад" }
     },
-    "feedbackChatMessage": "\uD83D\uDCE9 Отзыв от @{{username}} (id: {{userId}}): {{feedbackText}}"
+    "feedbackChatMessage": "\uD83D\uDCE9 Отзыв от {{name}} (@{{username}}, id: {{userId}}): {{feedbackText}}"
   },
   "ChooseForMeHandler": {
     "messageInfo": "Окей, сегодня вы хотите заказать еду в...",

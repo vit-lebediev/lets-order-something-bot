@@ -44,6 +44,7 @@ export default class FeedbackHandler extends BaseHandler {
     if (LOS_BOT_FEEDBACK_TG_CHAT_ID) {
       const user: User = UserProfileManager.getUserFromMessage(msg);
       const feedbackMessage: string = I18n.t('FeedbackHandler.feedbackChatMessage', {
+        name: user.first_name,
         username: user.username,
         userId: user.id as unknown as string,
         feedbackText: msg.text
