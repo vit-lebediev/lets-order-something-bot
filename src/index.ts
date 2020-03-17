@@ -4,7 +4,7 @@ import Experss from 'express';
 import LosTelegramBot from './LosTelegramBot';
 
 // Event Handlers
-import LocationHandler from './TelegramEventHandlers/LocationHandler';
+// import LocationHandler from './TelegramEventHandlers/LocationHandler';
 import ErrorHandler from './TelegramEventHandlers/ErrorHandler';
 import SettingsHandler from './TelegramEventHandlers/SettingsHandler';
 import HelpHandler from './TelegramEventHandlers/HelpHandler';
@@ -16,12 +16,6 @@ import IndexHandler from './ExpressHandlers/IndexHandler';
 
 const express = Experss();
 
-const { LOS_EXPRESS_PORT } = process.env;
-
-if (!LOS_EXPRESS_PORT) {
-  throw new Error('LOS_EXPRESS_HOST and LOS_EXPRESS_PORT env vars need to be set');
-}
-
 const logger = Logger.child({ module: 'Index' });
 
 LosTelegramBot.onText(/^\/start/, StartHandler.handle);
@@ -29,15 +23,15 @@ LosTelegramBot.onText(/^\/help/, HelpHandler.handle);
 LosTelegramBot.onText(/^\/settings/, SettingsHandler.handle);
 
 LosTelegramBot.on('message', MessageHandler.handle);
-LosTelegramBot.on('location', LocationHandler.handle);
+// LosTelegramBot.on('location', LocationHandler.handle);
 
 LosTelegramBot.on('polling_error', ErrorHandler.handle);
 
 express.get('/', IndexHandler.handle);
 express.get('/r', RedirectHandler.handle);
 
-express.listen(LOS_EXPRESS_PORT, () => {
-  logger.info(`Express is listening on port ${ LOS_EXPRESS_PORT }`);
+express.listen(3000, () => {
+  logger.info('Express is listening on port 3000');
 });
 
 process.on('uncaughtException', (e: Error) => {

@@ -16,10 +16,10 @@ import Replacements = i18n.Replacements;
 
 const uuid = require('uuid');
 
-const { LOS_EXPRESS_HOST, LOS_EXPRESS_PORT } = process.env;
+const { LOS_EXPRESS_HOST, LOS_BOT_ENV } = process.env;
 
-if (!LOS_EXPRESS_HOST || !LOS_EXPRESS_PORT) {
-  throw new Error('LOS_EXPRESS_HOST and LOS_EXPRESS_PORT env vars need to be set');
+if (!LOS_EXPRESS_HOST || !LOS_BOT_ENV) {
+  throw new Error('LOS_EXPRESS_HOST and LOS_BOT_ENV env vars need to be set');
 }
 
 export default class BaseHandler {
@@ -207,7 +207,7 @@ export default class BaseHandler {
 
     const foodCategories = foodCategoriesArray.join(' ');
 
-    const losBotFullUrl = `http://${ LOS_EXPRESS_HOST }${ LOS_EXPRESS_PORT as unknown as number === 80 ? `:${ LOS_EXPRESS_PORT }` : '' }`;
+    const losBotFullUrl = `https://${ LOS_EXPRESS_HOST }${ LOS_BOT_ENV === 'DEV' ? ':3000' : '' }`;
 
     const replacements: Replacements = {
       name: place.name,

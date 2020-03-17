@@ -1,0 +1,46 @@
+{
+  "name": "LosBot",
+  "script": "./build/src/index.js",
+  "env": {
+    "NODE_ENV": "development",
+    "LOS_BOT_ENV": "DEV",
+    "NTBA_FIX_319": "1",
+
+    "LOS_BOT_FEEDBACK_TG_CHAT_ID": "",
+    "LOS_BOT_TG_TOKEN": "",
+
+    "LOS_REDIS_HOST": "localhost",
+    "LOS_REDIS_PORT": "8001",
+
+    "LOS_MONGO_HOST": "localhost",
+    "LOS_MONGO_PORT": "8002",
+    "LOS_MONGO_DB": "losBotDB",
+    "LOS_MONGO_USER": "los-bot",
+    "LOS_MONGO_PASS": "breakable_dev_password",
+
+    "LOS_AMPLITUDE_API_KEY": "",
+
+    "LOS_EXPRESS_HOST": "losbot.in.ua"
+  },
+  "env_production": {
+    "NODE_ENV": "production",
+    "LOS_BOT_ENV": "PROD",
+    "NTBA_FIX_319": "1",
+
+    "LOS_BOT_FEEDBACK_TG_CHAT_ID": "",
+    "LOS_BOT_TG_TOKEN": "",
+
+    "LOS_REDIS_HOST": "localhost",
+    "LOS_REDIS_PORT": "8001",
+
+    "LOS_MONGO_HOST": "localhost",
+    "LOS_MONGO_PORT": "8002",
+    "LOS_MONGO_DB": "losBotDB",
+    "LOS_MONGO_USER": "los-bot",
+    "LOS_MONGO_PASS": "",
+
+    "LOS_AMPLITUDE_API_KEY": "",
+
+    "LOS_EXPRESS_HOST": "losbot.in.ua"
+  }
+}
