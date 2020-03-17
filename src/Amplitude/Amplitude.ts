@@ -33,7 +33,7 @@ export enum AMPLITUDE_EVENTS {
   USER_SELECTED_CITY = 'userSelectedCity',
   USER_LEFT_FEEDBACK = 'userLeftFeedback',
   USER_ENTERED_OTHER_CITY = 'userEnteredOtherCity',
-  USER_CLICKED_ON_PLACE = 'userClickedOnPlace'
+  USER_CLICKED_ON_PLACE = 'userClickedOnPlace',
   USER_SELECTED_CHOOSE_FOR_ME = 'userSelectedChooseForMe',
   USER_SELECTED_GOTO_MENU = 'userSelectedGoToMenu',
 }

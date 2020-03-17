@@ -61,7 +61,7 @@ export default class IFeelLuckyHandler extends BaseHandler {
     const redirectUUIDKey = await this.storeRedirectData(userId, place.num_id, 0, place.url);
     const verifiedMessage: string = `${ I18n.t('IFeelLuckyHandler.found') }\n\n${ BaseHandler.parsePlaceTemplate(place, redirectUUIDKey) }`;
 
-    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(I18n.t('LocationHandler.buttons.i_feel_lucky.emoji'));
+    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(true, I18n.t('LocationHandler.buttons.i_feel_lucky.emoji'));
 
     const messageOptions: SendMessageOptions = {
       reply_markup: replyMarkup,
