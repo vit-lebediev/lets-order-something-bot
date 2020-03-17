@@ -7,12 +7,12 @@
     "node": ">=12.0.0 <13.0.0"
   },
   "scripts": {
-    "build": "tsc -b",
-    "watchts": "tsc -w",
+    "build": "cp -r ./resources ./build/resources && tsc -b",
+    "watchts": "npm run build && tsc -w --outDir ./build",
     "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "stack": "docker-compose -f stack.yml up",
-    "start": "export $(cat .env | xargs) && nodemon src/index.js",
+    "start": "export $(cat .env | xargs) && nodemon build/src/index.js",
     "parsePlaces": "export $(cat .env | xargs) && node scripts/parsePlacesCSV"
   },
   "repository": {

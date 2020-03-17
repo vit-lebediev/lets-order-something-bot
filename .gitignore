@@ -1,6 +1,7 @@
 # Project-wise
 *.js
 .idea
+build
 
 ### Github generated file ###
 # Logs
