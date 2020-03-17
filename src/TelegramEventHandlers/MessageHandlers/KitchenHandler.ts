@@ -96,7 +96,14 @@ export default class KitchenHandler extends BaseHandler {
 
     await Util.wait(1.4);
 
-    return BaseHandler.answerWithPlacesToOrder(userProfile.tgUserId, msg.chat.id, places, msg.text, totalPlacesNumber, repeatSymbol);
+    return BaseHandler.answerWithPlacesToOrder(
+        userProfile.tgUserId,
+        msg.chat.id,
+        places,
+        I18n.t(`SectionHandler.buttons.kitchens.${ kitchen.toLowerCase() }.text`),
+        totalPlacesNumber,
+        repeatSymbol
+    );
   }
 
   static getRandomPlacesForKitchen (kitchen: KITCHEN_CATEGORIES, currentUserCity: SUPPORTED_CITIES): Promise<any[]> {
