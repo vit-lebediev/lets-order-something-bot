@@ -74,6 +74,8 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     const repeatSymbol: string = I18n.t(`SectionHandler.buttons.foods.${ category.toLowerCase() }.emoji`);
 
+    userState.lastCategory = category;
+
     if (category === FOOD_CATEGORIES.RANDOM) {
       // get random kitchen category
       // @see https://stackblitz.com/edit/typescript-random-enum-value
@@ -89,7 +91,6 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     userState.currentState = USER_STATES.WAIT_FOR_REPEAT_OR_RESTART;
     userState.lastSection = SECTIONS.FOOD;
-    userState.lastCategory = category;
     userState.lastSelectedPlaces = JSON.stringify(places);
     await UserStateManager.updateUserState(userState.userId, userState);
 
