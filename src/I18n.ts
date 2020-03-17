@@ -1,5 +1,6 @@
 import i18n from 'i18n';
 
+import '../resources/locales/ru.json'; // this line reloads locale on tswatch
 import Logger from './Logger';
 
 import ConfigurationOptions = i18n.ConfigurationOptions;
