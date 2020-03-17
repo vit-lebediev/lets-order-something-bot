@@ -121,7 +121,7 @@ export default class BaseHandler {
     // const verifiedMessage: string = `${ I18n.t('FoodCategoryHandler.found', replacements) }\n\n`;
     const verifiedMessage: string = `${ foundText }\n\n${ placesList }${ foundTextFollowup }`;
 
-    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(repeatSymbol);
+    const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(repeatSymbol, true);
 
     const messageOptions: SendMessageOptions = {
       reply_markup: replyMarkup,
@@ -134,21 +134,24 @@ export default class BaseHandler {
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);
   }
 
-  static getRepeatOrRestartMarkup (repeatSymbol?: string): ReplyKeyboardMarkup {
+  static getRepeatOrRestartMarkup (repeatSymbol?: string, showChooseForMeBtn: boolean = false): ReplyKeyboardMarkup {
     const verifiedRepeatSymbol = repeatSymbol || I18n.t('BaseHandler.buttons.repeat');
     const replacements: Replacements = { repeatSymbol: verifiedRepeatSymbol };
-
-    const chooseForMe: KeyboardButton = { text: I18n.t('BaseHandler.buttons.chooseForMe.text') };
     const buttons: KeyboardButton[] = [
         { text: I18n.t('BaseHandler.buttons.repeat.text', replacements) },
         { text: I18n.t('BaseHandler.buttons.restart.text') }
     ];
 
+    const keyboard: [KeyboardButton[]] = [ buttons ];
+
+    if (showChooseForMeBtn) {
+      const chooseForMe: KeyboardButton = { text: I18n.t('BaseHandler.buttons.chooseForMe.text') };
+
+      keyboard.unshift([ chooseForMe ]);
+    }
+
     return {
-      keyboard: [
-          [ chooseForMe ],
-          buttons
-      ],
+      keyboard,
       resize_keyboard: true
     } as ReplyKeyboardMarkup;
   }
