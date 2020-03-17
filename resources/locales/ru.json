@@ -14,6 +14,18 @@
       "chooseForMe": { "emoji": "\uD83D\uDE48️", "text": "\uD83D\uDE48️ Реши за меня!" },
       "repeat": { "emoji": "\uD83D\uDD01", "text": "{{repeatSymbol}} Ещё!", "regExp": "Ещё!" },
       "restart": { "emoji": "↩️️", "text": "↩️️ Сначала" }
+    },
+    "searchSequence": {
+      "0": "Спросил у меого друга Гриши... \uD83D\uDC68",
+      "1": "Спрашиваю у нашего ИИ... \uD83E\uDD16",
+      "2": "Листаю справочник... \uD83D\uDCD6",
+      "3": "Пошел гуглить... \uD83D\uDD0E",
+      "4": "Узнаю у древних... \uD83D\uDD2E",
+      "5": "Дай поумать... \uD83E\uDD14",
+      "6": "Вспоминаю такие места... \uD83D\uDCAD",
+      "7": "Анализирую фазу луны... \uD83C\uDF16",
+      "8": "Смотрю в сегодняшней газете... \uD83D\uDCF0",
+      "9": "Ищу на карте... \uD83D\uDDFA️"
     }
   },
   "StartHandler": {
@@ -81,17 +93,18 @@
     }
   },
   "KitchenHandler": {
-    "searchingForKitchen": "Ищем {{kitchen}} кухню...",
+    "searchingForKitchen": "Ищу {{kitchen}} кухню...",
     "found": "Вот что я нашел:"
   },
   "FoodCategoryHandler": {
-    "searchingForFoodCategory": "Ищем где бы заказать {{foodCat}}...",
+    "searchingForFoodCategory": "Ищу где бы заказать {{foodCat}}...",
     "found": "Вот что получилось найти \uD83D\uDD0E\n\nВ каждом из этих мест точно доставляют {{searchCategory}}",
-    "foundFollowup": "Как тебе?\n\nЕсли понравилось - \uD83D\uDC49 жми на название заведения для перехода на сайт. Или ищем ещё?",
+    "foundFollowup": "Как тебе?\n\nЕсли понравилось - \uD83D\uDC49 жми на название заведения для перехода на сайт. Или ищем ещё? \uD83D\uDC47",
     "placeTemplate": "\uD83D\uDC49 <a href=\"{{url}}\">{{name}}</a>\n\t\t\t\tКухни: {{kitchens}}\n\t\t\t\tЕда: {{categories}}\n"
   },
   "IFeelLuckyHandler": {
-    "found": "Выбираем случайное место \uD83C\uDFB2! Как тебе?\n\nЕсли понравилось - \uD83D\uDC49 жми на его название для перехода на сайт. Или ищем ещё?"
+    "found": "Как тебе?\n\nЕсли понравилось - \uD83D\uDC49 жми на его название для перехода на сайт. Или ищем ещё? \uD83D\uDC47",
+    "searching": "Выбираем абсолютно случайное место... \uD83C\uDFB2"
   },
   "HelpHandler": {
     "notSupported": "Раздел помощи ещё не оформлен.",

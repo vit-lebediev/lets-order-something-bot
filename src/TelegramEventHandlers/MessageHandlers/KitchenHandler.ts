@@ -21,7 +21,6 @@ import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 import UserProfileInterface from '../../UserProfile/UserProfileInterface';
 import UserProfileManager from '../../UserProfile/UserProfileManager';
 import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
-import Util from '../../Util';
 
 import Replacements = i18n.Replacements;
 
@@ -95,7 +94,7 @@ export default class KitchenHandler extends BaseHandler {
 
     logger.info(`${ places.length } places randomly selected (of ${ totalPlacesNumber }): ${ places.map((item) => item.name).join(', ') }`);
 
-    await Util.wait(1.4);
+    await this.runSearchSequence(msg.chat.id);
 
     return BaseHandler.answerWithPlacesToOrder(
         userProfile.tgUserId,

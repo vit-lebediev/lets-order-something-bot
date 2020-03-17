@@ -11,6 +11,7 @@ import Amplitude from '../Amplitude/Amplitude';
 import I18n from '../I18n';
 import Util from '../Util';
 import LosRedisClient from '../LosRedisClient';
+import { DEFAULT_NUMBER_OF_SEARCH_SEQ_STEPS } from '../Constants';
 
 import Replacements = i18n.Replacements;
 
@@ -216,5 +217,22 @@ export default class BaseHandler {
     };
 
     return I18n.t('FoodCategoryHandler.placeTemplate', replacements);
+  }
+
+  static async runSearchSequence (chatId: number, numOfSteps: number = DEFAULT_NUMBER_OF_SEARCH_SEQ_STEPS): Promise<void> {
+    const searchSequenceOptionsNum = 10;
+
+    const indexArray = [ ...Array(searchSequenceOptionsNum).keys() ];
+
+    for (let i = 0; i < numOfSteps; i += 1) {
+      const randIndex = Math.floor(Math.random() * indexArray.length);
+
+      const searchIndex = indexArray.splice(randIndex, 1);
+
+      await Util.wait(2); // eslint-disable-line no-await-in-loop
+      await LosTelegramBot.sendMessage(chatId, I18n.t(`BaseHandler.searchSequence.${ searchIndex }`)); // eslint-disable-line no-await-in-loop
+    }
+
+    await Util.wait(3);
   }
 }

@@ -40,6 +40,10 @@ export default class IFeelLuckyHandler extends BaseHandler {
 
     logger.info(`Random place selected: ${ place.name }`);
 
+    await LosTelegramBot.sendMessage(msg.chat.id, I18n.t('IFeelLuckyHandler.searching'));
+
+    await this.runSearchSequence(msg.chat.id, 3);
+
     return IFeelLuckyHandler.answerWithRandomPlace(userProfile.tgUserId, msg.chat.id, place);
   }
 
@@ -59,7 +63,7 @@ export default class IFeelLuckyHandler extends BaseHandler {
 
   static async answerWithRandomPlace (userId: number, chatId: number, place: any): Promise<Message> {
     const redirectUUIDKey = await this.storeRedirectData(userId, place.num_id, 0, place.url);
-    const verifiedMessage: string = `${ I18n.t('IFeelLuckyHandler.found') }\n\n${ BaseHandler.parsePlaceTemplate(place, redirectUUIDKey) }`;
+    const verifiedMessage: string = `${ BaseHandler.parsePlaceTemplate(place, redirectUUIDKey) }\n${ I18n.t('IFeelLuckyHandler.found') }`;
 
     const replyMarkup: ReplyKeyboardMarkup = BaseHandler.getRepeatOrRestartMarkup(I18n.t('LocationHandler.buttons.i_feel_lucky.emoji'));
 

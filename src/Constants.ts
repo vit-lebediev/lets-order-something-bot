@@ -1,4 +1,5 @@
 export const DEFAULT_NUMBER_OF_ANSWERS = 4;
+export const DEFAULT_NUMBER_OF_SEARCH_SEQ_STEPS = 2;
 
 export enum LOCALES {
   UK = 'uk',
