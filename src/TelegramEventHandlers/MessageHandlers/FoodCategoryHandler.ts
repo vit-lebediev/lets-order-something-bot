@@ -1,4 +1,4 @@
-import { Message } from 'node-telegram-bot-api';
+import { Message, ReplyKeyboardRemove, SendMessageOptions } from 'node-telegram-bot-api';
 import { Collection } from 'mongodb';
 import i18n from 'i18n';
 import { BaseLogger } from 'pino';
@@ -21,7 +21,6 @@ import RepeatOrRestartHandler from './RepeatOrRestartHandler';
 import UserProfileInterface from '../../UserProfile/UserProfileInterface';
 import UserProfileManager from '../../UserProfile/UserProfileManager';
 import Amplitude, { AMPLITUDE_EVENTS } from '../../Amplitude/Amplitude';
-import Util from '../../Util';
 
 import Replacements = i18n.Replacements;
 
@@ -96,7 +95,7 @@ export default class FoodCategoryHandler extends BaseHandler {
 
     logger.info(`${ places.length } places randomly selected (of ${ totalPlacesNumber }): ${ places.map((item: any) => item.name).join(', ') }`);
 
-    await Util.wait(1.4);
+    await this.runSearchSequence(msg.chat.id);
 
     return BaseHandler.answerWithPlacesToOrder(
         userProfile.tgUserId,
@@ -156,6 +155,14 @@ export default class FoodCategoryHandler extends BaseHandler {
   static answerWithSearchingForCategory (chatId: number, foodCategory: string): Promise<Message> {
     const replacements: Replacements = { foodCat: I18n.t(`SectionHandler.buttons.foods.${ foodCategory.toLowerCase() }.text`) };
 
-    return LosTelegramBot.sendMessage(chatId, I18n.t('FoodCategoryHandler.searchingForFoodCategory', replacements));
+    const replyMarkup: ReplyKeyboardRemove = {
+      remove_keyboard: true
+    };
+
+    const messageOptions: SendMessageOptions = {
+      reply_markup: replyMarkup
+    };
+
+    return LosTelegramBot.sendMessage(chatId, I18n.t('FoodCategoryHandler.searchingForFoodCategory', replacements), messageOptions);
   }
 }
