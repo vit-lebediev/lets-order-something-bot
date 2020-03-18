@@ -32,7 +32,7 @@ setTimeout(async () => {
     .on('error', (error) => logger.error(error))
     .on('data', async (row) => {
       logger.info('Inserting Row:');
-      // console.log(row); // for debug purposes
+      console.log(row); // for debug purposes
 
       const insertRow: InsertRow = row;
 
