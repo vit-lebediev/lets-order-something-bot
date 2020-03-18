@@ -207,7 +207,13 @@ export default class BaseHandler {
 
     const foodCategories = foodCategoriesArray.join(' ');
 
-    const losBotFullUrl = `https://${ LOS_EXPRESS_HOST }${ LOS_BOT_ENV === 'DEV' ? ':3000' : '' }`;
+    let losBotFullUrl = `https://${ LOS_EXPRESS_HOST }${ LOS_BOT_ENV === 'DEV' ? ':3000' : '' }`;
+
+    if (LOS_BOT_ENV === 'PROD') {
+      losBotFullUrl = `https://${ LOS_EXPRESS_HOST } }`;
+    } else {
+      losBotFullUrl = 'http://127.0.0.1:3000';
+    }
 
     const replacements: Replacements = {
       name: place.name,

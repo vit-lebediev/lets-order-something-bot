@@ -95,7 +95,7 @@
         "hotdogs": { "emoji": "\uD83C\uDF2D", "text": "\uD83C\uDF2D Хот-доги" },
         "sandwiches": { "emoji": "\uD83E\uDD6A", "text": "\uD83E\uDD6A Сендвичи" },
         "salads": { "emoji": "\uD83E\uDD57", "text": "\uD83E\uDD57 Салаты" },
-        "soups": { "emoji": "\uD83C\uDF72", "text": "\uD83C\uDF72 Супы" },
+        "soups": { "emoji": "\uD83C\uDF5C", "text": "\uD83C\uDF5C Супы" },
         "pasta": { "emoji": "\uD83C\uDF5D", "text": "\uD83C\uDF5D Пасту" },
         "snacks": { "emoji": "\uD83E\uDD68", "text": "\uD83E\uDD68 Снеки" },
         "desserts": { "emoji": "\uD83C\uDF70", "text": "\uD83C\uDF70 Десерты" },
