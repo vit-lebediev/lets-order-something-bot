@@ -210,7 +210,7 @@ export default class BaseHandler {
     let losBotFullUrl = `https://${ LOS_EXPRESS_HOST }${ LOS_BOT_ENV === 'DEV' ? ':3000' : '' }`;
 
     if (LOS_BOT_ENV === 'PROD') {
-      losBotFullUrl = `https://${ LOS_EXPRESS_HOST } }`;
+      losBotFullUrl = `https://${ LOS_EXPRESS_HOST }`;
     } else {
       losBotFullUrl = 'http://127.0.0.1:3000';
     }
