@@ -36,6 +36,7 @@ export enum AMPLITUDE_EVENTS {
   USER_CLICKED_ON_PLACE = 'userClickedOnPlace',
   USER_SELECTED_CHOOSE_FOR_ME = 'userSelectedChooseForMe',
   USER_SELECTED_GOTO_MENU = 'userSelectedGoToMenu',
+  PLACE_SHOWN = 'placeShown',
 }
 
 class Amplitude {

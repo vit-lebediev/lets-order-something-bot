@@ -134,6 +134,10 @@ export default class RepeatOrRestartHandler extends BaseHandler {
       disable_web_page_preview: true
     };
 
+    await Amplitude.logEvent(userId, AMPLITUDE_EVENTS.PLACE_SHOWN, {
+      name: place.name
+    });
+
     Amplitude.flush();
 
     return LosTelegramBot.sendMessage(chatId, verifiedMessage, messageOptions);

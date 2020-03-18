@@ -7,7 +7,7 @@ import {
 import i18n from 'i18n';
 
 import LosTelegramBot from '../LosTelegramBot';
-import Amplitude from '../Amplitude/Amplitude';
+import Amplitude, { AMPLITUDE_EVENTS } from '../Amplitude/Amplitude';
 import I18n from '../I18n';
 import Util from '../Util';
 import LosRedisClient from '../LosRedisClient';
@@ -111,9 +111,14 @@ export default class BaseHandler {
       const place = places[i];
 
       // eslint-disable-next-line no-await-in-loop
+      await Amplitude.logEvent(userId, AMPLITUDE_EVENTS.PLACE_SHOWN, {
+        name: place.name
+      });
+
+      // eslint-disable-next-line no-await-in-loop
       const redirectUUIDKey = await this.storeRedirectData(userId, place.num_id, i + 1, place.url);
 
-      placesList += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(places[i], redirectUUIDKey, repeatSymbol) }\n`;
+      placesList += `${ i + 1 }. ${ BaseHandler.parsePlaceTemplate(place, redirectUUIDKey, repeatSymbol) }\n`;
     }
 
     const replacements: Replacements = { numberOfPlaces: totalNumberOfPlaces as unknown as string };
