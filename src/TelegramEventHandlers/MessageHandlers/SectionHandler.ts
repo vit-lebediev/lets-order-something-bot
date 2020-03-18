@@ -84,6 +84,12 @@ export default class SectionHandler extends BaseHandler {
         { text: I18n.t('BaseHandler.buttons.restart.text') }
     ];
 
+    const zeroRowOfCategories: KeyboardButton[] = [
+        { text: I18n.t('SectionHandler.buttons.foods.breakfast.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.lunch.text') },
+        { text: I18n.t('SectionHandler.buttons.foods.meat_grill.text') }
+    ];
+
     const firstRowOfCategories: KeyboardButton[] = [
         { text: I18n.t('SectionHandler.buttons.foods.sushi.text') },
         { text: I18n.t('SectionHandler.buttons.foods.pizza.text') },
@@ -117,6 +123,7 @@ export default class SectionHandler extends BaseHandler {
     const replyMarkup: ReplyKeyboardMarkup = {
       keyboard: [
           functionButtons,
+          zeroRowOfCategories,
           firstRowOfCategories,
           secondRowOfCategories,
           thirdRowOfCategories,

@@ -82,6 +82,9 @@
       },
       "foods": {
         "random": { "emoji": "\uD83D\uDD00", "text": "\uD83D\uDD00 Любую!" },
+        "breakfast": { "emoji": "\uD83C\uDF73", "text": "\uD83C\uDF73 Завтраки" },
+        "lunch": { "emoji": "\uD83C\uDF72", "text": "\uD83C\uDF72 Обеды" },
+        "meat_grill": { "emoji": "\uD83C\uDF56", "text": "\uD83C\uDF56 Мясо, Гриль" },
         "sushi": { "emoji": "\uD83C\uDF63", "text": "\uD83C\uDF63 Суши" },
         "pizza": { "emoji": "\uD83C\uDF55", "text": "\uD83C\uDF55 Пиццу" },
         "shawerma": { "emoji": "\uD83C\uDF2F", "text": "\uD83C\uDF2F Шаурму" },

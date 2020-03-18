@@ -42,6 +42,9 @@ export default class FoodCategoryHandler extends BaseHandler {
       case I18n.t('SectionHandler.buttons.foods.random.text'): category = FOOD_CATEGORIES.RANDOM; break;
 
       case I18n.t('SectionHandler.buttons.foods.sushi.text'): category = FOOD_CATEGORIES.SUSHI; break;
+      case I18n.t('SectionHandler.buttons.foods.breakfast.text'): category = FOOD_CATEGORIES.BREAKFAST; break;
+      case I18n.t('SectionHandler.buttons.foods.lunch.text'): category = FOOD_CATEGORIES.LUNCH; break;
+      case I18n.t('SectionHandler.buttons.foods.meat_grill.text'): category = FOOD_CATEGORIES.MEAT_GRILL; break;
       case I18n.t('SectionHandler.buttons.foods.pizza.text'): category = FOOD_CATEGORIES.PIZZA; break;
       case I18n.t('SectionHandler.buttons.foods.shawerma.text'): category = FOOD_CATEGORIES.SHAWERMA; break;
       case I18n.t('SectionHandler.buttons.foods.vegetarian.text'): category = FOOD_CATEGORIES.VEGETARIAN; break;
