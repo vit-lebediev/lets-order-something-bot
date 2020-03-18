@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "stack": "docker-compose -f stack.yml up -d",
     "start": "export $(cat .env | xargs) && nodemon build/src/index.js",
-    "parsePlaces": "export $(cat .env | xargs) && node build/scripts/parsePlacesCSV"
+    "parsePlaces": "export $(cat .env | xargs) && cp ./resources/places.csv ./build/resources/places.csv && node build/scripts/parsePlacesCSV"
   },
   "repository": {
     "type": "git",

@@ -24,16 +24,15 @@ setTimeout(async () => {
   // @ts-ignore
   const placesCollection: Collection = LosMongoClient.dbHandler.collection(PLACES_COLLECTION);
 
-  await placesCollection.remove({});
-
   const warnings: string[] = [];
   const urlsAdded: string[] = [];
+  let newPlacesAdded: number = 0;
 
   csv.parseFile(path.resolve(__dirname, '..', 'resources', 'places.csv'), { headers: true })
     .on('error', (error) => logger.error(error))
     .on('data', async (row) => {
       logger.info('Inserting Row:');
-      console.log(row);
+      // console.log(row); // for debug purposes
 
       const insertRow: InsertRow = row;
 
@@ -82,15 +81,22 @@ setTimeout(async () => {
 
       urlsAdded.push(placeUrl.hostname);
 
-      await placesCollection.insertOne(insertRow);
+      const res = await placesCollection.updateOne(
+          { num_id: insertRow.num_id },
+          { $set: insertRow },
+          { upsert: true }
+      );
+
+      newPlacesAdded += res.upsertedCount;
     })
     .on('end', async (rowCount: number) => {
-      logger.info(`Parsed ${ rowCount } rows`);
+      logger.info(`Parsed ${ rowCount } rows from csv file`);
 
-      logger.info('Reading documents from Mongo collection, to initiate batch insert (THIS IS QUICKFIX FOR A BUG)...');
+      logger.warn('Reading documents from Mongo collection, to initiate batch insert (THIS IS QUICKFIX FOR A BUG)...');
       const documents = placesCollection.find({});
 
-      logger.info(`Documents actually inserted: ${ (await documents.toArray()).length }`);
+      logger.info(`Places currently in a database: ${ (await documents.toArray()).length }`);
+      logger.info(`New places added: ${ newPlacesAdded }`);
 
       for (let i = 0; i < warnings.length; i += 1) {
         logger.warn(warnings[i]);
